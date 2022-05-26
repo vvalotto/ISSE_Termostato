@@ -37,3 +37,8 @@ class Ambiente:
         self.__temperatura_deseada = 0
         self.__temperatura_a_mostrar = "ambiente"
         return
+
+    def __repr__(self):
+        return 'Ambiente: ' + str(self.__temperatura_ambiente) + ' - ' + \
+               'Deseada: ' + str(self.__temperatura_deseada) + ' - ' + \
+               'a mostrar: ' + str(self.__temperatura_a_mostrar)
