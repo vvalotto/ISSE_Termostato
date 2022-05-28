@@ -1,7 +1,7 @@
 """
 Clase que inicializa el termostato
 """
-from servicios_aplicacion.operador_secuencial import *
+from servicios_aplicacion.operador_paralelo import *
 
 
 class Lanzador:
@@ -33,4 +33,4 @@ class Lanzador:
 
         if todo_ok:
             print("Entre en operacion")
-            OperadorSecuencial().ejecutar()
+            OperadorParalelo().ejecutar()
