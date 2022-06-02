@@ -21,8 +21,9 @@ class GestorBateria:
         self._proxy_bateria = ProxyBateria()
         self._visualizador_bateria = VisualizadorBateria()
 
-    def verificar_nivel_de_carga(self):
-        self._bateria.nivel_de_carga = self._proxy_bateria.leer_carga()
+    # Se cambia el contrato!!!!
+    def verificar_nivel_de_carga(self, tipo_proxy):
+        self._bateria.nivel_de_carga = self._proxy_bateria.leer_carga(tipo_proxy)
 
     def obtener_nivel_de_carga(self):
         return self._bateria.nivel_de_carga
