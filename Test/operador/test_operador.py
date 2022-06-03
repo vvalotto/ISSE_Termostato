@@ -1,4 +1,4 @@
-from servicios_aplicacion.operador_paralelo import *
+from servicios_aplicacion.operador_secuencial import *
 
-operador = OperadorParalelo()
+operador = OperadorSecuencial()
 operador.ejecutar()

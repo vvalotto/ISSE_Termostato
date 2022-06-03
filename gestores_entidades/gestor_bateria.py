@@ -3,8 +3,6 @@ Es el componente responsable de mantener y gestionar el
 estado interno de la clase que representa la bateria real
 """
 
-from agentes_sensores.proxy_bateria import *
-from agentes_actuadores.visualizador_bateria import *
 from entidades.bateria import *
 from configurador.configurador import *
 
@@ -23,7 +21,7 @@ class GestorBateria:
         # En tiempo de ejecución se determina que clase será la que
         # integrara el gestor
         self._proxy_bateria = Configurador().configurar_proxy_bateria()
-        self._visualizador_bateria = VisualizadorBateria()
+        self._visualizador_bateria = Configurador.configurar_visualizador_bateria()
 
     def verificar_nivel_de_carga(self):
         self._bateria.nivel_de_carga = self._proxy_bateria.leer_carga()

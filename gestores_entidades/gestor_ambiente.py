@@ -5,9 +5,7 @@ Clase que es la responsable de manejar la entidad Ambiente.
 - mostrando las temperaturas en los dispositivos de visualizacion
 """
 
-from agentes_sensores.proxy_sensor_temperatura import *
 from entidades.ambiente import *
-from agentes_actuadores.visualizador_temperatura import *
 from configurador.configurador import *
 
 
@@ -20,7 +18,7 @@ class GestorAmbiente:
     def __init__(self):
         self._ambiente = Ambiente()
         self._proxy_sensor_temperatura = Configurador.configurar_proxy_temperatura()
-        self._visualizador_temperatura = VisualizadorTemperaturas()
+        self._visualizador_temperatura = Configurador().configurar_visualizador_temperaturas()
 
     def leer_temperatura_ambiente(self):
         try:
