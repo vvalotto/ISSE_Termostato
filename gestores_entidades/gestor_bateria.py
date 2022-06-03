@@ -10,7 +10,7 @@ from entidades.bateria import *
 
 class GestorBateria:
 
-    def __init__(self):
+    def __init__(self, tipo_proxy):
         """
         Inicializa el gestor que esta compuesto de:
         La clase que que obtiene la carga de la bateria desde la interfaz
@@ -18,12 +18,16 @@ class GestorBateria:
         la clase que expone visualmente el estado de la bateria
         """
         self._bateria = Bateria()
-        self._proxy_bateria = ProxyBateria()
+
+        # Se cambia el constructor!!!!
+        if tipo_proxy == "archivo":
+            self._proxy_bateria = ProxyBateria()
+        elif tipo_proxy == "socket":
+            self._proxy_bateria = ProxyBateriaSocket()
         self._visualizador_bateria = VisualizadorBateria()
 
-    # Se cambia el contrato!!!!
-    def verificar_nivel_de_carga(self, tipo_proxy):
-        self._bateria.nivel_de_carga = self._proxy_bateria.leer_carga(tipo_proxy)
+    def verificar_nivel_de_carga(self):
+        self._bateria.nivel_de_carga = self._proxy_bateria.leer_carga()
 
     def obtener_nivel_de_carga(self):
         return self._bateria.nivel_de_carga
