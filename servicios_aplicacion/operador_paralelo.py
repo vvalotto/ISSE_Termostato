@@ -16,7 +16,7 @@ from servicios_aplicacion.presentador import *
 class OperadorParalelo:
 
     def __init__(self):
-        self._gestor_bateria = GestorBateria()
+        self._gestor_bateria = GestorBateria("socket")
         self._gestor_ambiente = GestorAmbiente()
         self._gestor_climatizador = GestorClimatizador()
         self._selector = SelectorEntradaTemperatura(self._gestor_ambiente)
