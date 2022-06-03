@@ -6,11 +6,12 @@ estado interno de la clase que representa la bateria real
 from agentes_sensores.proxy_bateria import *
 from agentes_actuadores.visualizador_bateria import *
 from entidades.bateria import *
+from configurador.configurador import *
 
 
 class GestorBateria:
 
-    def __init__(self, tipo_proxy):
+    def __init__(self):
         """
         Inicializa el gestor que esta compuesto de:
         La clase que que obtiene la carga de la bateria desde la interfaz
@@ -19,11 +20,9 @@ class GestorBateria:
         """
         self._bateria = Bateria()
 
-        # Se cambia el constructor!!!!
-        if tipo_proxy == "archivo":
-            self._proxy_bateria = ProxyBateria()
-        elif tipo_proxy == "socket":
-            self._proxy_bateria = ProxyBateriaSocket()
+        # En tiempo de ejecución se determina que clase será la que
+        # integrara el gestor
+        self._proxy_bateria = Configurador().configurar_proxy_bateria()
         self._visualizador_bateria = VisualizadorBateria()
 
     def verificar_nivel_de_carga(self):
