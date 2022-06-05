@@ -5,12 +5,6 @@ Clase que representa la bateria que alimenta al dispositivo
 
 class Bateria:
 
-    carga_maxima = 5
-
-    def __init__(self):
-        self.__indicador = None
-        self.__nivel_de_carga = None
-
     @property
     def nivel_de_carga(self):
         return self.__nivel_de_carga
@@ -21,9 +15,15 @@ class Bateria:
 
     @nivel_de_carga.setter
     def nivel_de_carga(self, valor):
-        if valor <= Bateria.carga_maxima * 0.80:
+        if valor <= self.__carga_maxima * self.__umbral_de_carga:
             self.__indicador = "BAJA"
             self.__nivel_de_carga = valor
         else:
             self.__indicador = "NORMAL"
         self.__nivel_de_carga = valor
+
+    def __init__(self, carga_maxima, umbral_del_carga):
+        self.__carga_maxima = carga_maxima
+        self.__umbral_de_carga = umbral_del_carga
+        self.__nivel_de_carga = 0
+        self.__indicador = None

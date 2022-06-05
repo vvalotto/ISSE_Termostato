@@ -1,6 +1,6 @@
-""""
+"""
 Muestra los valores del estado del climatizador
-Clase dummy que simula la visualizacion de los parametros
+Clase dummy que simula la visualización de los parámetros
 """
 
 

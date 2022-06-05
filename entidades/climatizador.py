@@ -1,11 +1,16 @@
 """"
 Clase que respresenta el climatizador
 """
+from abc import ABCMeta, abstractmethod
 from servicios_dominio.controlador_climatizador import *
 
 
-class Climatizador:
-
+class AbsClimatizador(metaclass=ABCMeta):
+    """
+    Clase Abstracta Climatizador que generaliza el comportamiento
+    de los posibles dispositivo que sirven para cambiar la temperatura
+    de un ambiente
+    """
     @property
     def estado(self):
         return self._estado
@@ -22,65 +27,81 @@ class Climatizador:
             if estado_actual == transicion[0]:
                 self._estado = transicion[1]
                 return self._estado
-        raise "No existe proximo estado"
+        raise 'No existe proximo estado'
 
+    @abstractmethod
+    def _inicializar_maquina_estado(self):
+        pass
+
+    @abstractmethod
+    def evaluar_accion(self, ambiente):
+        pass
+
+    @abstractmethod
+    def _definir_accion(self, temperatura):
+        pass
+
+
+class Climatizador(AbsClimatizador):
+    """
+    Clase climatizador: calienta y enfria el ambiente
+    """
     def _inicializar_maquina_estado(self):
         self._maquina_estado.append([["apagado", "calentar"], "calentando"])
         self._maquina_estado.append([["apagado", "enfriar"], "enfriando"])
         self._maquina_estado.append([["calentando", "apagar"], "apagado"])
         self._maquina_estado.append([["enfriando", "apagar"], "apagado"])
+        return
 
-    # Se aplica el principio de SRP para separar responsabilidades
     def evaluar_accion(self, ambiente):
-
         temperatura = ControladorTemperatura.comparar_temperatura(ambiente.temperatura_ambiente,
                                                                   ambiente.temperatura_deseada)
         accion = self._definir_accion(temperatura)
         return accion
 
     def _definir_accion(self, temperatura):
-        """
-        Este metodo es muy problematico!!!
-        Evalua el tipo para decidir como debe comportarse!!
-        """
         accion = None
-
-        if isinstance(self, Calefactor):
-            if temperatura == "alta":
-                if self._estado == "calentando":
-                    accion = "apagar"
-                else:
-                    accion = None
-            if temperatura == "baja":
-                if self._estado == "apagado":
-                    accion = "calentar"
-                else:
-                    accion = None
-            print('accion:', accion)
-
-        elif isinstance(self, Climatizador):
-            if temperatura == "alta":
-                if self._estado == "apagado":
-                    accion = "enfriar"
-                elif self._estado == "calentando":
-                    accion = "apagar"
-                else:
-                    accion = None
-            if temperatura == "baja":
-                if self._estado == "apagado":
-                    accion = "calentar"
-                elif self._estado == "enfriando":
-                    accion = "apagar"
-                else:
-                    accion = None
-            print('accion:', accion)
-
+        if temperatura == "alta":
+            if self._estado == "apagado":
+                accion = "enfriar"
+            elif self._estado == "calentando":
+                accion = "apagar"
+            else:
+                accion = None
+        if temperatura == "baja":
+            if self._estado == "apagado":
+                accion = "calentar"
+            elif self._estado == "enfriando":
+                accion = "apagar"
+            else:
+                accion = None
+        print('accion:', accion)
         return accion
 
 
-# Se extiende mediante herencia, especializando la maquina de estado
-class Calefactor(Climatizador):
-    # sobreescribe el metodo que especializa
+class Calefactor(AbsClimatizador):
+    """
+    Calefactor
+    """
+    def evaluar_accion(self, ambiente):
+        temperatura = ControladorTemperatura.comparar_temperatura(ambiente.temperatura_ambiente,
+                                                                  ambiente.temperatura_deseada)
+        accion = self._definir_accion(temperatura)
+        return accion
+
     def _inicializar_maquina_estado(self):
         self._maquina_estado.append([["apagado", "calentar"], "calentando"])
+        self._maquina_estado.append([["apagado", "enfriar"], "apagado"])
         self._maquina_estado.append([["calentando", "apagar"], "apagado"])
+        return
+
+    def _definir_accion(self, temperatura):
+        accion = None
+        if temperatura == "baja":
+            if self._estado == "apagado":
+                accion = "calentar"
+        else:
+            if self._estado == "calentando":
+                accion = "apagar"
+        print('accion:', accion)
+        return accion

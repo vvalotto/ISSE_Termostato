@@ -18,9 +18,12 @@ class ProxyBateriaArchivo(AbsProxyBateria):
 
     def leer_carga(self):
 
-        archivo = open("bateria", "r")
-        carga = float(archivo.read())
-        archivo.close()
+        try:
+            archivo = open("bateria", "r")
+            carga = float(archivo.read())
+            archivo.close()
+        except IOError:
+            carga = None
         return carga
 
 
@@ -48,4 +51,3 @@ class ProxyBateriaSocket(AbsProxyBateria):
             print("FIN")
 
         return carga
-

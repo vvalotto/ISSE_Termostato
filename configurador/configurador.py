@@ -15,7 +15,7 @@ class Configurador:
 
     @staticmethod
     def configurar_proxy_bateria():
-        return ProxyBateriaSocket()
+        return ProxyBateriaArchivo()
 
     @staticmethod
     def configurar_proxy_temperatura():
@@ -39,4 +39,4 @@ class Configurador:
 
     @staticmethod
     def configurar_climatizador():
-        return Calefactor()
+        return Climatizador()

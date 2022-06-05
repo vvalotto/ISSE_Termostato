@@ -12,4 +12,3 @@ class SeteoTemperatura:
             opcion = input(">")
         diferencia = "aumentar" if opcion == "1" else "disminuir"
         return diferencia
-
