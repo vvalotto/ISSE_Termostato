@@ -39,30 +39,48 @@ class Climatizador:
         return accion
 
     def _definir_accion(self, temperatura):
+        """
+        Este metodo es muy problematico!!!
+        Evalua el tipo para decidir como debe comportarse!!
+        """
         accion = None
-        if temperatura == "alta":
-            if self._estado == "apagado":
-                accion = "enfriar"
-            elif self._estado == "calentando":
-                accion = "apagar"
-            else:
-                accion = None
-        if temperatura == "baja":
-            if self._estado == "apagado":
-                accion = "calentar"
-            elif self._estado == "enfriando":
-                accion = "apagar"
-            else:
-                accion = None
-        print('accion:', accion)
+
+        if isinstance(self, Calefactor):
+            if temperatura == "alta":
+                if self._estado == "calentando":
+                    accion = "apagar"
+                else:
+                    accion = None
+            if temperatura == "baja":
+                if self._estado == "apagado":
+                    accion = "calentar"
+                else:
+                    accion = None
+            print('accion:', accion)
+
+        elif isinstance(self, Climatizador):
+            if temperatura == "alta":
+                if self._estado == "apagado":
+                    accion = "enfriar"
+                elif self._estado == "calentando":
+                    accion = "apagar"
+                else:
+                    accion = None
+            if temperatura == "baja":
+                if self._estado == "apagado":
+                    accion = "calentar"
+                elif self._estado == "enfriando":
+                    accion = "apagar"
+                else:
+                    accion = None
+            print('accion:', accion)
+
         return accion
 
 
 # Se extiende mediante herencia, especializando la maquina de estado
 class Calefactor(Climatizador):
-
     # sobreescribe el metodo que especializa
     def _inicializar_maquina_estado(self):
         self._maquina_estado.append([["apagado", "calentar"], "calentando"])
         self._maquina_estado.append([["calentando", "apagar"], "apagado"])
-
