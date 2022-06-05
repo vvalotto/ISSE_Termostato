@@ -14,7 +14,7 @@ class GestorClimatizador:
         self._visualizador = Configurador.configurar_visualizador_climatizador()
 
     def accionar_climatizador(self, ambiente):
-        accion = self._climatizador.definir_accion(ambiente)
+        accion = self._climatizador.evaluar_accion(ambiente)
         if accion is not None:
             self._actuador.accionar_climatizador(accion)
             self._climatizador.proximo_estado(accion)

@@ -2,10 +2,9 @@
 Clase que respresenta el climatizador
 """
 from servicios_dominio.controlador_climatizador import *
-from abc import abstractmethod, ABCMeta
 
 
-class Climatizador(metaclass=ABCMeta):
+class Climatizador:
 
     @property
     def estado(self):
@@ -31,12 +30,16 @@ class Climatizador(metaclass=ABCMeta):
         self._maquina_estado.append([["calentando", "apagar"], "apagado"])
         self._maquina_estado.append([["enfriando", "apagar"], "apagado"])
 
-    # Esta función pertenece a la responsabilidad del climatizador
-    # no a la del gestor
-    def definir_accion(self, ambiente):
-        accion = None
+    # Se aplica el principio de SRP para separar responsabilidades
+    def evaluar_accion(self, ambiente):
+
         temperatura = ControladorTemperatura.comparar_temperatura(ambiente.temperatura_ambiente,
                                                                   ambiente.temperatura_deseada)
+        accion = self._definir_accion(temperatura)
+        return accion
+
+    def _definir_accion(self, temperatura):
+        accion = None
         if temperatura == "alta":
             if self._estado == "apagado":
                 accion = "enfriar"
