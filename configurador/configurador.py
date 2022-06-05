@@ -8,6 +8,7 @@ from agentes_actuadores.actuador_climatizador import *
 from agentes_actuadores.visualizador_bateria import *
 from agentes_actuadores.visualizador_temperatura import *
 from agentes_actuadores.visualizador_climatizador import *
+from entidades.climatizador import *
 
 
 class Configurador:
@@ -35,3 +36,7 @@ class Configurador:
     @staticmethod
     def configurar_visualizador_climatizador():
         return VisualizadorClimatizador()
+
+    @staticmethod
+    def configurar_climatizador():
+        return Calefactor()

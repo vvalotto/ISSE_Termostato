@@ -1,5 +1,6 @@
 """
-
+Servicio del dominio porque es el algoritmo para identificar
+que siente el dueño de casa respecto de la temperatura deseada
 """
 
 
