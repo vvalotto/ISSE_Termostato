@@ -45,7 +45,3 @@ class SelectorTemperatura(AbsRegistrador):
                 archivo_errores.close()
         except IOError:
             raise "Error al escribir el archivo de errores: " + str(IOError.errno)
-
-    @staticmethod
-    def auditar_funcion(registro):
-        raise "No implementado"

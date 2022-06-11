@@ -7,7 +7,7 @@ from registrador.registrador import *
 import datetime
 
 
-class ActuadorClimatizador(AbsRegistrador):
+class ActuadorClimatizador(AbsRegistrador, AbsAuditor):
 
     @staticmethod
     def accionar_climatizador(accion):
