@@ -4,31 +4,39 @@ Aqui la acción es escribir en un archivo externo
 """
 
 from registrador.registrador import *
+from abc import ABCMeta
 import datetime
 
 
-class ActuadorClimatizador(AbsRegistrador, AbsAuditor):
+class AbsActuadorClimatizador(metaclass=ABCMeta):
+
+    @staticmethod
+    def accionar_climatizador(accion):
+        pass
+
+
+class ActuadorClimatizadorGeneral(AbsActuadorClimatizador, AbsRegistrador, AbsAuditor):
 
     @staticmethod
     def accionar_climatizador(accion):
 
         # Simula Actuador
         mensaje_accion = "accionando el climatizador"
-        ActuadorClimatizador.auditar_funcion(ActuadorClimatizador.__name__,
-                                             mensaje_accion,
-                                             str(datetime.datetime.now()))
+        ActuadorClimatizadorGeneral.auditar_funcion(ActuadorClimatizadorGeneral.__name__,
+                                                    mensaje_accion,
+                                                    str(datetime.datetime.now()))
         try:
             with open("climatizador", "w") as archivo_climatizador:
                 archivo_climatizador.write(accion)
                 archivo_climatizador.close()
         except IOError:
             mensaje_error = "Error al quierer actuar en el climatizador"
-            registro_error = ActuadorClimatizador._armar_registro_error(
+            registro_error = ActuadorClimatizadorGeneral._armar_registro_error(
                 str(datetime.datetime.now()),
                 str(IOError),
                 mensaje_error)
 
-            ActuadorClimatizador.registrar_error(registro_error)
+            ActuadorClimatizadorGeneral.registrar_error(registro_error)
 
     @staticmethod
     def _armar_registro_error(fecha_hora, tipo_de_error, mensaje):
@@ -47,6 +55,7 @@ class ActuadorClimatizador(AbsRegistrador, AbsAuditor):
                 archivo_errores.close()
         except IOError:
             raise "Error al escribir el archivo de errores: " + str(IOError.errno)
+        return
 
     @staticmethod
     def auditar_funcion(clase, mensaje, fecha_hora):
@@ -62,3 +71,4 @@ class ActuadorClimatizador(AbsRegistrador, AbsAuditor):
                 archivo_auditoria.close()
         except IOError:
             raise "Error al escribir el archivo de auditoria: " + str(IOError.errno)
+        return

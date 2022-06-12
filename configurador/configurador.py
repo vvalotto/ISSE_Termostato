@@ -2,28 +2,29 @@
 Clase que define que componentes se usaran
 """
 
-from agentes_sensores.proxy_bateria import *
-from agentes_sensores.proxy_sensor_temperatura import *
-from agentes_actuadores.actuador_climatizador import *
+from agentes_sensores.factory_proxy_bateria import *
+from agentes_sensores.factory_sensor_temperatura import *
+from agentes_sensores.factory_selector_temperatura import *
+from agentes_actuadores.factory_actuador_climatizador import *
 from agentes_actuadores.visualizador_bateria import *
 from agentes_actuadores.visualizador_temperatura import *
 from agentes_actuadores.visualizador_climatizador import *
-from entidades.climatizador import *
+from entidades.factory_climatizador import *
 
 
 class Configurador:
 
     @staticmethod
     def configurar_proxy_bateria():
-        return ProxyBateriaArchivo()
+        return FactoryProxyBateria.crear("archivo")
 
     @staticmethod
     def configurar_proxy_temperatura():
-        return ProxySensorTemperaturaSocket()
+        return FactoryProxySensorTemperatura.crear("archivo")
 
     @staticmethod
     def configurar_actuador_climatizador():
-        return ActuadorClimatizador()
+        return FactoryActuadorClimatizador.crear("general")
 
     @staticmethod
     def configurar_visualizador_bateria():
@@ -39,4 +40,4 @@ class Configurador:
 
     @staticmethod
     def configurar_climatizador():
-        return Climatizador()
+        return FactoryClimatizador.crear("climatizador")
