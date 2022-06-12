@@ -1,15 +1,9 @@
 """
 Clase abstracta sensor de temperatura
 """
-from abc import ABCMeta, abstractmethod
+
 import socket
-
-
-class AbsProxySensorTemperatura(metaclass=ABCMeta):
-
-    @abstractmethod
-    def leer_temperatura(self):
-        pass
+from entidades.abs_sensor_temperatura import *
 
 
 class ProxySensorTemperaturaArchivo(AbsProxySensorTemperatura):

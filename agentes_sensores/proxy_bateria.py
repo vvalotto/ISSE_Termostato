@@ -4,14 +4,7 @@ Se crea un clase abstracta y se derivan sus implementaciones
 con las clases concretas que se corresponden
 """
 import socket
-from abc import ABCMeta, abstractmethod
-
-
-class AbsProxyBateria(metaclass=ABCMeta):
-
-    @abstractmethod
-    def leer_carga(self):
-        pass
+from entidades.abs_bateria import *
 
 
 class ProxyBateriaArchivo(AbsProxyBateria):
