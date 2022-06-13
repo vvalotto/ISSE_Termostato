@@ -11,7 +11,7 @@ class SelectorEntradaTemperatura:
         """
         Arma la clases con la que necesita colaborar
         """
-        self._seteo_temperatura = SeteoTemperatura()
+        self._seteo_temperatura = Configurador.configurar_seteo_temperatura()
         self._selector_temperatura = Configurador.configurar_selector_temperatura()
         self._gestor_ambiente = gestor_ambiente
 

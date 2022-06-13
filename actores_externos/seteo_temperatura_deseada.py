@@ -25,4 +25,3 @@ while True:
 
     time.sleep(1)
     system("clear")
-

@@ -1,6 +1,8 @@
 from servicios_aplicacion.selector_entrada import *
 from gestores_entidades.gestor_ambiente import *
 
+Configurador().cargar_configuracion()
+
 gestor = GestorAmbiente()
 
 gestor.leer_temperatura_ambiente()

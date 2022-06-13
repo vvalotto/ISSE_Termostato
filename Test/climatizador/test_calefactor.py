@@ -1,6 +1,8 @@
 from gestores_entidades.gestor_climatizador import *
 from gestores_entidades.gestor_ambiente import *
 
+Configurador().cargar_configuracion()
+
 gestor_ambiente = GestorAmbiente()
 for t in range(24):
     gestor_ambiente.aumentar_temperatura_deseada()

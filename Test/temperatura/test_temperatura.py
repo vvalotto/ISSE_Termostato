@@ -1,5 +1,7 @@
 from gestores_entidades.gestor_ambiente import *
 
+Configurador().cargar_configuracion()
+
 gestor = GestorAmbiente()
 gestor.leer_temperatura_ambiente()
 gestor.indicar_temperatura_a_mostrar("ambiente")
