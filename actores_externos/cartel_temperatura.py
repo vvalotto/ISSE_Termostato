@@ -4,7 +4,7 @@ from os import system
 
 
 servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-direccion_servidor = ('localhost', 13001)
+direccion_servidor = ('localhost', 14001)
 servidor.bind(direccion_servidor)
 
 servidor.listen(1)

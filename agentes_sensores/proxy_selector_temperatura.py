@@ -13,7 +13,7 @@ class SelectorTemperaturaArchivo(AbsSelectorTemperatura, AbsRegistrador):
     def obtener_selector():
         try:
             archivo = open("tipo_temperatura", "r")
-            tipo_temperatura = archivo.read()
+            tipo_temperatura = str(archivo.read())
             archivo.close()
         except IOError:
             mensaje_error = "Error al leer el tipo de temperatura"

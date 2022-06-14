@@ -3,7 +3,7 @@ import time
 from os import system
 
 servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-direccion_servidor = ('localhost', 13002)
+direccion_servidor = ('localhost', 14002)
 servidor.bind(direccion_servidor)
 
 servidor.listen(1)

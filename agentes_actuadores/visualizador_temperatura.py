@@ -26,7 +26,7 @@ class VisualizadorTemperaturaSocket(AbsVisualizadorTemperatura):
     def mostrar_temperatura_ambiente(temperatura_ambiente):
         try:
             cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            direccion_servidor = ("localhost", 13001)
+            direccion_servidor = ("localhost", 14001)
             cliente.connect(direccion_servidor)
 
             cliente.send(bytes(("ambiente: " + str(temperatura_ambiente)).encode()))
@@ -38,7 +38,7 @@ class VisualizadorTemperaturaSocket(AbsVisualizadorTemperatura):
     def mostrar_temperatura_deseada(temperatura_deseada):
         try:
             cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            direccion_servidor = ("localhost", 13001)
+            direccion_servidor = ("localhost", 14001)
             cliente.connect(direccion_servidor)
 
             cliente.send(bytes(("deseada: " + str(temperatura_deseada)).encode()))

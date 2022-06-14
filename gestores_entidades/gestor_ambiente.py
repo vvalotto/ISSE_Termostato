@@ -48,7 +48,7 @@ class GestorAmbiente:
         if self._ambiente.temperatura_a_mostrar == "ambiente":
             self._visualizador_temperatura.mostrar_temperatura_ambiente(self._ambiente.temperatura_ambiente)
         elif self._ambiente.temperatura_a_mostrar == "deseada":
-            self._visualizador_temperatura.mostrar_temperatura_ambiente(self._ambiente.temperatura_deseada)
+            self._visualizador_temperatura.mostrar_temperatura_deseada(self._ambiente.temperatura_deseada)
 
     def indicar_temperatura_a_mostrar(self, tipo_temperatura):
         self.ambiente.temperatura_a_mostrar = tipo_temperatura

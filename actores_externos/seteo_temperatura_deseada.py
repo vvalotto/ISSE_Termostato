@@ -9,7 +9,7 @@ seteo de la temperatura deseada
 while True:
     try:
         cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        direccion_servidor = ("localhost", 14000)
+        direccion_servidor = ("localhost", 13000)
         cliente.connect(direccion_servidor)
 
         print("Para aumentar la temperatura >")

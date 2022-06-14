@@ -23,7 +23,7 @@ class SeteoTemperaturaSocket(AbsSeteoTemperatura):
 
         diferencia = None
         servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        direccion_servidor = ('localhost', 14000)
+        direccion_servidor = ('localhost', 13000)
         servidor.bind(direccion_servidor)
 
         servidor.listen(1)

@@ -20,7 +20,7 @@ class VisualizadorClimatizadorSocket(AbsVisualizadorClimatizador):
 
         try:
             cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            direccion_servidor = ("localhost", 13002)
+            direccion_servidor = ("localhost", 14002)
             cliente.connect(direccion_servidor)
 
             cliente.send(bytes(str(estado_climatizador).encode()))

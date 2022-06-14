@@ -25,7 +25,7 @@ class VisualizadorBateriaSocket(AbsVisualizadorBateria):
 
         try:
             cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            direccion_servidor = ("localhost", 13005)
+            direccion_servidor = ("localhost", 14000)
             cliente.connect(direccion_servidor)
 
             cliente.send(bytes(str(tension_bateria).encode()))
