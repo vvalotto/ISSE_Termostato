@@ -31,7 +31,7 @@ class Presentador:
         print("------------------------------------")
         print("\n")
         print("------------ TEMPERATURA ----------")
-        self._gestor_ambiente.indicar_temperatura_a_mostrar('deseada')
+        # self._gestor_ambiente.indicar_temperatura_a_mostrar('deseada')
         self._gestor_ambiente.mostrar_temperatura()
         print("------------------------------------")
         print("\n")

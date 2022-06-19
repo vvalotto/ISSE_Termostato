@@ -5,20 +5,16 @@
 import time
 import threading
 
-
-from gestores_entidades.gestor_bateria import *
-from gestores_entidades.gestor_ambiente import *
-from gestores_entidades.gestor_climatizador import *
 from servicios_aplicacion.selector_entrada import *
 from servicios_aplicacion.presentador import *
 
 
 class OperadorParalelo:
 
-    def __init__(self):
-        self._gestor_bateria = GestorBateria()
-        self._gestor_ambiente = GestorAmbiente()
-        self._gestor_climatizador = GestorClimatizador()
+    def __init__(self, gestor_bateria, gestor_ambiente, gestor_climatizador):
+        self._gestor_bateria = gestor_bateria
+        self._gestor_ambiente = gestor_ambiente
+        self._gestor_climatizador = gestor_climatizador
         self._selector = SelectorEntradaTemperatura(self._gestor_ambiente)
         self._presentador = Presentador(self._gestor_bateria,
                                         self._gestor_ambiente,
@@ -29,30 +25,34 @@ class OperadorParalelo:
             print("lee_bateria")
             self._gestor_bateria.verificar_nivel_de_carga()
             time.sleep(1)
+        return
 
     def lee_temperatura_ambiente(self):
         while True:
             print("lee temperatura")
             self._gestor_ambiente.leer_temperatura_ambiente()
-            self._gestor_ambiente.ambiente.temperatura_deseada = 25
             time.sleep(2)
+        return
 
     def acciona_climatizador(self):
         while True:
             print("acciona climatizador")
             self._gestor_climatizador.accionar_climatizador(self._gestor_ambiente.ambiente)
             time.sleep(5)
+        return
 
     def muestra_parametros(self):
         while True:
             self._presentador.ejecutar()
             time.sleep(5)
+        return
 
     def setea_temperatura(self):
         while True:
             print("ve si setea temperatura")
             self._selector.ejecutar()
             time.sleep(5)
+        return
 
     def ejecutar(self):
 
@@ -71,9 +71,8 @@ class OperadorParalelo:
         t1.start()
         t2.start()
         t3.start()
-        time.sleep(1)
         t4.start()
-        time.sleep(5)
         t5.start()
 
+        return
 

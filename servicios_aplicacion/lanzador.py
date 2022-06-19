@@ -18,7 +18,9 @@ class Lanzador:
         self._presentador = Presentador(self._gestor_bateria,
                                         self._gestor_ambiente,
                                         self._gestor_climatizador)
-        self._operador = OperadorParalelo()
+        self._operador = OperadorParalelo(self._gestor_bateria,
+                                          self._gestor_ambiente,
+                                          self._gestor_climatizador)
 
     def ejecutar(self):
 
