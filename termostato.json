@@ -6,6 +6,6 @@
   "selector_temperatura": "archivo",
   "seteo_temperatura" : "socket",
   "visualizador_bateria" : "socket",
-  "visualizador_temperatura" : "socket",
-  "visualizador_climatizador" : "socket"
+  "visualizador_temperatura" : "webapi",
+  "visualizador_climatizador" : "webapi"
 }

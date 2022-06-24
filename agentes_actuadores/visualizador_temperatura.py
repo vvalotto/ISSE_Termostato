@@ -5,7 +5,8 @@ Clase dummy
 """
 import socket
 from entidades.abs_visualizador_temperatura import *
-
+import requests
+import json
 
 class VisualizadorTemperatura(AbsVisualizadorTemperatura):
 
@@ -43,5 +44,26 @@ class VisualizadorTemperaturaSocket(AbsVisualizadorTemperatura):
 
             cliente.send(bytes(("deseada: " + str(temperatura_deseada)).encode()))
             cliente.close()
+        except ConnectionError:
+            print("Intentar de vuelta")
+
+
+class VisualizadorTemperaturaWebApi(AbsVisualizadorTemperatura):
+
+    @staticmethod
+    def mostrar_temperatura_ambiente(temperatura_ambiente):
+        try:
+            url_server = "http://0.0.0.0:5001/termostato/temperatura_ambiente/"
+            dato = {'ambiente' : str(temperatura_ambiente)}
+            respuesta = requests.post(url_server, json=dato)
+        except ConnectionError:
+            print("Intentar de vuelta")
+
+    @staticmethod
+    def mostrar_temperatura_deseada(temperatura_deseada):
+        try:
+            url_server = "http://0.0.0.0:5001/termostato/temperatura_deseada/"
+            dato = {'ambiente': str(temperatura_deseada)}
+            respuesta = requests.post(url_server, json=dato)
         except ConnectionError:
             print("Intentar de vuelta")

@@ -44,3 +44,4 @@ class VisualizadorBateriaSocket(AbsVisualizadorBateria):
             cliente.close()
         except ConnectionError:
             print("Intentar de vuelta")
+
