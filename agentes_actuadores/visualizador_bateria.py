@@ -4,6 +4,7 @@ Clase dummy que simula la visualizacion de los parametros
 """
 import socket
 from entidades.abs_visualizador_bateria import *
+import requests
 
 
 class VisualizadorBateria(AbsVisualizadorBateria):
@@ -45,3 +46,17 @@ class VisualizadorBateriaSocket(AbsVisualizadorBateria):
         except ConnectionError:
             print("Intentar de vuelta")
 
+
+class VisualizadorBateriaWebApi(AbsVisualizadorBateria):
+
+    def mostrar_tension(self, tension_bateria):
+        try:
+            url_server = "http://0.0.0.0:5050/termostato/bateria/"
+            dato = {'bateria': str(tension_bateria)}
+            respuesta = requests.post(url_server, json=dato)
+        except ConnectionError:
+            print("Intentar de vuelta")
+
+    def mostrar_indicador(self, indicador_bateria):
+
+        pass

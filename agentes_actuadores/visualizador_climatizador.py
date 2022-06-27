@@ -36,8 +36,8 @@ class VisualizadorClimatizadorWebApi(AbsVisualizadorClimatizador):
     @staticmethod
     def mostrar_estado_climatizador(estado_climatizador):
         try:
-            url_server = "http://0.0.0.0:5001/termostato/estado_climatizador/"
-            dato = {'climatizador' : str(estado_climatizador)}
+            url_server = "http://0.0.0.0:5050/termostato/estado_climatizador/"
+            dato = {'climatizador': str(estado_climatizador)}
             respuesta = requests.post(url_server, json=dato)
         except ConnectionError:
             print("Intentar de vuelta")

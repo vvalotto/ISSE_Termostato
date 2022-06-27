@@ -4,7 +4,7 @@ Clase que inicializa el termostato
 from gestores_entidades.gestor_bateria import *
 from gestores_entidades.gestor_ambiente import *
 from gestores_entidades.gestor_climatizador import *
-from servicios_aplicacion.operador_paralelo import *
+from servicios_aplicacion.operador_secuencial import *
 from servicios_aplicacion.inicializador import *
 from os import system
 
@@ -18,7 +18,7 @@ class Lanzador:
         self._presentador = Presentador(self._gestor_bateria,
                                         self._gestor_ambiente,
                                         self._gestor_climatizador)
-        self._operador = OperadorParalelo(self._gestor_bateria,
+        self._operador = OperadorSecuencial(self._gestor_bateria,
                                           self._gestor_ambiente,
                                           self._gestor_climatizador)
 

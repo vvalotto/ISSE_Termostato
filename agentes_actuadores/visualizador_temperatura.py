@@ -53,7 +53,7 @@ class VisualizadorTemperaturaWebApi(AbsVisualizadorTemperatura):
     @staticmethod
     def mostrar_temperatura_ambiente(temperatura_ambiente):
         try:
-            url_server = "http://0.0.0.0:5001/termostato/temperatura_ambiente/"
+            url_server = "http://0.0.0.0:5050/termostato/temperatura_ambiente/"
             dato = {'ambiente' : str(temperatura_ambiente)}
             respuesta = requests.post(url_server, json=dato)
         except ConnectionError:
@@ -62,8 +62,8 @@ class VisualizadorTemperaturaWebApi(AbsVisualizadorTemperatura):
     @staticmethod
     def mostrar_temperatura_deseada(temperatura_deseada):
         try:
-            url_server = "http://0.0.0.0:5001/termostato/temperatura_deseada/"
-            dato = {'ambiente': str(temperatura_deseada)}
+            url_server = "http://0.0.0.0:5050/termostato/temperatura_deseada/"
+            dato = {'deseada': str(temperatura_deseada)}
             respuesta = requests.post(url_server, json=dato)
         except ConnectionError:
             print("Intentar de vuelta")

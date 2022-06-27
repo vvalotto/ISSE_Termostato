@@ -14,5 +14,7 @@ class FactoryVisualizadorBateria:
             return VisualizadorBateria()
         elif tipo == "socket":
             return VisualizadorBateriaSocket()
+        elif tipo == 'webapi':
+            return VisualizadorBateriaWebApi()
         else:
             return None
