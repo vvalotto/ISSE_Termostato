@@ -66,15 +66,13 @@ class Climatizador(AbsClimatizador):
                 accion = "enfriar"
             elif self._estado == "calentando":
                 accion = "apagar"
-            else:
-                accion = None
+
         if temperatura == "baja":
             if self._estado == "apagado":
                 accion = "calentar"
             elif self._estado == "enfriando":
                 accion = "apagar"
-            else:
-                accion = None
+
         print('accion:', accion)
         return accion
 
