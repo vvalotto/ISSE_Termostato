@@ -25,34 +25,29 @@ class OperadorParalelo:
             print("lee_bateria")
             self._gestor_bateria.verificar_nivel_de_carga()
             time.sleep(1)
-        return
 
     def lee_temperatura_ambiente(self):
         while True:
             print("lee temperatura")
             self._gestor_ambiente.leer_temperatura_ambiente()
             time.sleep(2)
-        return
 
     def acciona_climatizador(self):
         while True:
             print("acciona climatizador")
             self._gestor_climatizador.accionar_climatizador(self._gestor_ambiente.ambiente)
             time.sleep(5)
-        return
 
     def muestra_parametros(self):
         while True:
             self._presentador.ejecutar()
             time.sleep(5)
-        return
 
     def setea_temperatura(self):
         while True:
             print("ve si setea temperatura")
             self._selector.ejecutar()
             time.sleep(5)
-        return
 
     def ejecutar(self):
 
