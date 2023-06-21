@@ -3,6 +3,7 @@ Muestra los valores del estado del climatizador
 Clase dummy que simula la visualizacion de los parametros
 """
 import socket
+import requests
 from entidades.abs_visualizador_climatizador import *
 
 
@@ -27,3 +28,8 @@ class VisualizadorClimatizadorSocket(AbsVisualizadorClimatizador):
             cliente.close()
         except ConnectionError:
             print("Intentar de vuelta")
+
+class VisualizadorClimatizadorApi(AbsVisualizadorClimatizador):
+
+    def mostrar_estado_climatizador(self, estado_climatizador):
+        requests.post("http://localhost:5050/termostato/estado_climatizador", json={"climatizador": estado_climatizador})

@@ -4,6 +4,7 @@ a un visualizador
 Clase dummy
 """
 import socket
+import requests
 from entidades.abs_visualizador_temperatura import *
 
 
@@ -45,3 +46,13 @@ class VisualizadorTemperaturaSocket(AbsVisualizadorTemperatura):
             cliente.close()
         except ConnectionError:
             print("Intentar de vuelta")
+
+class VisualizadorTemperaturaApi(AbsVisualizadorTemperatura):
+
+    @staticmethod
+    def mostrar_temperatura_ambiente(temperatura_ambiente):
+        requests.post("http://localhost:5050/termostato/temperatura_ambiente", json={"ambiente": temperatura_ambiente})
+
+    @staticmethod
+    def mostrar_temperatura_deseada(temperatura_deseada):
+        requests.post("http://localhost:5050/termostato/temperatura_deseada", json={"deseada": temperatura_deseada})

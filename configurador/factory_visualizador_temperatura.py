@@ -14,5 +14,7 @@ class FactoryVisualizadorTemperatura:
             return VisualizadorTemperatura()
         elif tipo == "socket":
             return VisualizadorTemperaturaSocket()
+        elif tipo == "api":
+            return VisualizadorTemperaturaApi()
         else:
             return None
