@@ -16,9 +16,22 @@ class GestorAmbiente:
     def ambiente(self):
         return self._ambiente
 
-    def __init__(self):
+    def __init__(self, hal_adc=None):
+        """
+        Inicializa el gestor de ambiente
+
+        :param hal_adc: Opcional, permite inyectar implementación HAL específica
+                        Si es None, ProxySensorTemperatura usará HAL simulado por defecto
+        """
         self._ambiente = Ambiente()
-        self._proxy_sensor_temperatura = ProxySensorTemperatura()
+
+        # Permite inyectar HAL desde fuera (útil para testing y producción)
+        if hal_adc is not None:
+            self._proxy_sensor_temperatura = ProxySensorTemperatura(hal_adc)
+        else:
+            # Usa HAL simulado por defecto
+            self._proxy_sensor_temperatura = ProxySensorTemperatura()
+
         self._visualizador_temperatura = VisualizadorTemperaturas()
 
     def leer_temperatura_ambiente(self):
