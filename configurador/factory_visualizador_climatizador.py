@@ -14,5 +14,7 @@ class FactoryVisualizadorClimatizador:
             return VisualizadorClimatizador()
         elif tipo == "socket":
             return VisualizadorClimatizadorSocket()
+        elif tipo == "api":
+            return VisualizadorClimatizadorApi()
         else:
             return None

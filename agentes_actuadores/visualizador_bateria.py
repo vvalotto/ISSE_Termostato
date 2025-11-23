@@ -3,6 +3,8 @@ Muestra los valores de carga de la Bateria
 Clase dummy que simula la visualizacion de los parametros
 """
 import socket
+import requests
+
 from entidades.abs_visualizador_bateria import *
 
 
@@ -44,3 +46,12 @@ class VisualizadorBateriaSocket(AbsVisualizadorBateria):
             cliente.close()
         except ConnectionError:
             print("Intentar de vuelta")
+
+
+class VisualizadorBateriaApi(AbsVisualizadorBateria):
+
+    def mostrar_tension(self, tension_bateria):
+        requests.post("http://localhost:5050/termostato/bateria", json={"bateria": tension_bateria})
+
+    def mostrar_indicador(self, indicador_bateria):
+        requests.post("http://localhost:5050/bateria/indicador", json={"indicador": indicador_bateria})
