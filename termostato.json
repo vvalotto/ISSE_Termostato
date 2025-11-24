@@ -16,6 +16,6 @@
       "temperatura": 12000,
       "seteo_temperatura": 13000
     },
-    "api_url": "http://localhost:5050"
+    "api_url": "https://termostato-api.onrender.com"
   }
 }

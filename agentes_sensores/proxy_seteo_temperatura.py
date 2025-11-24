@@ -20,10 +20,15 @@ class SeteoTemperaturaSocket(AbsSeteoTemperatura):
 
     @staticmethod
     def obtener_seteo():
+        from configurador.configurador import Configurador
 
         diferencia = None
         servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        direccion_servidor = ('localhost', 13000)
+        servidor.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # Permite reusar puerto
+
+        host = Configurador.obtener_host_escucha()
+        puerto = Configurador.obtener_puerto("seteo_temperatura")
+        direccion_servidor = (host, puerto)
         servidor.bind(direccion_servidor)
 
         servidor.listen(1)
@@ -35,8 +40,10 @@ class SeteoTemperaturaSocket(AbsSeteoTemperatura):
                 if not datos:
                     break
                 diferencia = str(datos.decode("utf-8"))
-        except ConnectionError("Error"):
+        except ConnectionError as e:  # FIX: sintaxis correcta
+            print(f"Error de conexión: {e}")
+        finally:  # FIX: asegurar cierre
             conexion.close()
-            print("FIN")
+            servidor.close()
 
         return diferencia
