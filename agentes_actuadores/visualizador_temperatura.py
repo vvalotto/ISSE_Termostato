@@ -51,8 +51,22 @@ class VisualizadorTemperaturaApi(AbsVisualizadorTemperatura):
 
     @staticmethod
     def mostrar_temperatura_ambiente(temperatura_ambiente):
-        requests.post("http://localhost:5050/termostato/temperatura_ambiente", json={"ambiente": temperatura_ambiente})
+        from configurador.configurador import Configurador
+        api_url = Configurador.obtener_api_url()
+        try:
+            requests.post(f"{api_url}/termostato/temperatura_ambiente",
+                         json={"ambiente": temperatura_ambiente},
+                         timeout=5)
+        except requests.RequestException as e:
+            print(f"Error al enviar temperatura ambiente: {e}")
 
     @staticmethod
     def mostrar_temperatura_deseada(temperatura_deseada):
-        requests.post("http://localhost:5050/termostato/temperatura_deseada", json={"deseada": temperatura_deseada})
+        from configurador.configurador import Configurador
+        api_url = Configurador.obtener_api_url()
+        try:
+            requests.post(f"{api_url}/termostato/temperatura_deseada",
+                         json={"deseada": temperatura_deseada},
+                         timeout=5)
+        except requests.RequestException as e:
+            print(f"Error al enviar temperatura deseada: {e}")
