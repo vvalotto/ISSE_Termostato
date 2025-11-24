@@ -7,5 +7,15 @@
   "seteo_temperatura" : "socket",
   "visualizador_bateria" : "api",
   "visualizador_temperatura" : "api",
-  "visualizador_climatizador" : "api"
+  "visualizador_climatizador" : "api",
+
+  "red": {
+    "host_escucha": "0.0.0.0",
+    "puertos": {
+      "bateria": 11000,
+      "temperatura": 12000,
+      "seteo_temperatura": 13000
+    },
+    "api_url": "http://localhost:5050"
+  }
 }

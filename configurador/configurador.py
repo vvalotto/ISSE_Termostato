@@ -58,3 +58,23 @@ class Configurador:
     @staticmethod
     def configurar_seteo_temperatura():
         return FactorySeteoTemperatura.crear(Configurador.configuracion_termostato["seteo_temperatura"])
+
+    @staticmethod
+    def obtener_host_escucha():
+        """Retorna el host donde escuchar conexiones socket"""
+        return Configurador.configuracion_termostato.get("red", {}).get("host_escucha", "localhost")
+
+    @staticmethod
+    def obtener_puerto(nombre_sensor):
+        """Retorna el puerto para un sensor específico"""
+        puertos_default = {
+            "bateria": 11000,
+            "temperatura": 12000,
+            "seteo_temperatura": 13000
+        }
+        return Configurador.configuracion_termostato.get("red", {}).get("puertos", puertos_default).get(nombre_sensor, puertos_default.get(nombre_sensor))
+
+    @staticmethod
+    def obtener_api_url():
+        """Retorna la URL base de la API REST"""
+        return Configurador.configuracion_termostato.get("red", {}).get("api_url", "http://localhost:5050")
