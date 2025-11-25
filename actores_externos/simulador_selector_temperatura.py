@@ -6,8 +6,8 @@ from datetime import datetime
 from os import system
 
 """
-Objeto que hace de botones o selectores para el
-seteo de la temperatura deseada
+Simula el botón selector de modo del display (ambiente/deseada)
+Funciona como un botón toggle de dos estados
 """
 
 # Cargar configuración (buscar en directorio actual o padre)
@@ -19,19 +19,19 @@ with open(config_file, "r") as f:
     config = json.load(f)
 
 HOST = config["raspberry_pi"]["host"]
-PUERTO = config["raspberry_pi"]["puertos"]["seteo_temperatura"]
+PUERTO = config["raspberry_pi"]["puertos"]["selector_temperatura"]
 
-# Historial de acciones
+# Estado interno del selector (comienza en "ambiente")
+estado_actual = "ambiente"
 historial = []
 contador = 0
 conectado = False
-ultima_accion = None
 
 while True:
     system("clear")
 
     print("╔" + "═" * 54 + "╗")
-    print("║" + " " * 8 + "CONTROL DE TEMPERATURA DESEADA" + " " * 16 + "║")
+    print("║" + " " * 10 + "SELECTOR DE MODO DEL DISPLAY" + " " * 16 + "║")
     print("╚" + "═" * 54 + "╝")
     print()
 
@@ -40,13 +40,21 @@ while True:
     estado_icono = "✓" if conectado else "✗"
     print(f"Conexión: {HOST}:{PUERTO} {estado_icono}")
     print(f"Hora: {hora}")
-    print(f"Comandos enviados: {contador}")
+    print(f"Cambios realizados: {contador}")
     print()
 
-    # Última acción
-    if ultima_accion:
-        print(f"Última acción: {ultima_accion}")
-        print()
+    # Estado actual resaltado
+    print("┌─────────────────────────────────────────────────────┐")
+    if estado_actual == "ambiente":
+        print("│ MODO ACTUAL: AMBIENTE                               │")
+        print("│ • Muestra temperatura del sensor (solo lectura)    │")
+        print("│ • Seteo de temperatura: DESHABILITADO              │")
+    else:
+        print("│ MODO ACTUAL: DESEADA                                │")
+        print("│ • Muestra temperatura objetivo                     │")
+        print("│ • Seteo de temperatura: HABILITADO                 │")
+    print("└─────────────────────────────────────────────────────┘")
+    print()
 
     # Historial
     if historial:
@@ -57,42 +65,46 @@ while True:
         print("└─────────────────────────────────────────────────────┘")
         print()
 
+    # Determinar próximo estado
+    proximo_estado = "deseada" if estado_actual == "ambiente" else "ambiente"
+    proximo_modo = "DESEADA" if proximo_estado == "deseada" else "AMBIENTE"
+
     print("┌─────────────────────────────────────────────────────┐")
-    print("│ [S] Subir temperatura (+1°C)                        │")
-    print("│ [B] Bajar temperatura (-1°C)                        │")
+    print(f"│ [Enter] Cambiar a modo {proximo_modo}" + " " * (27 - len(proximo_modo)) + "│")
     print("│ [Ctrl+C] Salir                                      │")
     print("└─────────────────────────────────────────────────────┘")
     print()
 
     try:
+        input()  # Esperar Enter
+
+        # Alternar estado
+        estado_actual = proximo_estado
+
+        # Conectar y enviar
         cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         direccion_servidor = (HOST, PUERTO)
         cliente.connect(direccion_servidor)
         conectado = True
 
-        opcion = input("Opción [S/B] → ").upper()
-
-        if opcion in ["S", "B"]:
-            diferencia = "aumentar" if opcion == "S" else "disminuir"
-            accion_texto = "SUBIR" if opcion == "S" else "BAJAR"
-
-            cliente.send(bytes(diferencia.encode()))
-            contador += 1
-            registro = f"{hora} → {accion_texto}"
-            historial.append(registro)
-            ultima_accion = f"{accion_texto} ({hora})"
-            print(f"\n✓ Comando enviado: {accion_texto}")
-        elif opcion:
-            print("\n✗ Opción inválida. Use S o B.")
-
+        cliente.send(bytes(estado_actual.encode()))
         cliente.close()
+
+        contador += 1
+        registro = f"{hora} → {estado_actual.upper()}"
+        historial.append(registro)
+
+        print(f"\n✓ Cambiado a modo {estado_actual.upper()}")
 
     except ConnectionError:
         conectado = False
         print(f"\n✗ Error: No se pudo conectar a {HOST}:{PUERTO}")
-        print("  Verifique que el termostato esté en modo DESEADA.")
+        print("  Verifique que el termostato esté ejecutándose.")
+    except KeyboardInterrupt:
+        print("\n\nSaliendo...")
+        break
     except Exception as e:
         conectado = False
         print(f"\n✗ Error inesperado: {e}")
 
-    time.sleep(1)
+    time.sleep(2)

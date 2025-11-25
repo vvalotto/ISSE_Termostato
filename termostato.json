@@ -3,7 +3,7 @@
   "proxy_sensor_temperatura" : "socket",
   "climatizador" : "calefactor",
   "actuador_climatizador": "general",
-  "selector_temperatura": "archivo",
+  "selector_temperatura": "socket",
   "seteo_temperatura" : "socket",
   "visualizador_bateria" : "api",
   "visualizador_temperatura" : "api",
@@ -14,7 +14,8 @@
     "puertos": {
       "bateria": 11000,
       "temperatura": 12000,
-      "seteo_temperatura": 13000
+      "seteo_temperatura": 13000,
+      "selector_temperatura": 14000
     },
     "api_url": "https://termostato-api.onrender.com"
   }

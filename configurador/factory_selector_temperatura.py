@@ -12,5 +12,7 @@ class FactorySelectorTemperatura:
 
         if tipo == "archivo":
             return SelectorTemperaturaArchivo()
+        elif tipo == "socket":
+            return SelectorTemperaturaSocket()
         else:
             return None
