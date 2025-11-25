@@ -47,7 +47,7 @@ class SeteoTemperaturaSocket(AbsSeteoTemperatura):
                 try:
                     self._conexion, direccion_cliente = self._servidor.accept()
                     self._conexion.settimeout(5.0)  # Timeout para recv
-                    print(f"[Seteo] Cliente conectado: {direccion_cliente}")
+                    print("[Seteo] Cliente conectado: {}".format(direccion_cliente))
                 except socket.timeout:
                     # No hay cliente, retornar None
                     return None
@@ -57,7 +57,7 @@ class SeteoTemperaturaSocket(AbsSeteoTemperatura):
                 datos = self._conexion.recv(4096)
                 if datos:
                     diferencia = str(datos.decode("utf-8"))
-                    print(f"[Seteo] Comando recibido: {diferencia}")
+                    print("[Seteo] Comando recibido: {}".format(diferencia))
                 else:
                     # Cliente cerró conexión
                     print("[Seteo] Cliente desconectado")
@@ -67,13 +67,13 @@ class SeteoTemperaturaSocket(AbsSeteoTemperatura):
                 # Timeout esperando comando, retornar None
                 return None
             except ConnectionError as e:
-                print(f"[Seteo] Error de conexión: {e}")
+                print("[Seteo] Error de conexión: {}".format(e))
                 if self._conexion:
                     self._conexion.close()
                 self._conexion = None
 
         except Exception as e:
-            print(f"[Seteo] Error: {e}")
+            print("[Seteo] Error: {}".format(e))
 
         return diferencia
 

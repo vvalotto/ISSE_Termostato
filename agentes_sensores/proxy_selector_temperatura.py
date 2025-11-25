@@ -90,7 +90,7 @@ class SelectorTemperaturaSocket(AbsSelectorTemperatura):
                 if datos:
                     nuevo_estado = str(datos.decode("utf-8"))
                     self._estado_actual = nuevo_estado
-                    print(f"[Selector] Cambio a modo: {self._estado_actual.upper()}")
+                    print("[Selector] Cambio a modo: {}".format(self._estado_actual.upper()))
                 else:
                     # Cliente cerró conexión
                     self._conexion.close()
@@ -99,13 +99,13 @@ class SelectorTemperaturaSocket(AbsSelectorTemperatura):
                 # No hay datos nuevos, mantener estado actual
                 pass
             except ConnectionError as e:
-                print(f"[Selector] Error de conexión: {e}")
+                print("[Selector] Error de conexión: {}".format(e))
                 if self._conexion:
                     self._conexion.close()
                 self._conexion = None
 
         except Exception as e:
-            print(f"[Selector] Error: {e}")
+            print("[Selector] Error: {}".format(e))
 
         return self._estado_actual
 

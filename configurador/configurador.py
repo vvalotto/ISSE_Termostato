@@ -25,7 +25,7 @@ class Configurador:
         except FileNotFoundError:
             raise Exception("ERROR: No se encontró el archivo termostato.json")
         except json.JSONDecodeError as e:
-            raise Exception(f"ERROR: termostato.json tiene formato inválido: {e}")
+            raise Exception("ERROR: termostato.json tiene formato inválido: {}".format(e))
 
         # Validar configuración
         Configurador._validar_configuracion()
@@ -101,7 +101,7 @@ class Configurador:
 
         for clave in claves_requeridas:
             if clave not in config:
-                raise Exception(f"ERROR: Falta la clave '{clave}' en termostato.json")
+                raise Exception("ERROR: Falta la clave '{}' en termostato.json".format(clave))
 
         # Validar sección de red (opcional pero recomendada)
         if "red" in config:

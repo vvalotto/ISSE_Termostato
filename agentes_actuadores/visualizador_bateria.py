@@ -54,18 +54,18 @@ class VisualizadorBateriaApi(AbsVisualizadorBateria):
         from configurador.configurador import Configurador
         api_url = Configurador.obtener_api_url()
         try:
-            requests.post(f"{api_url}/termostato/bateria",
+            requests.post("{}/termostato/bateria".format(api_url),
                          json={"bateria": tension_bateria},
                          timeout=5)
         except requests.RequestException as e:
-            print(f"Error al enviar tensión batería: {e}")
+            print("Error al enviar tensión batería: {}".format(e))
 
     def mostrar_indicador(self, indicador_bateria):
         from configurador.configurador import Configurador
         api_url = Configurador.obtener_api_url()
         try:
-            requests.post(f"{api_url}/bateria/indicador",
+            requests.post("{}/bateria/indicador".format(api_url),
                          json={"indicador": indicador_bateria},
                          timeout=5)
         except requests.RequestException as e:
-            print(f"Error al enviar indicador batería: {e}")
+            print("Error al enviar indicador batería: {}".format(e))

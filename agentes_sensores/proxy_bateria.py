@@ -44,7 +44,7 @@ class ProxyBateriaSocket(AbsProxyBateria):
                     break
                 carga = float(datos.decode("utf-8"))
         except ConnectionError as e:  # FIX: sintaxis correcta
-            print(f"Error de conexión: {e}")
+            print("Error de conexión: {}".format(e))
         finally:  # FIX: asegurar cierre
             conexion.close()
             servidor.close()

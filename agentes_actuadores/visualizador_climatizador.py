@@ -35,8 +35,8 @@ class VisualizadorClimatizadorApi(AbsVisualizadorClimatizador):
         from configurador.configurador import Configurador
         api_url = Configurador.obtener_api_url()
         try:
-            requests.post(f"{api_url}/termostato/estado_climatizador",
+            requests.post("{}/termostato/estado_climatizador".format(api_url),
                          json={"climatizador": estado_climatizador},
                          timeout=5)
         except requests.RequestException as e:
-            print(f"Error al enviar estado climatizador: {e}")
+            print("Error al enviar estado climatizador: {}".format(e))
