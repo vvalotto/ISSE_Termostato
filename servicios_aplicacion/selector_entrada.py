@@ -36,6 +36,10 @@ class SelectorEntradaTemperatura:
     def _obtener_seteo_temperatura_deseada(self):
         opcion = self._seteo_temperatura.obtener_seteo()
 
+        # Si hay timeout (None), no hacer nada y continuar
+        if opcion is None:
+            return
+
         if opcion == "aumentar":
             self._gestor_ambiente.aumentar_temperatura_deseada()
         if opcion == "disminuir":

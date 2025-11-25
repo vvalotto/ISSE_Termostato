@@ -21,11 +21,15 @@ class ProxySensorTemperaturaArchivo(AbsProxySensorTemperatura):
 class ProxySensorTemperaturaSocket(AbsProxySensorTemperatura):
 
     def leer_temperatura(self):
+        from configurador.configurador import Configurador
 
         temperatura = None
-
         servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        direccion_servidor = ('localhost', 12000)
+        servidor.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # Permite reusar puerto
+
+        host = Configurador.obtener_host_escucha()
+        puerto = Configurador.obtener_puerto("temperatura")
+        direccion_servidor = (host, puerto)
         servidor.bind(direccion_servidor)
 
         servidor.listen(1)
@@ -37,8 +41,10 @@ class ProxySensorTemperaturaSocket(AbsProxySensorTemperatura):
                 if not datos:
                     break
                 temperatura = float(datos.decode("utf-8"))
-        except ConnectionError("Error en la lectura de la carga"):
+        except ConnectionError as e:  # FIX: sintaxis correcta
+            print(f"Error de conexión: {e}")
+        finally:  # FIX: asegurar cierre
             conexion.close()
-            print("FIN")
+            servidor.close()
 
         return temperatura

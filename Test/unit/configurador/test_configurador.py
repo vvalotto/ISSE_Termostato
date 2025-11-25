@@ -143,3 +143,159 @@ class TestConfiguradorConfiguracionesAlternativas:
 
         # Cleanup
         Configurador.configuracion_termostato = None
+
+
+class TestConfiguradorMetodosRed:
+    """Tests para los métodos de configuración de red (Fase 1)"""
+
+    def test_obtener_host_escucha_con_config(self):
+        """Con configuración de red debe retornar el host configurado"""
+        Configurador.configuracion_termostato = {
+            "red": {
+                "host_escucha": "0.0.0.0",
+                "puertos": {
+                    "bateria": 11000,
+                    "temperatura": 12000,
+                    "seteo_temperatura": 13000
+                },
+                "api_url": "http://192.168.1.100:5050"
+            }
+        }
+
+        resultado = Configurador.obtener_host_escucha()
+        assert resultado == "0.0.0.0"
+
+        # Cleanup
+        Configurador.configuracion_termostato = None
+
+    def test_obtener_host_escucha_sin_config_usa_default(self):
+        """Sin configuración de red debe usar valor por defecto 'localhost'"""
+        Configurador.configuracion_termostato = {
+            "proxy_bateria": "socket"
+        }
+
+        resultado = Configurador.obtener_host_escucha()
+        assert resultado == "localhost"
+
+        # Cleanup
+        Configurador.configuracion_termostato = None
+
+    def test_obtener_puerto_bateria_con_config(self):
+        """Con configuración debe retornar puerto de batería configurado"""
+        Configurador.configuracion_termostato = {
+            "red": {
+                "host_escucha": "0.0.0.0",
+                "puertos": {
+                    "bateria": 11000,
+                    "temperatura": 12000,
+                    "seteo_temperatura": 13000
+                }
+            }
+        }
+
+        resultado = Configurador.obtener_puerto("bateria")
+        assert resultado == 11000
+
+        # Cleanup
+        Configurador.configuracion_termostato = None
+
+    def test_obtener_puerto_temperatura_con_config(self):
+        """Con configuración debe retornar puerto de temperatura configurado"""
+        Configurador.configuracion_termostato = {
+            "red": {
+                "puertos": {
+                    "bateria": 11000,
+                    "temperatura": 12000,
+                    "seteo_temperatura": 13000
+                }
+            }
+        }
+
+        resultado = Configurador.obtener_puerto("temperatura")
+        assert resultado == 12000
+
+        # Cleanup
+        Configurador.configuracion_termostato = None
+
+    def test_obtener_puerto_seteo_temperatura_con_config(self):
+        """Con configuración debe retornar puerto de seteo temperatura configurado"""
+        Configurador.configuracion_termostato = {
+            "red": {
+                "puertos": {
+                    "bateria": 11000,
+                    "temperatura": 12000,
+                    "seteo_temperatura": 13000
+                }
+            }
+        }
+
+        resultado = Configurador.obtener_puerto("seteo_temperatura")
+        assert resultado == 13000
+
+        # Cleanup
+        Configurador.configuracion_termostato = None
+
+    def test_obtener_puerto_sin_config_usa_default(self):
+        """Sin configuración debe usar valores por defecto"""
+        Configurador.configuracion_termostato = {
+            "proxy_bateria": "socket"
+        }
+
+        resultado_bateria = Configurador.obtener_puerto("bateria")
+        resultado_temperatura = Configurador.obtener_puerto("temperatura")
+        resultado_seteo = Configurador.obtener_puerto("seteo_temperatura")
+
+        assert resultado_bateria == 11000
+        assert resultado_temperatura == 12000
+        assert resultado_seteo == 13000
+
+        # Cleanup
+        Configurador.configuracion_termostato = None
+
+    def test_obtener_api_url_con_config(self):
+        """Con configuración de red debe retornar la URL configurada"""
+        Configurador.configuracion_termostato = {
+            "red": {
+                "host_escucha": "0.0.0.0",
+                "puertos": {
+                    "bateria": 11000
+                },
+                "api_url": "http://192.168.1.100:5050"
+            }
+        }
+
+        resultado = Configurador.obtener_api_url()
+        assert resultado == "http://192.168.1.100:5050"
+
+        # Cleanup
+        Configurador.configuracion_termostato = None
+
+    def test_obtener_api_url_sin_config_usa_default(self):
+        """Sin configuración de red debe usar valor por defecto"""
+        Configurador.configuracion_termostato = {
+            "proxy_bateria": "socket"
+        }
+
+        resultado = Configurador.obtener_api_url()
+        assert resultado == "http://localhost:5050"
+
+        # Cleanup
+        Configurador.configuracion_termostato = None
+
+    def test_obtener_puerto_sensor_inexistente_retorna_none(self):
+        """Si se solicita puerto de sensor inexistente debe retornar None"""
+        Configurador.configuracion_termostato = {
+            "red": {
+                "puertos": {
+                    "bateria": 11000,
+                    "temperatura": 12000,
+                    "seteo_temperatura": 13000
+                }
+            }
+        }
+
+        resultado = Configurador.obtener_puerto("sensor_inexistente")
+        assert resultado is None
+
+        # Cleanup
+        Configurador.configuracion_termostato = None

@@ -4,6 +4,7 @@ from os import system
 
 
 servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+servidor.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # Permite reusar puerto
 direccion_servidor = ('localhost', 14001)
 servidor.bind(direccion_servidor)
 
@@ -22,9 +23,10 @@ while True:
                 break
             temperatura = str(datos.decode("utf-8"))
 
-    except ConnectionError("Error en la lectura de la temperatura"):
+    except ConnectionError as e:  # FIX: sintaxis correcta
+        print(f"Error en la lectura de la temperatura: {e}")
+    finally:  # FIX: Asegurar cierre de conexión
         conexion.close()
-        print("FIN")
 
     time.sleep(1)
     system("clear")

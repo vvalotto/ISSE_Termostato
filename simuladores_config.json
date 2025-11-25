@@ -1,0 +1,11 @@
+{
+  "raspberry_pi": {
+    "host": "localhost",
+    "puertos": {
+      "bateria": 11000,
+      "temperatura": 12000,
+      "seteo_temperatura": 13000,
+      "selector_temperatura": 14000
+    }
+  }
+}

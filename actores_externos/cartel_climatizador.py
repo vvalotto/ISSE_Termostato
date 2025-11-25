@@ -3,6 +3,7 @@ import time
 from os import system
 
 servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+servidor.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # Permite reusar puerto
 direccion_servidor = ('localhost', 14002)
 servidor.bind(direccion_servidor)
 
@@ -21,9 +22,10 @@ while True:
                 break
             estado = str(datos.decode("utf-8"))
 
-    except ConnectionError("Error en la lectura del estado"):
+    except ConnectionError as e:  # FIX: sintaxis correcta
+        print(f"Error en la lectura del estado: {e}")
+    finally:  # FIX: Asegurar cierre de conexión
         conexion.close()
-        print("FIN")
 
     time.sleep(1)
     system("clear")
