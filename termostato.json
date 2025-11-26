@@ -9,6 +9,17 @@
   "visualizador_temperatura" : "api",
   "visualizador_climatizador" : "api",
 
+  "bateria": {
+    "carga_maxima": 5.0,
+    "umbral_carga_baja": 0.95
+  },
+
+  "ambiente": {
+    "histeresis": 2.0,
+    "temperatura_inicial": 22.0,
+    "incremento_ajuste": 1.0
+  },
+
   "red": {
     "host_escucha": "0.0.0.0",
     "puertos": {

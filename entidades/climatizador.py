@@ -8,7 +8,7 @@ from servicios_dominio.controlador_climatizador import *
 class AbsClimatizador(metaclass=ABCMeta):
     """
     Clase Abstracta Climatizador que generaliza el comportamiento
-    de los posibles dispositivo que sirven para cambiar la temperatura
+    de los posibles dispositivos que sirven para cambiar la temperatura
     de un ambiente
     """
     @property

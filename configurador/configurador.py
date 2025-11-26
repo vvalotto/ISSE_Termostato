@@ -88,6 +88,31 @@ class Configurador:
         return Configurador.configuracion_termostato.get("red", {}).get("api_url", "http://localhost:5050")
 
     @staticmethod
+    def obtener_carga_maxima_bateria():
+        """Retorna la carga máxima de la batería en voltios"""
+        return Configurador.configuracion_termostato.get("bateria", {}).get("carga_maxima", 5.0)
+
+    @staticmethod
+    def obtener_umbral_bateria():
+        """Retorna el umbral para indicador de batería baja (porcentaje como decimal)"""
+        return Configurador.configuracion_termostato.get("bateria", {}).get("umbral_carga_baja", 0.95)
+
+    @staticmethod
+    def obtener_histeresis():
+        """Retorna el valor de histéresis para control de temperatura en grados Celsius"""
+        return Configurador.configuracion_termostato.get("ambiente", {}).get("histeresis", 2.0)
+
+    @staticmethod
+    def obtener_temperatura_inicial():
+        """Retorna la temperatura deseada inicial en grados Celsius"""
+        return Configurador.configuracion_termostato.get("ambiente", {}).get("temperatura_inicial", 22.0)
+
+    @staticmethod
+    def obtener_incremento_temperatura():
+        """Retorna el incremento/decremento para ajustar temperatura en grados Celsius"""
+        return Configurador.configuracion_termostato.get("ambiente", {}).get("incremento_ajuste", 1.0)
+
+    @staticmethod
     def _validar_configuracion():
         """Valida que la configuración tenga todas las claves necesarias"""
         config = Configurador.configuracion_termostato

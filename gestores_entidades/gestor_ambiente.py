@@ -16,7 +16,9 @@ class GestorAmbiente:
         return self._ambiente
 
     def __init__(self):
-        self._ambiente = Ambiente()
+        # Obtener temperatura inicial desde configuración
+        temperatura_inicial = Configurador.obtener_temperatura_inicial()
+        self._ambiente = Ambiente(temperatura_deseada_inicial=temperatura_inicial)
         self._proxy_sensor_temperatura = Configurador.configurar_proxy_temperatura()
         self._visualizador_temperatura = Configurador().configurar_visualizador_temperatura()
 
@@ -33,10 +35,14 @@ class GestorAmbiente:
         self._visualizador_temperatura.mostrar_temperatura_ambiente(self._ambiente.temperatura_ambiente)
 
     def aumentar_temperatura_deseada(self):
-        self._ambiente.temperatura_deseada += 1
+        """Aumenta la temperatura deseada según el incremento configurado"""
+        incremento = Configurador.obtener_incremento_temperatura()
+        self._ambiente.temperatura_deseada += incremento
 
     def disminuir_temperatura_deseada(self):
-        self._ambiente.temperatura_deseada -= 1
+        """Disminuye la temperatura deseada según el incremento configurado"""
+        incremento = Configurador.obtener_incremento_temperatura()
+        self._ambiente.temperatura_deseada -= incremento
 
     def obtener_temperatura_deseada(self):
         return self._ambiente.temperatura_deseada
