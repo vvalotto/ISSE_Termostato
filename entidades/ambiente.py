@@ -32,11 +32,17 @@ class Ambiente:
         self.__temperatura_a_mostrar = valor
         return
 
-    def __init__(self):
-        self.__temperatura_ambiente = 0
-        self.__temperatura_deseada = 0
+    def __init__(self, temperatura_deseada_inicial=None):
+        """
+        Inicializa el ambiente.
+
+        Args:
+            temperatura_deseada_inicial: Temperatura deseada inicial en °C.
+                                        Si es None, se usa 22°C por defecto.
+        """
+        self.__temperatura_ambiente = None  # Aún no leída del sensor
+        self.__temperatura_deseada = temperatura_deseada_inicial if temperatura_deseada_inicial is not None else 22
         self.__temperatura_a_mostrar = "ambiente"
-        return
 
     def __repr__(self):
         return 'Ambiente: ' + str(self.__temperatura_ambiente) + ' - ' + \

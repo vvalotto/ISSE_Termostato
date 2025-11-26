@@ -16,7 +16,10 @@ class GestorBateria:
         la clase que guarda el estado de la bateria
         la clase que expone visualmente el estado de la bateria
         """
-        self._bateria = Bateria(5, 0.95)
+        # Obtener configuración de batería desde el archivo de configuración
+        carga_maxima = Configurador.obtener_carga_maxima_bateria()
+        umbral = Configurador.obtener_umbral_bateria()
+        self._bateria = Bateria(carga_maxima, umbral)
 
         # En tiempo de ejecución se determina que clase será la que
         # integrara el gestor

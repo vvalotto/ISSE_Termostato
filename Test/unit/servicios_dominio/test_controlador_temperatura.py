@@ -17,6 +17,14 @@ Nota: La histeresis es de 2 grados. El rango "normal" es [deseada-2, deseada+2]
 """
 import pytest
 from servicios_dominio.controlador_climatizador import ControladorTemperatura
+from configurador.configurador import Configurador
+
+
+@pytest.fixture(scope="module", autouse=True)
+def cargar_configuracion():
+    """Carga la configuración antes de ejecutar los tests"""
+    Configurador.cargar_configuracion()
+    yield
 
 
 class TestControladorTemperatura:
@@ -103,9 +111,9 @@ class TestControladorTemperaturaParametrizado:
 class TestControladorTemperaturaHisteresis:
     """Tests para verificar el valor de histeresis"""
 
-    def test_histeresis_es_dos(self):
-        """La histeresis debe ser 2"""
-        assert ControladorTemperatura.histeris == 2
+    def test_histeresis_configurada_es_dos(self):
+        """La histeresis configurada debe ser 2"""
+        assert Configurador.obtener_histeresis() == 2.0
 
     def test_limite_exacto_superior_es_normal(self):
         """El limite exacto superior (deseada + histeresis) debe ser 'normal'"""

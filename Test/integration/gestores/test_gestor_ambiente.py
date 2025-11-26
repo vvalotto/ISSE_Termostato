@@ -27,6 +27,8 @@ class TestGestorAmbienteIntegracion:
         with patch('gestores_entidades.gestor_ambiente.Configurador') as mock_config:
             mock_config.configurar_proxy_temperatura.return_value = mock_proxy
             mock_config.return_value.configurar_visualizador_temperatura.return_value = mock_visualizador
+            mock_config.obtener_temperatura_inicial.return_value = 22.0
+            mock_config.obtener_incremento_temperatura.return_value = 1.0
 
             gestor = GestorAmbiente()
             gestor.leer_temperatura_ambiente()
@@ -44,6 +46,8 @@ class TestGestorAmbienteIntegracion:
         with patch('gestores_entidades.gestor_ambiente.Configurador') as mock_config:
             mock_config.configurar_proxy_temperatura.return_value = mock_proxy
             mock_config.return_value.configurar_visualizador_temperatura.return_value = mock_visualizador
+            mock_config.obtener_temperatura_inicial.return_value = 22.0
+            mock_config.obtener_incremento_temperatura.return_value = 1.0
 
             gestor = GestorAmbiente()
             gestor.leer_temperatura_ambiente()
@@ -59,6 +63,8 @@ class TestGestorAmbienteIntegracion:
         with patch('gestores_entidades.gestor_ambiente.Configurador') as mock_config:
             mock_config.configurar_proxy_temperatura.return_value = mock_proxy
             mock_config.return_value.configurar_visualizador_temperatura.return_value = mock_visualizador
+            mock_config.obtener_temperatura_inicial.return_value = 22.0
+            mock_config.obtener_incremento_temperatura.return_value = 1.0
 
             gestor = GestorAmbiente()
             temp_inicial = gestor.obtener_temperatura_deseada()
@@ -76,6 +82,8 @@ class TestGestorAmbienteIntegracion:
         with patch('gestores_entidades.gestor_ambiente.Configurador') as mock_config:
             mock_config.configurar_proxy_temperatura.return_value = mock_proxy
             mock_config.return_value.configurar_visualizador_temperatura.return_value = mock_visualizador
+            mock_config.obtener_temperatura_inicial.return_value = 22.0
+            mock_config.obtener_incremento_temperatura.return_value = 1.0
 
             gestor = GestorAmbiente()
             # Primero aumentamos para tener un valor positivo
@@ -97,6 +105,8 @@ class TestGestorAmbienteIntegracion:
         with patch('gestores_entidades.gestor_ambiente.Configurador') as mock_config:
             mock_config.configurar_proxy_temperatura.return_value = mock_proxy
             mock_config.return_value.configurar_visualizador_temperatura.return_value = mock_visualizador
+            mock_config.obtener_temperatura_inicial.return_value = 22.0
+            mock_config.obtener_incremento_temperatura.return_value = 1.0
 
             gestor = GestorAmbiente()
             gestor.leer_temperatura_ambiente()
@@ -113,13 +123,15 @@ class TestGestorAmbienteIntegracion:
         with patch('gestores_entidades.gestor_ambiente.Configurador') as mock_config:
             mock_config.configurar_proxy_temperatura.return_value = mock_proxy
             mock_config.return_value.configurar_visualizador_temperatura.return_value = mock_visualizador
+            mock_config.obtener_temperatura_inicial.return_value = 22.0
+            mock_config.obtener_incremento_temperatura.return_value = 1.0
 
             gestor = GestorAmbiente()
-            gestor.aumentar_temperatura_deseada()  # temp = 1
-            gestor.aumentar_temperatura_deseada()  # temp = 2
+            gestor.aumentar_temperatura_deseada()  # temp = 22+1 = 23
+            gestor.aumentar_temperatura_deseada()  # temp = 23+1 = 24
             gestor.mostrar_temperatura_deseada()
 
-            mock_visualizador.mostrar_temperatura_deseada.assert_called_once_with(2)
+            mock_visualizador.mostrar_temperatura_deseada.assert_called_once_with(24)
 
 
 class TestGestorAmbienteMostrarTemperatura:
@@ -134,6 +146,8 @@ class TestGestorAmbienteMostrarTemperatura:
         with patch('gestores_entidades.gestor_ambiente.Configurador') as mock_config:
             mock_config.configurar_proxy_temperatura.return_value = mock_proxy
             mock_config.return_value.configurar_visualizador_temperatura.return_value = mock_visualizador
+            mock_config.obtener_temperatura_inicial.return_value = 22.0
+            mock_config.obtener_incremento_temperatura.return_value = 1.0
 
             gestor = GestorAmbiente()
             gestor.leer_temperatura_ambiente()
@@ -150,13 +164,15 @@ class TestGestorAmbienteMostrarTemperatura:
         with patch('gestores_entidades.gestor_ambiente.Configurador') as mock_config:
             mock_config.configurar_proxy_temperatura.return_value = mock_proxy
             mock_config.return_value.configurar_visualizador_temperatura.return_value = mock_visualizador
+            mock_config.obtener_temperatura_inicial.return_value = 22.0
+            mock_config.obtener_incremento_temperatura.return_value = 1.0
 
             gestor = GestorAmbiente()
-            gestor.aumentar_temperatura_deseada()  # temp = 1
+            gestor.aumentar_temperatura_deseada()  # temp = 22+1 = 23
             gestor.indicar_temperatura_a_mostrar("deseada")
             gestor.mostrar_temperatura()
 
-            mock_visualizador.mostrar_temperatura_deseada.assert_called_with(1)
+            mock_visualizador.mostrar_temperatura_deseada.assert_called_with(23)
 
 
 class TestGestorAmbienteFlujoCompleto:
@@ -171,6 +187,8 @@ class TestGestorAmbienteFlujoCompleto:
         with patch('gestores_entidades.gestor_ambiente.Configurador') as mock_config:
             mock_config.configurar_proxy_temperatura.return_value = mock_proxy
             mock_config.return_value.configurar_visualizador_temperatura.return_value = mock_visualizador
+            mock_config.obtener_temperatura_inicial.return_value = 22.0
+            mock_config.obtener_incremento_temperatura.return_value = 1.0
 
             gestor = GestorAmbiente()
 
@@ -178,14 +196,15 @@ class TestGestorAmbienteFlujoCompleto:
             gestor.leer_temperatura_ambiente()
             assert gestor.obtener_temperatura_ambiente() == 18.0
 
-            # Paso 2: Ajustar temperatura deseada
-            for _ in range(22):  # Subir a 22
-                gestor.aumentar_temperatura_deseada()
-            assert gestor.obtener_temperatura_deseada() == 22
+            # Paso 2: Verificar temperatura inicial y ajustar
+            assert gestor.obtener_temperatura_deseada() == 22.0  # Valor inicial configurado
+            gestor.aumentar_temperatura_deseada()  # Aumentar a 23
+            gestor.aumentar_temperatura_deseada()  # Aumentar a 24
+            assert gestor.obtener_temperatura_deseada() == 24.0
 
             # Paso 3: Mostrar ambas temperaturas
             gestor.mostrar_temperatura_ambiente()
             gestor.mostrar_temperatura_deseada()
 
             mock_visualizador.mostrar_temperatura_ambiente.assert_called_with(18.0)
-            mock_visualizador.mostrar_temperatura_deseada.assert_called_with(22)
+            mock_visualizador.mostrar_temperatura_deseada.assert_called_with(24.0)

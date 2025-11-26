@@ -2,7 +2,7 @@
 Tests unitarios para la entidad Ambiente
 
 Casos de prueba del Plan de Pruebas:
-- AMB-001: Inicializacion por defecto -> temp_ambiente=0, temp_deseada=0
+- AMB-001: Inicializacion por defecto -> temp_ambiente=None, temp_deseada=22
 - AMB-002: Setear temperatura ambiente -> temperatura_ambiente=25.5
 - AMB-003: Setear temperatura deseada -> temperatura_deseada=22.0
 - AMB-004: Cambiar temperatura a mostrar -> temperatura_a_mostrar="deseada"
@@ -18,8 +18,8 @@ class TestAmbiente:
     # AMB-001: Inicializacion por defecto
     def test_inicializacion_por_defecto(self, ambiente_default):
         """Al crear un Ambiente, los valores deben ser los por defecto"""
-        assert ambiente_default.temperatura_ambiente == 0
-        assert ambiente_default.temperatura_deseada == 0
+        assert ambiente_default.temperatura_ambiente is None  # Aún no leída del sensor
+        assert ambiente_default.temperatura_deseada == 22  # Valor por defecto
         assert ambiente_default.temperatura_a_mostrar == "ambiente"
 
     # AMB-002: Setear temperatura ambiente
