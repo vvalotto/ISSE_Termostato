@@ -221,25 +221,30 @@ ISSE_Termostato/
 +-- registrador/                  # Sistema de Auditoria
 |   +-- registrador.py            # Registro de operaciones y eventos
 |
-+-- registro_auditoria/           # Logs de auditoria generados
++-- registro_auditoria            # Archivo de logs de auditoria
 |
 +-- actores_externos/             # Simuladores y Displays
 |   +-- simuladores_config.json   # Configuracion de IP remota (Raspberry Pi)
 |   +-- lanzar_simuladores.sh     # Script para lanzar 4 simuladores (macOS)
-|   +-- sensor_temperatura.py     # Simulador sensor (cliente, puerto 12000)
-|   +-- bateria.py                # Simulador bateria (cliente, puerto 11000)
-|   +-- seteo_temperatura_deseada.py  # Selector temp (cliente, puerto 13000)
+|   +-- simulador_temperatura.py  # Simulador sensor (cliente, puerto 12000)
+|   +-- simulador_bateria.py      # Simulador bateria (cliente, puerto 11000)
+|   +-- simulador_seteo_temperatura_deseada.py  # Selector temp (cliente, puerto 13000)
+|   +-- simulador_selector_temperatura.py  # Selector temperatura (cliente, puerto 14000)
 |   +-- cartel_temperatura.py     # Display temperatura (servidor, puerto 14001)
 |   +-- cartel_bateria.py         # Display bateria (servidor, puerto 14000)
 |   +-- cartel_climatizador.py    # Display climatizador (servidor, puerto 14002)
 |
-+-- Test/                         # Tests unitarios
++-- Test/                         # Tests unitarios e integración
+|   +-- unit/                     # Tests unitarios
+|   +-- integration/              # Tests de integración
 |   +-- hal/
 |   +-- bateria/
 |   +-- temperatura/
 |   +-- climatizador/
 |   +-- operador/
 |   +-- presentador/
+|   +-- lanzador/
+|   +-- selector_temperatura/
 |
 +-- docs/                         # Documentacion
 +-- termostato.json               # Configuracion
@@ -388,10 +393,10 @@ Envian datos al sistema principal:
 
 | Actor | Archivo | Puerto | Descripcion |
 |-------|---------|--------|-------------|
-| Sensor Temperatura | `sensor_temperatura.py` | 12000 | Simula sensor fisico, envia temperatura en grados C |
-| Bateria | `bateria.py` | 11000 | Simula bateria, envia nivel de carga (0-5V) |
-| Seteo Temperatura | `seteo_temperatura_deseada.py` | 13000 | Botones para aumentar/disminuir temperatura deseada |
-| Selector Temperatura | `selector_temperatura.py` | 14000 | Selector de modo de operacion (manual/auto) |
+| Sensor Temperatura | `simulador_temperatura.py` | 12000 | Simula sensor fisico, envia temperatura en grados C |
+| Bateria | `simulador_bateria.py` | 11000 | Simula bateria, envia nivel de carga (0-5V) |
+| Seteo Temperatura | `simulador_seteo_temperatura_deseada.py` | 13000 | Botones para aumentar/disminuir temperatura deseada |
+| Selector Temperatura | `simulador_selector_temperatura.py` | 14000 | Selector de modo de operacion (manual/auto) |
 
 ### Displays de Salida (Servidores)
 
@@ -503,16 +508,16 @@ Para pruebas con comunicacion por socket, ejecutar en terminales separadas:
 python ejecutar.py
 
 # Terminal 2: Simulador de temperatura
-python actores_externos/sensor_temperatura.py
+python actores_externos/simulador_temperatura.py
 
 # Terminal 3: Simulador de bateria
-python actores_externos/bateria.py
+python actores_externos/simulador_bateria.py
 
 # Terminal 4: Seteo de temperatura
-python actores_externos/seteo_temperatura_deseada.py
+python actores_externos/simulador_seteo_temperatura_deseada.py
 
 # Terminal 5: Selector de temperatura
-python actores_externos/selector_temperatura.py
+python actores_externos/simulador_selector_temperatura.py
 
 # Terminal 6: Display de temperatura (opcional, solo testing local)
 python actores_externos/cartel_temperatura.py
@@ -831,7 +836,6 @@ pip3 install requests
 
 ### Historias de Usuario
 - `Historias Sprint 1.md` - Historias de usuario del primer sprint
-- `Guia de Diseno Detallado.pdf` - Guia de diseno del sistema
 
 ## Licencia y Contribuciones
 
