@@ -1,7 +1,7 @@
 {
   "proxy_bateria" : "socket",
   "proxy_sensor_temperatura" : "socket",
-  "climatizador" : "calefactor",
+  "climatizador" : "climatizador",
   "actuador_climatizador": "general",
   "selector_temperatura": "socket",
   "seteo_temperatura" : "socket",

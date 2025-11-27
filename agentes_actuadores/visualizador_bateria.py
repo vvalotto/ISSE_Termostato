@@ -64,7 +64,7 @@ class VisualizadorBateriaApi(AbsVisualizadorBateria):
         from configurador.configurador import Configurador
         api_url = Configurador.obtener_api_url()
         try:
-            requests.post("{}/bateria/indicador".format(api_url),
+            requests.post("{}/termostato/indicador".format(api_url),
                          json={"indicador": indicador_bateria},
                          timeout=5)
         except requests.RequestException as e:
