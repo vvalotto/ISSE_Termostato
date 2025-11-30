@@ -115,7 +115,8 @@ class TestVisualizadorTemperaturaApi:
 
             mock_post.assert_called_once_with(
                 "http://localhost:5050/termostato/temperatura_ambiente",
-                json={"ambiente": 25}
+                json={"ambiente": 25},
+                timeout=5
             )
 
     def test_mostrar_temperatura_deseada_hace_post(self):
@@ -125,7 +126,8 @@ class TestVisualizadorTemperaturaApi:
 
             mock_post.assert_called_once_with(
                 "http://localhost:5050/termostato/temperatura_deseada",
-                json={"deseada": 22}
+                json={"deseada": 22},
+                timeout=5
             )
 
     def test_post_con_diferentes_valores(self):
@@ -140,13 +142,17 @@ class TestVisualizadorTemperaturaApi:
                 assert call_args[1]['json']['ambiente'] == valor
 
     # VIS-005: API no disponible
-    def test_api_no_disponible_lanza_excepcion(self):
-        """Cuando la API no esta disponible, lanza excepcion (no manejada)"""
+    def test_api_no_disponible_maneja_error(self, capsys):
+        """Cuando la API no esta disponible, maneja el error e imprime mensaje"""
         import requests
 
-        with patch('requests.post', side_effect=requests.exceptions.ConnectionError()):
-            with pytest.raises(requests.exceptions.ConnectionError):
-                VisualizadorTemperaturaApi.mostrar_temperatura_ambiente(25)
+        with patch('requests.post', side_effect=requests.exceptions.ConnectionError("API no disponible")):
+            # No debe lanzar excepcion, debe manejarlo
+            VisualizadorTemperaturaApi.mostrar_temperatura_ambiente(25)
+
+            # Verificar que se imprimió mensaje de error
+            captured = capsys.readouterr()
+            assert "Error al enviar temperatura ambiente" in captured.out
 
 
 class TestVisualizadoresIntegracion:

@@ -20,13 +20,6 @@ from servicios_dominio.controlador_climatizador import ControladorTemperatura
 from configurador.configurador import Configurador
 
 
-@pytest.fixture(scope="module", autouse=True)
-def cargar_configuracion():
-    """Carga la configuración antes de ejecutar los tests"""
-    Configurador.cargar_configuracion()
-    yield
-
-
 class TestControladorTemperatura:
     """Tests para ControladorTemperatura.comparar_temperatura()"""
 

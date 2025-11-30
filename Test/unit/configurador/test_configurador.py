@@ -56,17 +56,15 @@ class TestConfiguradorCargarConfiguracion:
 
     # CFG-004: Clave faltante (se prueba en los metodos configurar_*)
     def test_configurar_con_clave_faltante_lanza_keyerror(self):
-        """Si falta una clave debe lanzar KeyError al configurar"""
+        """Si falta una clave debe lanzar KeyError al cargar configuracion"""
         # Configuracion incompleta (falta proxy_bateria)
         config_incompleta = json.dumps({
             "climatizador": "climatizador"
         })
 
         with patch("builtins.open", mock_open(read_data=config_incompleta)):
-            Configurador.cargar_configuracion()
-
-        with pytest.raises(KeyError):
-            Configurador.configurar_proxy_bateria()
+            with pytest.raises(KeyError):
+                Configurador.cargar_configuracion()
 
 
 class TestConfiguradorMetodosConfigurar:
