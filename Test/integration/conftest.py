@@ -3,6 +3,46 @@ Fixtures compartidas para tests de integracion
 """
 import pytest
 from unittest.mock import Mock, patch
+from configurador.configurador import Configurador
+
+
+# ============ FIXTURE CONFIGURADOR ============
+
+@pytest.fixture(autouse=True)
+def setup_configurador_integration():
+    """Inicializa Configurador con valores por defecto para tests de integración"""
+    Configurador.configuracion_termostato = {
+        "proxy_bateria": "archivo",
+        "proxy_sensor_temperatura": "archivo",
+        "actuador_climatizador": "archivo",
+        "visualizador_temperatura": "archivo",
+        "visualizador_bateria": "archivo",
+        "visualizador_climatizador": "archivo",
+        "climatizador": "climatizador",
+        "selector_temperatura": "archivo",
+        "seteo_temperatura": "archivo",
+        "ambiente": {
+            "histeresis": 2.0,
+            "temperatura_inicial": 0.0,  # Empieza en 0 para que los tests puedan incrementar
+            "incremento_ajuste": 1.0
+        },
+        "bateria": {
+            "carga_maxima": 5.0,
+            "umbral_carga_baja": 0.95
+        },
+        "red": {
+            "host_escucha": "localhost",
+            "puertos": {
+                "bateria": 11000,
+                "temperatura": 12000,
+                "seteo_temperatura": 13000
+            },
+            "api_url": "http://localhost:5050"
+        }
+    }
+    yield
+    # Cleanup: limpiar configuracion después de cada test
+    Configurador.configuracion_termostato = None
 
 
 # ============ FIXTURES PARA GESTORES ============

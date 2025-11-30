@@ -22,10 +22,10 @@ class Configurador:
         try:
             with open("termostato.json", "r") as termostato_config:
                 Configurador.configuracion_termostato = json.load(termostato_config)
-        except FileNotFoundError:
-            raise Exception("ERROR: No se encontró el archivo termostato.json")
+        except FileNotFoundError as e:
+            raise FileNotFoundError("ERROR: No se encontró el archivo termostato.json") from e
         except json.JSONDecodeError as e:
-            raise Exception("ERROR: termostato.json tiene formato inválido: {}".format(e))
+            raise json.JSONDecodeError("ERROR: termostato.json tiene formato inválido: {}".format(e), e.doc, e.pos)
 
         # Validar configuración
         Configurador._validar_configuracion()
@@ -126,7 +126,7 @@ class Configurador:
 
         for clave in claves_requeridas:
             if clave not in config:
-                raise Exception("ERROR: Falta la clave '{}' en termostato.json".format(clave))
+                raise KeyError("ERROR: Falta la clave '{}' en termostato.json".format(clave))
 
         # Validar sección de red (opcional pero recomendada)
         if "red" in config:

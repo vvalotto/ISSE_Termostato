@@ -42,6 +42,9 @@ class TestCicloCompletoCalefaccion:
         with patch('gestores_entidades.gestor_ambiente.Configurador') as mock_config_amb:
             mock_config_amb.configurar_proxy_temperatura.return_value = mock_proxy_temp
             mock_config_amb.return_value.configurar_visualizador_temperatura.return_value = mock_visualizador_temp
+            mock_config_amb.obtener_temperatura_inicial.return_value = 0.0
+            mock_config_amb.obtener_incremento_temperatura.return_value = 1.0
+            mock_config_amb.obtener_histeresis.return_value = 2.0
 
             gestor_ambiente = GestorAmbiente()
 
@@ -63,6 +66,7 @@ class TestCicloCompletoCalefaccion:
             mock_config_clima.configurar_climatizador.return_value = Climatizador()
             mock_config_clima.configurar_actuador_climatizador.return_value = mock_actuador
             mock_config_clima.configurar_visualizador_climatizador.return_value = mock_visualizador_clima
+            mock_config_clima.obtener_histeresis.return_value = 2.0
 
             gestor_climatizador = GestorClimatizador()
 
@@ -96,6 +100,9 @@ class TestCicloCompletoEnfriamiento:
         with patch('gestores_entidades.gestor_ambiente.Configurador') as mock_config_amb:
             mock_config_amb.configurar_proxy_temperatura.return_value = mock_proxy_temp
             mock_config_amb.return_value.configurar_visualizador_temperatura.return_value = mock_visualizador_temp
+            mock_config_amb.obtener_temperatura_inicial.return_value = 0.0
+            mock_config_amb.obtener_incremento_temperatura.return_value = 1.0
+            mock_config_amb.obtener_histeresis.return_value = 2.0
 
             gestor_ambiente = GestorAmbiente()
 
@@ -117,6 +124,7 @@ class TestCicloCompletoEnfriamiento:
             mock_config_clima.configurar_climatizador.return_value = Climatizador()
             mock_config_clima.configurar_actuador_climatizador.return_value = mock_actuador
             mock_config_clima.configurar_visualizador_climatizador.return_value = mock_visualizador_clima
+            mock_config_clima.obtener_histeresis.return_value = 2.0
 
             gestor_climatizador = GestorClimatizador()
 
@@ -148,6 +156,9 @@ class TestCicloTemperaturaNormal:
         with patch('gestores_entidades.gestor_ambiente.Configurador') as mock_config_amb:
             mock_config_amb.configurar_proxy_temperatura.return_value = mock_proxy_temp
             mock_config_amb.return_value.configurar_visualizador_temperatura.return_value = mock_visualizador_temp
+            mock_config_amb.obtener_temperatura_inicial.return_value = 0.0
+            mock_config_amb.obtener_incremento_temperatura.return_value = 1.0
+            mock_config_amb.obtener_histeresis.return_value = 2.0
 
             gestor_ambiente = GestorAmbiente()
             gestor_ambiente.leer_temperatura_ambiente()
@@ -162,6 +173,7 @@ class TestCicloTemperaturaNormal:
             mock_config_clima.configurar_climatizador.return_value = Climatizador()
             mock_config_clima.configurar_actuador_climatizador.return_value = mock_actuador
             mock_config_clima.configurar_visualizador_climatizador.return_value = mock_visualizador_clima
+            mock_config_clima.obtener_histeresis.return_value = 2.0
 
             gestor_climatizador = GestorClimatizador()
             gestor_climatizador.accionar_climatizador(gestor_ambiente.ambiente)
@@ -184,6 +196,9 @@ class TestCicloConCalefactor:
         with patch('gestores_entidades.gestor_ambiente.Configurador') as mock_config_amb:
             mock_config_amb.configurar_proxy_temperatura.return_value = mock_proxy_temp
             mock_config_amb.return_value.configurar_visualizador_temperatura.return_value = mock_visualizador_temp
+            mock_config_amb.obtener_temperatura_inicial.return_value = 0.0
+            mock_config_amb.obtener_incremento_temperatura.return_value = 1.0
+            mock_config_amb.obtener_histeresis.return_value = 2.0
 
             gestor_ambiente = GestorAmbiente()
             gestor_ambiente.leer_temperatura_ambiente()
@@ -194,6 +209,7 @@ class TestCicloConCalefactor:
             mock_config_clima.configurar_climatizador.return_value = Calefactor()
             mock_config_clima.configurar_actuador_climatizador.return_value = mock_actuador
             mock_config_clima.configurar_visualizador_climatizador.return_value = mock_visualizador_clima
+            mock_config_clima.obtener_histeresis.return_value = 2.0
 
             gestor_climatizador = GestorClimatizador()
             gestor_climatizador.accionar_climatizador(gestor_ambiente.ambiente)
@@ -211,6 +227,9 @@ class TestCicloConCalefactor:
         with patch('gestores_entidades.gestor_ambiente.Configurador') as mock_config_amb:
             mock_config_amb.configurar_proxy_temperatura.return_value = mock_proxy_temp
             mock_config_amb.return_value.configurar_visualizador_temperatura.return_value = mock_visualizador_temp
+            mock_config_amb.obtener_temperatura_inicial.return_value = 0.0
+            mock_config_amb.obtener_incremento_temperatura.return_value = 1.0
+            mock_config_amb.obtener_histeresis.return_value = 2.0
 
             gestor_ambiente = GestorAmbiente()
             gestor_ambiente.leer_temperatura_ambiente()
@@ -221,6 +240,7 @@ class TestCicloConCalefactor:
             mock_config_clima.configurar_climatizador.return_value = Calefactor()
             mock_config_clima.configurar_actuador_climatizador.return_value = mock_actuador
             mock_config_clima.configurar_visualizador_climatizador.return_value = mock_visualizador_clima
+            mock_config_clima.obtener_histeresis.return_value = 2.0
 
             gestor_climatizador = GestorClimatizador()
             gestor_climatizador.accionar_climatizador(gestor_ambiente.ambiente)
