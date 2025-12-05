@@ -1,6 +1,10 @@
 from servicios_aplicacion.lanzador import *
 from configurador.configurador import *
 
-if __name__ == "__main__":
+def main():
+    """Punto de entrada principal del sistema de termostato"""
     Configurador().cargar_configuracion()
     Lanzador().ejecutar()
+
+if __name__ == "__main__":
+    main()

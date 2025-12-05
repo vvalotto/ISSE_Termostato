@@ -1,0 +1,24 @@
+# MANIFEST.in - Especifica qué archivos incluir en el paquete distribuible
+
+# Incluir archivos de configuración
+include configurador/termostato.json
+include README.md
+include LICENSE
+
+# Incluir ejecutable principal
+include ejecutar.py
+
+# Excluir archivos innecesarios
+exclude actores_externos/*
+exclude Test/*
+exclude docs/*
+exclude *.pyc
+exclude .git*
+exclude .DS_Store
+
+# Excluir directorios de build
+prune build
+prune dist
+prune *.egg-info
+prune __pycache__
+prune .pytest_cache
