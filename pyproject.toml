@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "termostato-core"
+version = "1.0.0"
+description = "Sistema de Control de Climatización para Raspberry Pi"
+readme = "README.md"
+requires-python = ">=3.5"
+license = {text = "MIT"}
+keywords = ["termostato", "raspberry-pi", "iot", "control", "climatizacion"]
+authors = [
+  {name = "Victor Valotto", email = "vvalotto@example.com"}
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python :: 3",
+  "Operating System :: POSIX :: Linux",
+]
+
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0.0", "pytest-cov>=4.0.0", "radon>=5.1.0", "pylint>=2.15.0"]
+rpi = []
+
+[project.urls]
+Homepage = "https://github.com/vvalotto/ISSE_Termostato"
+Documentation = "https://github.com/vvalotto/ISSE_Termostato/docs"
+Repository = "https://github.com/vvalotto/ISSE_Termostato"
+"Bug Tracker" = "https://github.com/vvalotto/ISSE_Termostato/issues"
+
+[project.scripts]
+termostato = "ejecutar:main"
+
+[tool.setuptools]
+packages = [
+    "entidades",
+    "servicios_dominio",
+    "gestores_entidades",
+    "servicios_aplicacion",
+    "agentes_sensores",
+    "agentes_actuadores",
+    "configurador",
+    "registrador"
+]
+
+[tool.setuptools.package-data]
+configurador = ["termostato.json"]

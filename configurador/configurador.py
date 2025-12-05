@@ -2,6 +2,7 @@
 Clase que define que componentes se usaran
 """
 import json
+import os
 from configurador.factory_proxy_bateria import *
 from configurador.factory_sensor_temperatura import *
 from configurador.factory_actuador_climatizador import *
@@ -19,11 +20,25 @@ class Configurador:
 
     @staticmethod
     def cargar_configuracion():
+        # Buscar termostato.json en múltiples ubicaciones
+        config_paths = [
+            "termostato.json",  # Directorio actual
+            "/etc/termostato/termostato.json",  # Sistema Linux
+            os.path.join(os.path.dirname(__file__), "termostato.json"),  # Directorio del paquete
+        ]
+
+        config_file = None
+        for path in config_paths:
+            if os.path.exists(path):
+                config_file = path
+                break
+
+        if config_file is None:
+            raise FileNotFoundError("ERROR: No se encontró el archivo termostato.json en ninguna ubicación: {}".format(config_paths))
+
         try:
-            with open("termostato.json", "r") as termostato_config:
+            with open(config_file, "r") as termostato_config:
                 Configurador.configuracion_termostato = json.load(termostato_config)
-        except FileNotFoundError as e:
-            raise FileNotFoundError("ERROR: No se encontró el archivo termostato.json") from e
         except json.JSONDecodeError as e:
             raise json.JSONDecodeError("ERROR: termostato.json tiene formato inválido: {}".format(e), e.doc, e.pos)
 
