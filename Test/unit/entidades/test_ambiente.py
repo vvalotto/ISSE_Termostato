@@ -96,6 +96,6 @@ class TestAmbienteRepr:
 
         repr_str = repr(ambiente_default)
 
-        assert "Ambiente: 25" in repr_str
-        assert "Deseada: 22" in repr_str
-        assert "a mostrar: ambiente" in repr_str
+        assert "temperatura_ambiente=25" in repr_str
+        assert "temperatura_deseada=22" in repr_str
+        assert "temperatura_a_mostrar='ambiente'" in repr_str
