@@ -4,14 +4,13 @@ Aqui la acción es escribir en un archivo externo
 """
 
 from registrador.registrador import *
-from entidades.abs_actuador_climatizador import *
+from entidades.abs_actuador_climatizador import AbsProxyActuadorClimatizador, AbsActuadorClimatizador
 import datetime
 
 
-class ActuadorClimatizadorGeneral(AbsActuadorClimatizador, AbsRegistrador, AbsAuditor):
+class ActuadorClimatizadorGeneral(AbsProxyActuadorClimatizador, AbsRegistrador, AbsAuditor):
 
-    @staticmethod
-    def accionar_climatizador(accion):
+    def accionar_climatizador(self, accion):
 
         # Simula Actuador
         mensaje_accion = "accionando el climatizador"
