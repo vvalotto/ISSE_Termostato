@@ -72,7 +72,9 @@ class Configurador:
 
     @staticmethod
     def configurar_climatizador():
-        return FactoryClimatizador.crear(Configurador.configuracion_termostato["climatizador"])
+        tipo = Configurador.configuracion_termostato["climatizador"]
+        histeresis = Configurador.obtener_histeresis()
+        return FactoryClimatizador.crear(tipo, histeresis=histeresis)
 
     @staticmethod
     def configurar_selector_temperatura():
