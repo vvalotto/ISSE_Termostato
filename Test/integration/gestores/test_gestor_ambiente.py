@@ -10,12 +10,22 @@ Casos de prueba del Plan de Pruebas:
 - GAM-006: Mostrar temp deseada -> mostrar_temperatura_deseada() invocado
 """
 import pytest
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 from gestores_entidades.gestor_ambiente import GestorAmbiente
+from entidades.ambiente import Ambiente
 
 
 class TestGestorAmbienteIntegracion:
     """Tests de integracion para GestorAmbiente"""
+
+    def _crear_gestor(self, ambiente=None, proxy=None, visualizador=None, incremento=1):
+        """Helper para crear gestor con dependencias inyectadas"""
+        return GestorAmbiente(
+            ambiente=ambiente or Ambiente(temperatura_deseada_inicial=22.0),
+            proxy_sensor=proxy or Mock(),
+            visualizador=visualizador or Mock(),
+            incremento_temperatura=incremento
+        )
 
     # GAM-001: Lectura temperatura exitosa
     def test_lectura_temperatura_exitosa(self):
@@ -24,35 +34,31 @@ class TestGestorAmbienteIntegracion:
         mock_proxy.leer_temperatura.return_value = 25.0
         mock_visualizador = Mock()
 
-        with patch('gestores_entidades.gestor_ambiente.Configurador') as mock_config:
-            mock_config.configurar_proxy_temperatura.return_value = mock_proxy
-            mock_config.return_value.configurar_visualizador_temperatura.return_value = mock_visualizador
-            mock_config.obtener_temperatura_inicial.return_value = 22.0
-            mock_config.obtener_incremento_temperatura.return_value = 1.0
+        gestor = self._crear_gestor(
+            ambiente=Ambiente(temperatura_deseada_inicial=22.0),
+            proxy=mock_proxy,
+            visualizador=mock_visualizador
+        )
+        gestor.leer_temperatura_ambiente()
 
-            gestor = GestorAmbiente()
-            gestor.leer_temperatura_ambiente()
-
-            assert gestor.obtener_temperatura_ambiente() == 25.0
-            mock_proxy.leer_temperatura.assert_called_once()
+        assert gestor.obtener_temperatura_ambiente() == 25.0
+        mock_proxy.leer_temperatura.assert_called_once()
 
     # GAM-002: Sensor no disponible
     def test_sensor_no_disponible_retorna_none(self):
         """Cuando el sensor lanza excepcion, temperatura_ambiente debe ser None"""
         mock_proxy = Mock()
-        mock_proxy.leer_temperatura.side_effect = Exception("Sensor no disponible")
+        mock_proxy.leer_temperatura.side_effect = OSError("Sensor no disponible")
         mock_visualizador = Mock()
 
-        with patch('gestores_entidades.gestor_ambiente.Configurador') as mock_config:
-            mock_config.configurar_proxy_temperatura.return_value = mock_proxy
-            mock_config.return_value.configurar_visualizador_temperatura.return_value = mock_visualizador
-            mock_config.obtener_temperatura_inicial.return_value = 22.0
-            mock_config.obtener_incremento_temperatura.return_value = 1.0
+        gestor = self._crear_gestor(
+            ambiente=Ambiente(temperatura_deseada_inicial=22.0),
+            proxy=mock_proxy,
+            visualizador=mock_visualizador
+        )
+        gestor.leer_temperatura_ambiente()
 
-            gestor = GestorAmbiente()
-            gestor.leer_temperatura_ambiente()
-
-            assert gestor.obtener_temperatura_ambiente() is None
+        assert gestor.obtener_temperatura_ambiente() is None
 
     # GAM-003: Aumentar temperatura
     def test_aumentar_temperatura_deseada(self):
@@ -60,18 +66,17 @@ class TestGestorAmbienteIntegracion:
         mock_proxy = Mock()
         mock_visualizador = Mock()
 
-        with patch('gestores_entidades.gestor_ambiente.Configurador') as mock_config:
-            mock_config.configurar_proxy_temperatura.return_value = mock_proxy
-            mock_config.return_value.configurar_visualizador_temperatura.return_value = mock_visualizador
-            mock_config.obtener_temperatura_inicial.return_value = 22.0
-            mock_config.obtener_incremento_temperatura.return_value = 1.0
+        gestor = self._crear_gestor(
+            ambiente=Ambiente(temperatura_deseada_inicial=22.0),
+            proxy=mock_proxy,
+            visualizador=mock_visualizador,
+            incremento=1.0
+        )
+        temp_inicial = gestor.obtener_temperatura_deseada()
 
-            gestor = GestorAmbiente()
-            temp_inicial = gestor.obtener_temperatura_deseada()
+        gestor.aumentar_temperatura_deseada()
 
-            gestor.aumentar_temperatura_deseada()
-
-            assert gestor.obtener_temperatura_deseada() == temp_inicial + 1
+        assert gestor.obtener_temperatura_deseada() == temp_inicial + 1
 
     # GAM-004: Disminuir temperatura
     def test_disminuir_temperatura_deseada(self):
@@ -79,21 +84,20 @@ class TestGestorAmbienteIntegracion:
         mock_proxy = Mock()
         mock_visualizador = Mock()
 
-        with patch('gestores_entidades.gestor_ambiente.Configurador') as mock_config:
-            mock_config.configurar_proxy_temperatura.return_value = mock_proxy
-            mock_config.return_value.configurar_visualizador_temperatura.return_value = mock_visualizador
-            mock_config.obtener_temperatura_inicial.return_value = 22.0
-            mock_config.obtener_incremento_temperatura.return_value = 1.0
+        gestor = self._crear_gestor(
+            ambiente=Ambiente(temperatura_deseada_inicial=22.0),
+            proxy=mock_proxy,
+            visualizador=mock_visualizador,
+            incremento=1.0
+        )
+        # Primero aumentamos para tener un valor positivo
+        gestor.aumentar_temperatura_deseada()
+        gestor.aumentar_temperatura_deseada()
+        temp_antes = gestor.obtener_temperatura_deseada()
 
-            gestor = GestorAmbiente()
-            # Primero aumentamos para tener un valor positivo
-            gestor.aumentar_temperatura_deseada()
-            gestor.aumentar_temperatura_deseada()
-            temp_antes = gestor.obtener_temperatura_deseada()
+        gestor.disminuir_temperatura_deseada()
 
-            gestor.disminuir_temperatura_deseada()
-
-            assert gestor.obtener_temperatura_deseada() == temp_antes - 1
+        assert gestor.obtener_temperatura_deseada() == temp_antes - 1
 
     # GAM-005: Mostrar temp ambiente
     def test_mostrar_temperatura_ambiente_invoca_visualizador(self):
@@ -102,17 +106,15 @@ class TestGestorAmbienteIntegracion:
         mock_proxy.leer_temperatura.return_value = 25.0
         mock_visualizador = Mock()
 
-        with patch('gestores_entidades.gestor_ambiente.Configurador') as mock_config:
-            mock_config.configurar_proxy_temperatura.return_value = mock_proxy
-            mock_config.return_value.configurar_visualizador_temperatura.return_value = mock_visualizador
-            mock_config.obtener_temperatura_inicial.return_value = 22.0
-            mock_config.obtener_incremento_temperatura.return_value = 1.0
+        gestor = self._crear_gestor(
+            ambiente=Ambiente(temperatura_deseada_inicial=22.0),
+            proxy=mock_proxy,
+            visualizador=mock_visualizador
+        )
+        gestor.leer_temperatura_ambiente()
+        gestor.mostrar_temperatura_ambiente()
 
-            gestor = GestorAmbiente()
-            gestor.leer_temperatura_ambiente()
-            gestor.mostrar_temperatura_ambiente()
-
-            mock_visualizador.mostrar_temperatura_ambiente.assert_called_once_with(25.0)
+        mock_visualizador.mostrar_temperatura_ambiente.assert_called_once_with(25.0)
 
     # GAM-006: Mostrar temp deseada
     def test_mostrar_temperatura_deseada_invoca_visualizador(self):
@@ -120,22 +122,30 @@ class TestGestorAmbienteIntegracion:
         mock_proxy = Mock()
         mock_visualizador = Mock()
 
-        with patch('gestores_entidades.gestor_ambiente.Configurador') as mock_config:
-            mock_config.configurar_proxy_temperatura.return_value = mock_proxy
-            mock_config.return_value.configurar_visualizador_temperatura.return_value = mock_visualizador
-            mock_config.obtener_temperatura_inicial.return_value = 22.0
-            mock_config.obtener_incremento_temperatura.return_value = 1.0
+        gestor = self._crear_gestor(
+            ambiente=Ambiente(temperatura_deseada_inicial=22.0),
+            proxy=mock_proxy,
+            visualizador=mock_visualizador,
+            incremento=1.0
+        )
+        gestor.aumentar_temperatura_deseada()  # temp = 22+1 = 23
+        gestor.aumentar_temperatura_deseada()  # temp = 23+1 = 24
+        gestor.mostrar_temperatura_deseada()
 
-            gestor = GestorAmbiente()
-            gestor.aumentar_temperatura_deseada()  # temp = 22+1 = 23
-            gestor.aumentar_temperatura_deseada()  # temp = 23+1 = 24
-            gestor.mostrar_temperatura_deseada()
-
-            mock_visualizador.mostrar_temperatura_deseada.assert_called_once_with(24)
+        mock_visualizador.mostrar_temperatura_deseada.assert_called_once_with(24)
 
 
 class TestGestorAmbienteMostrarTemperatura:
     """Tests para mostrar_temperatura segun modo"""
+
+    def _crear_gestor(self, ambiente=None, proxy=None, visualizador=None, incremento=1):
+        """Helper para crear gestor con dependencias inyectadas"""
+        return GestorAmbiente(
+            ambiente=ambiente or Ambiente(temperatura_deseada_inicial=22.0),
+            proxy_sensor=proxy or Mock(),
+            visualizador=visualizador or Mock(),
+            incremento_temperatura=incremento
+        )
 
     def test_mostrar_temperatura_modo_ambiente(self):
         """Con modo 'ambiente', debe mostrar temperatura ambiente"""
@@ -143,40 +153,46 @@ class TestGestorAmbienteMostrarTemperatura:
         mock_proxy.leer_temperatura.return_value = 22.0
         mock_visualizador = Mock()
 
-        with patch('gestores_entidades.gestor_ambiente.Configurador') as mock_config:
-            mock_config.configurar_proxy_temperatura.return_value = mock_proxy
-            mock_config.return_value.configurar_visualizador_temperatura.return_value = mock_visualizador
-            mock_config.obtener_temperatura_inicial.return_value = 22.0
-            mock_config.obtener_incremento_temperatura.return_value = 1.0
+        gestor = self._crear_gestor(
+            ambiente=Ambiente(temperatura_deseada_inicial=22.0),
+            proxy=mock_proxy,
+            visualizador=mock_visualizador
+        )
+        gestor.leer_temperatura_ambiente()
+        gestor.indicar_temperatura_a_mostrar("ambiente")
+        gestor.mostrar_temperatura()
 
-            gestor = GestorAmbiente()
-            gestor.leer_temperatura_ambiente()
-            gestor.indicar_temperatura_a_mostrar("ambiente")
-            gestor.mostrar_temperatura()
-
-            mock_visualizador.mostrar_temperatura_ambiente.assert_called_with(22.0)
+        mock_visualizador.mostrar_temperatura_ambiente.assert_called_with(22.0)
 
     def test_mostrar_temperatura_modo_deseada(self):
         """Con modo 'deseada', debe mostrar temperatura deseada"""
         mock_proxy = Mock()
         mock_visualizador = Mock()
 
-        with patch('gestores_entidades.gestor_ambiente.Configurador') as mock_config:
-            mock_config.configurar_proxy_temperatura.return_value = mock_proxy
-            mock_config.return_value.configurar_visualizador_temperatura.return_value = mock_visualizador
-            mock_config.obtener_temperatura_inicial.return_value = 22.0
-            mock_config.obtener_incremento_temperatura.return_value = 1.0
+        gestor = self._crear_gestor(
+            ambiente=Ambiente(temperatura_deseada_inicial=22.0),
+            proxy=mock_proxy,
+            visualizador=mock_visualizador,
+            incremento=1.0
+        )
+        gestor.aumentar_temperatura_deseada()  # temp = 22+1 = 23
+        gestor.indicar_temperatura_a_mostrar("deseada")
+        gestor.mostrar_temperatura()
 
-            gestor = GestorAmbiente()
-            gestor.aumentar_temperatura_deseada()  # temp = 22+1 = 23
-            gestor.indicar_temperatura_a_mostrar("deseada")
-            gestor.mostrar_temperatura()
-
-            mock_visualizador.mostrar_temperatura_deseada.assert_called_with(23)
+        mock_visualizador.mostrar_temperatura_deseada.assert_called_with(23)
 
 
 class TestGestorAmbienteFlujoCompleto:
     """Tests del flujo completo de GestorAmbiente"""
+
+    def _crear_gestor(self, ambiente=None, proxy=None, visualizador=None, incremento=1):
+        """Helper para crear gestor con dependencias inyectadas"""
+        return GestorAmbiente(
+            ambiente=ambiente or Ambiente(temperatura_deseada_inicial=22.0),
+            proxy_sensor=proxy or Mock(),
+            visualizador=visualizador or Mock(),
+            incremento_temperatura=incremento
+        )
 
     def test_flujo_completo_ajuste_temperatura(self):
         """Flujo completo: lectura -> ajuste -> visualizacion"""
@@ -184,27 +200,26 @@ class TestGestorAmbienteFlujoCompleto:
         mock_proxy.leer_temperatura.return_value = 18.0
         mock_visualizador = Mock()
 
-        with patch('gestores_entidades.gestor_ambiente.Configurador') as mock_config:
-            mock_config.configurar_proxy_temperatura.return_value = mock_proxy
-            mock_config.return_value.configurar_visualizador_temperatura.return_value = mock_visualizador
-            mock_config.obtener_temperatura_inicial.return_value = 22.0
-            mock_config.obtener_incremento_temperatura.return_value = 1.0
+        gestor = self._crear_gestor(
+            ambiente=Ambiente(temperatura_deseada_inicial=22.0),
+            proxy=mock_proxy,
+            visualizador=mock_visualizador,
+            incremento=1.0
+        )
 
-            gestor = GestorAmbiente()
+        # Paso 1: Leer temperatura ambiente
+        gestor.leer_temperatura_ambiente()
+        assert gestor.obtener_temperatura_ambiente() == 18.0
 
-            # Paso 1: Leer temperatura ambiente
-            gestor.leer_temperatura_ambiente()
-            assert gestor.obtener_temperatura_ambiente() == 18.0
+        # Paso 2: Verificar temperatura inicial y ajustar
+        assert gestor.obtener_temperatura_deseada() == 22.0  # Valor inicial configurado
+        gestor.aumentar_temperatura_deseada()  # Aumentar a 23
+        gestor.aumentar_temperatura_deseada()  # Aumentar a 24
+        assert gestor.obtener_temperatura_deseada() == 24.0
 
-            # Paso 2: Verificar temperatura inicial y ajustar
-            assert gestor.obtener_temperatura_deseada() == 22.0  # Valor inicial configurado
-            gestor.aumentar_temperatura_deseada()  # Aumentar a 23
-            gestor.aumentar_temperatura_deseada()  # Aumentar a 24
-            assert gestor.obtener_temperatura_deseada() == 24.0
+        # Paso 3: Mostrar ambas temperaturas
+        gestor.mostrar_temperatura_ambiente()
+        gestor.mostrar_temperatura_deseada()
 
-            # Paso 3: Mostrar ambas temperaturas
-            gestor.mostrar_temperatura_ambiente()
-            gestor.mostrar_temperatura_deseada()
-
-            mock_visualizador.mostrar_temperatura_ambiente.assert_called_with(18.0)
-            mock_visualizador.mostrar_temperatura_deseada.assert_called_with(24.0)
+        mock_visualizador.mostrar_temperatura_ambiente.assert_called_with(18.0)
+        mock_visualizador.mostrar_temperatura_deseada.assert_called_with(24.0)
