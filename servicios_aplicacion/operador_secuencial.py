@@ -1,24 +1,40 @@
 """
-Es la clase responsable de orquestar de manera ciclica
-la lectura de los dispositivos externos y el accionamiento
-del climatizador de acuerdo al seteo de la temperatura
-ambiente.
-Las responsbilidades específicas son delegadas a los gestores
-y procesos correspondientes
-"""
+Operador secuencial del termostato.
 
+Este modulo contiene el orquestador que ejecuta las operaciones del
+termostato de manera secuencial en un ciclo infinito.
+
+Patron de Diseno:
+    - Controller (GRASP): Coordina el flujo de operaciones del sistema
+"""
 import time
 from os import system
-from servicios_aplicacion.selector_entrada import *
-from servicios_aplicacion.presentador import *
+from servicios_aplicacion.selector_entrada import SelectorEntradaTemperatura
+from servicios_aplicacion.presentador import Presentador
 
 
+# pylint: disable=too-few-public-methods
 class OperadorSecuencial:
+    """
+    Orquestador secuencial de operaciones del termostato.
+
+    Ejecuta las operaciones de lectura de sensores, ajuste de temperatura
+    y accionamiento del climatizador en un ciclo secuencial.
+
+    Attributes:
+        _gestor_bateria: Gestor de operaciones de bateria.
+        _gestor_ambiente: Gestor de operaciones de ambiente.
+        _gestor_climatizador: Gestor de operaciones de climatizador.
+    """
 
     def __init__(self, gestor_bateria, gestor_ambiente, gestor_climatizador):
         """
-        Arma la dependencia con las clases con las que va
-        a trabajar
+        Inicializa el operador con los gestores necesarios.
+
+        Args:
+            gestor_bateria: Gestor de bateria.
+            gestor_ambiente: Gestor de ambiente.
+            gestor_climatizador: Gestor de climatizador.
         """
         self._gestor_bateria = gestor_bateria
         self._gestor_ambiente = gestor_ambiente
@@ -29,14 +45,16 @@ class OperadorSecuencial:
                                         self._gestor_climatizador)
 
     def ejecutar(self):
+        """
+        Ejecuta el ciclo principal del termostato.
 
+        Ciclo infinito que lee sensores, procesa entradas del usuario,
+        acciona el climatizador y muestra el estado del sistema.
+        """
         print("Inicio")
-
         self._gestor_ambiente.ambiente.temperatura_deseada = 24
 
-        'Ciclo infinito que establece la secuencia de acciones' \
-        'del termostato'
-
+        # Ciclo infinito de operaciones del termostato
         while True:
             print("lee_bateria")
 
