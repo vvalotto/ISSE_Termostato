@@ -51,15 +51,20 @@ class AbsClimatizador(metaclass=ABCMeta):
         """str: Estado actual del climatizador (apagado/calentando/enfriando)."""
         return self._estado
 
-    def __init__(self):
+    def __init__(self, histeresis=2):
         """
         Inicializa el climatizador en estado apagado.
 
         Crea la estructura de la maquina de estados (diccionario vacio)
         y delega a la subclase la definicion de transiciones validas
         via _inicializar_maquina_estado().
+
+        Args:
+            histeresis (float): Margen de tolerancia en grados para la
+                               comparacion de temperatura. Por defecto 2.
         """
         self._estado = "apagado"
+        self._histeresis = histeresis
         self._transiciones = {}
         self._inicializar_maquina_estado()
 
@@ -129,7 +134,8 @@ class AbsClimatizador(metaclass=ABCMeta):
         """
         temperatura = ControladorTemperatura.comparar_temperatura(
             ambiente.temperatura_ambiente,
-            ambiente.temperatura_deseada
+            ambiente.temperatura_deseada,
+            self._histeresis
         )
         return self._definir_accion(temperatura)
 
