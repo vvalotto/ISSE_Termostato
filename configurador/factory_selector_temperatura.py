@@ -1,18 +1,33 @@
 """
-Creación del tipo especifico del selector de temperatura
+Factory para crear selectores de temperatura.
+
+Patron de Diseno:
+    - Factory Method: Crea objetos sin especificar la clase exacta
 """
+from agentes_sensores.proxy_selector_temperatura import (
+    AbsSelectorTemperatura,
+    SelectorTemperaturaArchivo,
+    SelectorTemperaturaSocket
+)
 
-from agentes_sensores.proxy_selector_temperatura import *
 
-
+# pylint: disable=too-few-public-methods
 class FactorySelectorTemperatura:
+    """Factory para crear instancias de selector de temperatura."""
 
     @staticmethod
     def crear(tipo: str) -> AbsSelectorTemperatura:
+        """
+        Crea un selector de temperatura segun el tipo especificado.
 
+        Args:
+            tipo (str): Tipo de selector ("archivo" o "socket").
+
+        Returns:
+            AbsSelectorTemperatura: Instancia del selector o None si tipo invalido.
+        """
         if tipo == "archivo":
             return SelectorTemperaturaArchivo()
-        elif tipo == "socket":
+        if tipo == "socket":
             return SelectorTemperaturaSocket()
-        else:
-            return None
+        return None

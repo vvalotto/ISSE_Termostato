@@ -1,18 +1,33 @@
 """
-Creación del tipo especifico del proxy para leer la batería
+Factory para crear proxies de lectura de bateria.
+
+Patron de Diseno:
+    - Factory Method: Crea objetos sin especificar la clase exacta
 """
+from agentes_sensores.proxy_bateria import (
+    AbsProxyBateria,
+    ProxyBateriaArchivo,
+    ProxyBateriaSocket
+)
 
-from agentes_sensores.proxy_bateria import *
 
-
+# pylint: disable=too-few-public-methods
 class FactoryProxyBateria:
+    """Factory para crear instancias de proxy de bateria."""
 
     @staticmethod
     def crear(tipo: str) -> AbsProxyBateria:
+        """
+        Crea un proxy de bateria segun el tipo especificado.
 
+        Args:
+            tipo (str): Tipo de proxy ("archivo" o "socket").
+
+        Returns:
+            AbsProxyBateria: Instancia del proxy o None si tipo invalido.
+        """
         if tipo == "archivo":
             return ProxyBateriaArchivo()
-        elif tipo == "socket":
+        if tipo == "socket":
             return ProxyBateriaSocket()
-        else:
-            return None
+        return None
