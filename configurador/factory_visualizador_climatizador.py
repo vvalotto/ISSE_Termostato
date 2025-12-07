@@ -1,20 +1,36 @@
 """
-Creación del tipo especifico visualizador de estado del climatizador
+Factory para crear visualizadores de estado del climatizador.
+
+Patron de Diseno:
+    - Factory Method: Crea objetos sin especificar la clase exacta
 """
+from agentes_actuadores.visualizador_climatizador import (
+    AbsVisualizadorClimatizador,
+    VisualizadorClimatizador,
+    VisualizadorClimatizadorSocket,
+    VisualizadorClimatizadorApi
+)
 
-from agentes_actuadores.visualizador_climatizador import *
 
-
+# pylint: disable=too-few-public-methods
 class FactoryVisualizadorClimatizador:
+    """Factory para crear instancias de visualizador de climatizador."""
 
     @staticmethod
     def crear(tipo: str) -> AbsVisualizadorClimatizador:
+        """
+        Crea un visualizador de climatizador segun el tipo especificado.
 
+        Args:
+            tipo (str): Tipo de visualizador ("archivo", "socket" o "api").
+
+        Returns:
+            AbsVisualizadorClimatizador: Instancia del visualizador o None si tipo invalido.
+        """
         if tipo == "archivo":
             return VisualizadorClimatizador()
-        elif tipo == "socket":
+        if tipo == "socket":
             return VisualizadorClimatizadorSocket()
-        elif tipo == "api":
+        if tipo == "api":
             return VisualizadorClimatizadorApi()
-        else:
-            return None
+        return None
