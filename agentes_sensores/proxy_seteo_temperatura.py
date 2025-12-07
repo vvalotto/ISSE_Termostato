@@ -1,11 +1,25 @@
 """
-Clase que simula el cambio de la temperatura deseada
+Componentes para seteo de temperatura deseada.
+
+Este modulo contiene las implementaciones para obtener comandos
+de ajuste de temperatura (aumentar/disminuir) desde consola
+o via socket TCP.
+
+Patron de Diseno:
+    - Proxy: Representa el control de seteo real/remoto
 """
 import socket
-from  servicios_aplicacion.abs_seteo_temperatura import *
+from servicios_aplicacion.abs_seteo_temperatura import AbsSeteoTemperatura
 
 
+# pylint: disable=too-few-public-methods
 class SeteoTemperatura(AbsSeteoTemperatura):
+    """
+    Seteo de temperatura desde consola.
+
+    Solicita al usuario via input() el comando de ajuste
+    de temperatura: '1' para aumentar, '2' para disminuir.
+    """
 
     @staticmethod
     def obtener_seteo():
@@ -17,9 +31,16 @@ class SeteoTemperatura(AbsSeteoTemperatura):
 
 
 class SeteoTemperaturaSocket(AbsSeteoTemperatura):
+    """
+    Seteo de temperatura via socket TCP.
+
+    Escucha conexiones TCP para recibir comandos de ajuste
+    de temperatura ('aumentar' o 'disminuir').
+    """
 
     def __init__(self):
-        """Inicializa el socket persistente"""
+        """Inicializa el socket persistente."""
+        # pylint: disable=import-outside-toplevel
         from configurador.configurador import Configurador
 
         self._servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -72,7 +93,7 @@ class SeteoTemperaturaSocket(AbsSeteoTemperatura):
                     self._conexion.close()
                 self._conexion = None
 
-        except Exception as e:
+        except (socket.error, OSError) as e:
             print("[Seteo] Error: {}".format(e))
 
         return diferencia

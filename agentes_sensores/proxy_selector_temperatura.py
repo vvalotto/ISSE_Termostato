@@ -1,32 +1,45 @@
 """
-Clase que simula la lectura de un boton de seleccion
-"""
+Selectores de modo de temperatura.
 
-from registrador.registrador import *
-from servicios_aplicacion.abs_selector_temperatura import *
+Este modulo contiene las implementaciones para seleccionar el modo
+de visualizacion de temperatura (ambiente o deseada), desde archivo
+o via socket TCP.
+
+Patron de Diseno:
+    - Proxy: Representa el boton de seleccion real/remoto
+"""
 import datetime
 import socket
 
+from registrador.registrador import AbsRegistrador
+from servicios_aplicacion.abs_selector_temperatura import AbsSelectorTemperatura
+
 
 class SelectorTemperaturaArchivo(AbsSelectorTemperatura, AbsRegistrador):
+    """
+    Selector de modo de temperatura desde archivo.
+
+    Lee el modo de temperatura ('ambiente' o 'deseada') desde un archivo
+    local llamado 'tipo_temperatura'. Incluye registro de errores.
+    """
 
     @staticmethod
     def obtener_selector():
+        """Obtiene el modo de temperatura desde archivo."""
         try:
-            archivo = open("tipo_temperatura", "r")
-            tipo_temperatura = str(archivo.read()).strip()  # FIX: eliminar espacios/saltos de línea
-            archivo.close()
-        except IOError:
+            with open("tipo_temperatura", "r", encoding="utf-8") as archivo:
+                tipo_temperatura = archivo.read().strip()
+        except IOError as exc:
             mensaje_error = "Error al leer el tipo de temperatura"
             registro_error = SelectorTemperaturaArchivo._armar_registro_error(
-                                                        SelectorTemperaturaArchivo.__name__,
-                                                        SelectorTemperaturaArchivo.obtener_selector.__name__,
-                                                        str(datetime.datetime.now()),
-                                                        str(IOError),
-                                                        mensaje_error)
+                SelectorTemperaturaArchivo.__name__,
+                SelectorTemperaturaArchivo.obtener_selector.__name__,
+                str(datetime.datetime.now()),
+                str(IOError),
+                mensaje_error)
 
             SelectorTemperaturaArchivo.registrar_error(registro_error)
-            raise mensaje_error
+            raise IOError(mensaje_error) from exc
         return tipo_temperatura
 
     @staticmethod
@@ -42,18 +55,25 @@ class SelectorTemperaturaArchivo(AbsSelectorTemperatura, AbsRegistrador):
 
     @staticmethod
     def registrar_error(registro):
+        """Registra un error en el archivo de log."""
         try:
-            with open("registro_errores", "a") as archivo_errores:
+            with open("registro_errores", "a", encoding="utf-8") as archivo_errores:
                 archivo_errores.write(registro)
-                archivo_errores.close()
-        except IOError:
-            raise "Error al escribir el archivo de errores: " + str(IOError.errno)
+        except IOError as exc:
+            raise IOError("Error al escribir el archivo de errores") from exc
 
 
 class SelectorTemperaturaSocket(AbsSelectorTemperatura):
+    """
+    Selector de modo de temperatura via socket TCP.
+
+    Escucha conexiones TCP para recibir cambios de modo de temperatura.
+    Mantiene el estado actual y responde de forma no-bloqueante.
+    """
 
     def __init__(self):
-        """Inicializa el socket persistente y el estado"""
+        """Inicializa el socket persistente y el estado."""
+        # pylint: disable=import-outside-toplevel
         from configurador.configurador import Configurador
 
         self._estado_actual = "ambiente"  # Estado inicial
@@ -69,6 +89,7 @@ class SelectorTemperaturaSocket(AbsSelectorTemperatura):
         self._conexion = None
         self._servidor.settimeout(1.0)  # Timeout para accept
 
+    # pylint: disable=arguments-differ
     def obtener_selector(self):
         """
         Consulta no-bloqueante del selector.
@@ -104,7 +125,7 @@ class SelectorTemperaturaSocket(AbsSelectorTemperatura):
                     self._conexion.close()
                 self._conexion = None
 
-        except Exception as e:
+        except (socket.error, OSError) as e:
             print("[Selector] Error: {}".format(e))
 
         return self._estado_actual
