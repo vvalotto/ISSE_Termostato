@@ -20,6 +20,7 @@ from entidades.ambiente import Ambiente
 from entidades.bateria import Bateria
 
 
+# pylint: disable=too-few-public-methods
 class Lanzador:
     """
     Punto de entrada principal del sistema de termostato.
@@ -84,7 +85,12 @@ class Lanzador:
                                           self._gestor_climatizador)
 
     def ejecutar(self):
+        """
+        Ejecuta el sistema de termostato.
 
+        Primero inicializa el sistema verificando los sensores.
+        Si la inicializacion es exitosa, entra en modo operacion.
+        """
         todo_ok = Inicializador.iniciar(self._gestor_bateria,
                                         self._gestor_ambiente,
                                         self._presentador)
