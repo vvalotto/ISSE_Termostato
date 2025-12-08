@@ -17,12 +17,13 @@ class FactoryVisualizadorBateria:
     """Factory para crear instancias de visualizador de bateria."""
 
     @staticmethod
-    def crear(tipo: str) -> AbsVisualizadorBateria:
+    def crear(tipo: str, api_url: str = None) -> AbsVisualizadorBateria:
         """
         Crea un visualizador de bateria segun el tipo especificado.
 
         Args:
             tipo (str): Tipo de visualizador ("archivo", "socket" o "api").
+            api_url (str): URL de la API REST (requerido si tipo es "api").
 
         Returns:
             AbsVisualizadorBateria: Instancia del visualizador o None si tipo invalido.
@@ -32,5 +33,5 @@ class FactoryVisualizadorBateria:
         if tipo == "socket":
             return VisualizadorBateriaSocket()
         if tipo == "api":
-            return VisualizadorBateriaApi()
+            return VisualizadorBateriaApi(api_url)
         return None

@@ -17,12 +17,13 @@ class FactoryVisualizadorTemperatura:
     """Factory para crear instancias de visualizador de temperatura."""
 
     @staticmethod
-    def crear(tipo: str) -> AbsVisualizadorTemperatura:
+    def crear(tipo: str, api_url: str = None) -> AbsVisualizadorTemperatura:
         """
         Crea un visualizador de temperatura segun el tipo especificado.
 
         Args:
             tipo (str): Tipo de visualizador ("archivo", "socket" o "api").
+            api_url (str): URL de la API REST (requerido si tipo es "api").
 
         Returns:
             AbsVisualizadorTemperatura: Instancia del visualizador o None si tipo invalido.
@@ -32,5 +33,5 @@ class FactoryVisualizadorTemperatura:
         if tipo == "socket":
             return VisualizadorTemperaturaSocket()
         if tipo == "api":
-            return VisualizadorTemperaturaApi()
+            return VisualizadorTemperaturaApi(api_url)
         return None

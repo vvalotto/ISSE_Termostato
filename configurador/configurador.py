@@ -87,12 +87,20 @@ class Configurador:
     def configurar_proxy_bateria():
         """Crea y retorna el proxy de bateria segun configuracion."""
         tipo = Configurador.configuracion_termostato["proxy_bateria"]
+        if tipo == "socket":
+            host = Configurador.obtener_host_escucha()
+            puerto = Configurador.obtener_puerto("bateria")
+            return FactoryProxyBateria.crear(tipo, host, puerto)
         return FactoryProxyBateria.crear(tipo)
 
     @staticmethod
     def configurar_proxy_temperatura():
         """Crea y retorna el proxy de sensor de temperatura segun configuracion."""
         tipo = Configurador.configuracion_termostato["proxy_sensor_temperatura"]
+        if tipo == "socket":
+            host = Configurador.obtener_host_escucha()
+            puerto = Configurador.obtener_puerto("temperatura")
+            return FactoryProxySensorTemperatura.crear(tipo, host, puerto)
         return FactoryProxySensorTemperatura.crear(tipo)
 
     @staticmethod
@@ -105,19 +113,22 @@ class Configurador:
     def configurar_visualizador_temperatura():
         """Crea y retorna el visualizador de temperatura segun configuracion."""
         tipo = Configurador.configuracion_termostato["visualizador_temperatura"]
-        return FactoryVisualizadorTemperatura.crear(tipo)
+        api_url = Configurador.obtener_api_url() if tipo == "api" else None
+        return FactoryVisualizadorTemperatura.crear(tipo, api_url)
 
     @staticmethod
     def configurar_visualizador_bateria():
         """Crea y retorna el visualizador de bateria segun configuracion."""
         tipo = Configurador.configuracion_termostato["visualizador_bateria"]
-        return FactoryVisualizadorBateria.crear(tipo)
+        api_url = Configurador.obtener_api_url() if tipo == "api" else None
+        return FactoryVisualizadorBateria.crear(tipo, api_url)
 
     @staticmethod
     def configurar_visualizador_climatizador():
         """Crea y retorna el visualizador de climatizador segun configuracion."""
         tipo = Configurador.configuracion_termostato["visualizador_climatizador"]
-        return FactoryVisualizadorClimatizador.crear(tipo)
+        api_url = Configurador.obtener_api_url() if tipo == "api" else None
+        return FactoryVisualizadorClimatizador.crear(tipo, api_url)
 
     @staticmethod
     def configurar_climatizador():
@@ -130,12 +141,20 @@ class Configurador:
     def configurar_selector_temperatura():
         """Crea y retorna el selector de temperatura segun configuracion."""
         tipo = Configurador.configuracion_termostato["selector_temperatura"]
+        if tipo == "socket":
+            host = Configurador.obtener_host_escucha()
+            puerto = Configurador.obtener_puerto("selector_temperatura")
+            return FactorySelectorTemperatura.crear(tipo, host, puerto)
         return FactorySelectorTemperatura.crear(tipo)
 
     @staticmethod
     def configurar_seteo_temperatura():
         """Crea y retorna el componente de seteo de temperatura segun config."""
         tipo = Configurador.configuracion_termostato["seteo_temperatura"]
+        if tipo == "socket":
+            host = Configurador.obtener_host_escucha()
+            puerto = Configurador.obtener_puerto("seteo_temperatura")
+            return FactorySeteoTemperatura.crear(tipo, host, puerto)
         return FactorySeteoTemperatura.crear(tipo)
 
     @staticmethod

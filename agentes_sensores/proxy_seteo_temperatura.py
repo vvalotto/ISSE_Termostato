@@ -36,18 +36,26 @@ class SeteoTemperaturaSocket(AbsSeteoTemperatura):
 
     Escucha conexiones TCP para recibir comandos de ajuste
     de temperatura ('aumentar' o 'disminuir').
+
+    Patron de Diseno:
+        - DIP: Recibe host y puerto via inyeccion de dependencias
+
+    Args:
+        host: Direccion IP para escuchar conexiones.
+        puerto: Puerto TCP para escuchar conexiones.
     """
 
-    def __init__(self):
-        """Inicializa el socket persistente."""
-        # pylint: disable=import-outside-toplevel
-        from configurador.configurador import Configurador
+    def __init__(self, host, puerto):
+        """
+        Inicializa el socket persistente.
 
+        Args:
+            host: Direccion IP para escuchar conexiones.
+            puerto: Puerto TCP para escuchar conexiones.
+        """
         self._servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._servidor.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
-        host = Configurador.obtener_host_escucha()
-        puerto = Configurador.obtener_puerto("seteo_temperatura")
         direccion_servidor = (host, puerto)
         self._servidor.bind(direccion_servidor)
         self._servidor.listen(1)

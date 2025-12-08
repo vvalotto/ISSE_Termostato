@@ -69,19 +69,27 @@ class SelectorTemperaturaSocket(AbsSelectorTemperatura):
 
     Escucha conexiones TCP para recibir cambios de modo de temperatura.
     Mantiene el estado actual y responde de forma no-bloqueante.
+
+    Patron de Diseno:
+        - DIP: Recibe host y puerto via inyeccion de dependencias
+
+    Args:
+        host: Direccion IP para escuchar conexiones.
+        puerto: Puerto TCP para escuchar conexiones.
     """
 
-    def __init__(self):
-        """Inicializa el socket persistente y el estado."""
-        # pylint: disable=import-outside-toplevel
-        from configurador.configurador import Configurador
+    def __init__(self, host, puerto):
+        """
+        Inicializa el socket persistente y el estado.
 
+        Args:
+            host: Direccion IP para escuchar conexiones.
+            puerto: Puerto TCP para escuchar conexiones.
+        """
         self._estado_actual = "ambiente"  # Estado inicial
         self._servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._servidor.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
-        host = Configurador.obtener_host_escucha()
-        puerto = Configurador.obtener_puerto("selector_temperatura")
         direccion_servidor = (host, puerto)
         self._servidor.bind(direccion_servidor)
         self._servidor.listen(1)

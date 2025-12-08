@@ -16,12 +16,14 @@ class FactorySeteoTemperatura:
     """Factory para crear instancias de seteo de temperatura."""
 
     @staticmethod
-    def crear(tipo: str) -> AbsSeteoTemperatura:
+    def crear(tipo: str, host: str = None, puerto: int = None) -> AbsSeteoTemperatura:
         """
         Crea un componente de seteo de temperatura segun el tipo especificado.
 
         Args:
             tipo (str): Tipo de seteo ("consola" o "socket").
+            host (str): Direccion IP (requerido si tipo es "socket").
+            puerto (int): Puerto TCP (requerido si tipo es "socket").
 
         Returns:
             AbsSeteoTemperatura: Instancia del componente o None si tipo invalido.
@@ -29,5 +31,5 @@ class FactorySeteoTemperatura:
         if tipo == "consola":
             return SeteoTemperatura()
         if tipo == "socket":
-            return SeteoTemperaturaSocket()
+            return SeteoTemperaturaSocket(host, puerto)
         return None

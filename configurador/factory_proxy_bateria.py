@@ -16,12 +16,14 @@ class FactoryProxyBateria:
     """Factory para crear instancias de proxy de bateria."""
 
     @staticmethod
-    def crear(tipo: str) -> AbsProxyBateria:
+    def crear(tipo: str, host: str = None, puerto: int = None) -> AbsProxyBateria:
         """
         Crea un proxy de bateria segun el tipo especificado.
 
         Args:
             tipo (str): Tipo de proxy ("archivo" o "socket").
+            host (str): Direccion IP (requerido si tipo es "socket").
+            puerto (int): Puerto TCP (requerido si tipo es "socket").
 
         Returns:
             AbsProxyBateria: Instancia del proxy o None si tipo invalido.
@@ -29,5 +31,5 @@ class FactoryProxyBateria:
         if tipo == "archivo":
             return ProxyBateriaArchivo()
         if tipo == "socket":
-            return ProxyBateriaSocket()
+            return ProxyBateriaSocket(host, puerto)
         return None

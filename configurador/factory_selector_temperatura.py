@@ -16,12 +16,14 @@ class FactorySelectorTemperatura:
     """Factory para crear instancias de selector de temperatura."""
 
     @staticmethod
-    def crear(tipo: str) -> AbsSelectorTemperatura:
+    def crear(tipo: str, host: str = None, puerto: int = None) -> AbsSelectorTemperatura:
         """
         Crea un selector de temperatura segun el tipo especificado.
 
         Args:
             tipo (str): Tipo de selector ("archivo" o "socket").
+            host (str): Direccion IP (requerido si tipo es "socket").
+            puerto (int): Puerto TCP (requerido si tipo es "socket").
 
         Returns:
             AbsSelectorTemperatura: Instancia del selector o None si tipo invalido.
@@ -29,5 +31,5 @@ class FactorySelectorTemperatura:
         if tipo == "archivo":
             return SelectorTemperaturaArchivo()
         if tipo == "socket":
-            return SelectorTemperaturaSocket()
+            return SelectorTemperaturaSocket(host, puerto)
         return None
