@@ -37,20 +37,33 @@ class ProxyBateriaSocket(AbsProxyBateria):
 
     Implementa la interfaz AbsProxyBateria escuchando conexiones
     TCP para recibir el nivel de carga de un cliente remoto.
+
+    Patron de Diseno:
+        - DIP: Recibe host y puerto via inyeccion de dependencias
+
+    Args:
+        host: Direccion IP para escuchar conexiones.
+        puerto: Puerto TCP para escuchar conexiones.
     """
+
+    def __init__(self, host, puerto):
+        """
+        Inicializa el proxy con la configuracion de red.
+
+        Args:
+            host: Direccion IP para escuchar conexiones.
+            puerto: Puerto TCP para escuchar conexiones.
+        """
+        self._host = host
+        self._puerto = puerto
 
     def leer_carga(self):
         """Lee el nivel de carga via socket TCP."""
-        # pylint: disable=import-outside-toplevel
-        from configurador.configurador import Configurador
-
         carga = None
         servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         servidor.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # Permite reusar puerto
 
-        host = Configurador.obtener_host_escucha()
-        puerto = Configurador.obtener_puerto("bateria")
-        direccion_servidor = (host, puerto)
+        direccion_servidor = (self._host, self._puerto)
         servidor.bind(direccion_servidor)
 
         servidor.listen(1)

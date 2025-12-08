@@ -16,12 +16,14 @@ class FactoryProxySensorTemperatura:
     """Factory para crear instancias de proxy de sensor de temperatura."""
 
     @staticmethod
-    def crear(tipo: str) -> AbsProxySensorTemperatura:
+    def crear(tipo: str, host: str = None, puerto: int = None) -> AbsProxySensorTemperatura:
         """
         Crea un proxy de sensor de temperatura segun el tipo especificado.
 
         Args:
             tipo (str): Tipo de proxy ("archivo" o "socket").
+            host (str): Direccion IP (requerido si tipo es "socket").
+            puerto (int): Puerto TCP (requerido si tipo es "socket").
 
         Returns:
             AbsProxySensorTemperatura: Instancia del proxy o None si tipo invalido.
@@ -29,5 +31,5 @@ class FactoryProxySensorTemperatura:
         if tipo == "archivo":
             return ProxySensorTemperaturaArchivo()
         if tipo == "socket":
-            return ProxySensorTemperaturaSocket()
+            return ProxySensorTemperaturaSocket(host, puerto)
         return None
