@@ -1,3 +1,13 @@
+"""
+Display de temperatura via socket TCP.
+
+Este script actua como servidor socket que recibe y muestra
+en consola las lecturas de temperatura enviadas por el termostato.
+"""
+# pylint: disable=invalid-name,duplicate-code
+# Las variables de script (temperatura, etc.) son mutables, no constantes.
+# El codigo duplicado entre carteles es aceptable (scripts independientes).
+
 import socket
 import time
 from os import system

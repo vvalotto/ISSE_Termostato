@@ -1,6 +1,6 @@
 {
   "raspberry_pi": {
-    "host": "192.168.0.14",
+    "host": "0.0.0.0",
     "puertos": {
       "bateria": 11000,
       "temperatura": 12000,
