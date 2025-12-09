@@ -21,8 +21,7 @@ class SeteoTemperatura(AbsSeteoTemperatura):
     de temperatura: '1' para aumentar, '2' para disminuir.
     """
 
-    @staticmethod
-    def obtener_seteo():
+    def obtener_seteo(self):
         opcion = "0"
         while opcion not in ["1", "2"]:
             opcion = input(">")

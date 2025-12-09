@@ -8,6 +8,9 @@ o via socket TCP.
 Patron de Diseno:
     - Proxy: Representa el boton de seleccion real/remoto
 """
+# pylint: disable=duplicate-code
+# El codigo de socket y registro es similar entre proxies (patron comun aceptable)
+
 import datetime
 import socket
 

@@ -8,6 +8,9 @@ Patron de Diseno:
     - Controller (GRASP): Coordina el flujo de operaciones del sistema
     - Active Object: Cada operacion corre en su propio hilo
 """
+# pylint: disable=duplicate-code
+# La inicializacion es similar a operador_secuencial (patron comun aceptable)
+
 import time
 import threading
 

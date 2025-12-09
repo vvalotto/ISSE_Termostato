@@ -1,14 +1,11 @@
 """
 Clase que simula el accionamiento del climatizador.
-Aqui la acción es escribir en un archivo externo
+Aqui la accion es escribir en un archivo externo.
 """
+import datetime
 
 from registrador.registrador import AbsRegistrador, AbsAuditor
-from entidades.abs_actuador_climatizador import (
-    AbsProxyActuadorClimatizador,
-    AbsActuadorClimatizador
-)
-import datetime
+from entidades.abs_actuador_climatizador import AbsProxyActuadorClimatizador
 
 
 class ActuadorClimatizadorGeneral(AbsProxyActuadorClimatizador, AbsRegistrador, AbsAuditor):

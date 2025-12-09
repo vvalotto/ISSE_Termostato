@@ -37,13 +37,12 @@ class AbsVisualizadorBateria(metaclass=ABCMeta):
         mostrar_indicador: Visualiza el indicador de estado (BAJA/NORMAL)
 
     Note:
-        Los metodos son @staticmethod porque los visualizadores tipicamente
-        no mantienen estado propio, solo presentan datos que reciben.
+        Los metodos pueden ser de instancia para permitir que implementaciones
+        mantengan estado (ej: URLs de API, conexiones socket).
     """
 
-    @staticmethod
     @abstractmethod
-    def mostrar_tension(tension_bateria):
+    def mostrar_tension(self, tension_bateria):
         """
         Muestra el nivel de carga actual de la bateria.
 
@@ -55,11 +54,9 @@ class AbsVisualizadorBateria(metaclass=ABCMeta):
             Las implementaciones concretas deben definir como presentar
             este valor (display LCD, consola, interfaz grafica, etc.).
         """
-        pass
 
-    @staticmethod
     @abstractmethod
-    def mostrar_indicador(indicador_bateria):
+    def mostrar_indicador(self, indicador_bateria):
         """
         Muestra el indicador de estado de la bateria (BAJA/NORMAL).
 
@@ -71,4 +68,3 @@ class AbsVisualizadorBateria(metaclass=ABCMeta):
             Las implementaciones concretas deben definir como presentar
             este indicador (LED, icono, texto, color, etc.).
         """
-        pass

@@ -37,13 +37,12 @@ class AbsVisualizadorTemperatura(metaclass=ABCMeta):
         mostrar_temperatura_deseada: Visualiza la temperatura objetivo configurada
 
     Note:
-        Los metodos son @staticmethod porque los visualizadores tipicamente
-        no mantienen estado propio, solo presentan datos que reciben.
+        Los metodos pueden ser de instancia para permitir que implementaciones
+        mantengan estado (ej: URLs de API, conexiones socket).
     """
 
-    @staticmethod
     @abstractmethod
-    def mostrar_temperatura_ambiente(temperatura_ambiente):
+    def mostrar_temperatura_ambiente(self, temperatura_ambiente):
         """
         Muestra la temperatura ambiente actual.
 
@@ -55,13 +54,10 @@ class AbsVisualizadorTemperatura(metaclass=ABCMeta):
             Las implementaciones concretas deben definir como presentar
             este valor (display LCD, consola, interfaz grafica, etc.).
             Tipicamente se muestra con precision de 1 decimal.
-
         """
-        pass
 
-    @staticmethod
     @abstractmethod
-    def mostrar_temperatura_deseada(temperatura_deseada):
+    def mostrar_temperatura_deseada(self, temperatura_deseada):
         """
         Muestra la temperatura deseada (setpoint).
 
@@ -75,4 +71,3 @@ class AbsVisualizadorTemperatura(metaclass=ABCMeta):
             Tipicamente se distingue visualmente de la temperatura ambiente
             (diferente linea, color, o indicador).
         """
-        pass

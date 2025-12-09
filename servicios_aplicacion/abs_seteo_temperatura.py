@@ -11,7 +11,6 @@ from abc import ABCMeta, abstractmethod
 class AbsSeteoTemperatura(metaclass=ABCMeta):
     """Interfaz abstracta para obtener comandos de seteo de temperatura."""
 
-    @staticmethod
     @abstractmethod
-    def obtener_seteo():
+    def obtener_seteo(self):
         """Obtiene comando: 'aumentar', 'disminuir' o None."""

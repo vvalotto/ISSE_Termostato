@@ -90,9 +90,11 @@ class Bateria:
             ValueError: Si carga_maxima <= 0 o umbral_del_carga no esta en [0,1].
         """
         if carga_maxima <= 0:
-            raise ValueError("carga_maxima debe ser > 0, recibido: {}".format(carga_maxima))
+            mensaje = "carga_maxima debe ser > 0, recibido: {}"
+            raise ValueError(mensaje.format(carga_maxima))
         if not 0 <= umbral_del_carga <= 1:
-            raise ValueError("umbral_del_carga debe estar en [0,1], recibido: {}".format(umbral_del_carga))
+            mensaje = "umbral_del_carga debe estar en [0,1], recibido: {}"
+            raise ValueError(mensaje.format(umbral_del_carga))
 
         self.__carga_maxima = carga_maxima
         self.__umbral_de_carga = umbral_del_carga

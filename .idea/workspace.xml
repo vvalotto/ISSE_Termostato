@@ -1,0 +1,989 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="ea2dcee9-3009-4fcf-b649-a2633db54d5c" name="Changes" comment="&#10;  refactor(actores_externos): Mejorar calidad de código del &#10;  paquete&#10;&#10;  - Agregar docstrings de módulo a los 7 archivos (C0114)&#10;  - Mover docstrings al inicio en simuladores (W0105, C0413)&#10;  - Especificar encoding UTF-8 en open() (W1514)&#10;  - Cambiar except Exception por (OSError, socket.error) &#10;  (W0718)&#10;  - Agregar pylint disable para invalid-name y duplicate-code&#10;  - Agregar newline final en cartel_climatizador (C0304)&#10;  - Crear __init__.py con documentación del paquete&#10;&#10;  Pylint score: 7.80/10 → 10.00/10">
+      <change afterPath="$PROJECT_DIR$/.idea/ISSE_Termostato.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.agent.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.ask.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.ask2agent.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.edit.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Test/hal/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Test/hal/test_hal_adc.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/agentes_actuadores/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/agentes_sensores/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/configurador/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/entidades/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gestores_entidades/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/servicios_aplicacion/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/servicios_dominio/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agentes_actuadores/actuador_climatizador.py" beforeDir="false" afterPath="$PROJECT_DIR$/agentes_actuadores/actuador_climatizador.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agentes_actuadores/visualizador_bateria.py" beforeDir="false" afterPath="$PROJECT_DIR$/agentes_actuadores/visualizador_bateria.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agentes_actuadores/visualizador_climatizador.py" beforeDir="false" afterPath="$PROJECT_DIR$/agentes_actuadores/visualizador_climatizador.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agentes_actuadores/visualizador_temperatura.py" beforeDir="false" afterPath="$PROJECT_DIR$/agentes_actuadores/visualizador_temperatura.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agentes_sensores/proxy_bateria.py" beforeDir="false" afterPath="$PROJECT_DIR$/agentes_sensores/proxy_bateria.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agentes_sensores/proxy_selector_temperatura.py" beforeDir="false" afterPath="$PROJECT_DIR$/agentes_sensores/proxy_selector_temperatura.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agentes_sensores/proxy_sensor_temperatura.py" beforeDir="false" afterPath="$PROJECT_DIR$/agentes_sensores/proxy_sensor_temperatura.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agentes_sensores/proxy_seteo_temperatura.py" beforeDir="false" afterPath="$PROJECT_DIR$/agentes_sensores/proxy_seteo_temperatura.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/entidades/abs_actuador_climatizador.py" beforeDir="false" afterPath="$PROJECT_DIR$/entidades/abs_actuador_climatizador.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/entidades/abs_bateria.py" beforeDir="false" afterPath="$PROJECT_DIR$/entidades/abs_bateria.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/entidades/abs_sensor_temperatura.py" beforeDir="false" afterPath="$PROJECT_DIR$/entidades/abs_sensor_temperatura.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/entidades/abs_visualizador_bateria.py" beforeDir="false" afterPath="$PROJECT_DIR$/entidades/abs_visualizador_bateria.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/entidades/abs_visualizador_climatizador.py" beforeDir="false" afterPath="$PROJECT_DIR$/entidades/abs_visualizador_climatizador.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/entidades/abs_visualizador_temperatura.py" beforeDir="false" afterPath="$PROJECT_DIR$/entidades/abs_visualizador_temperatura.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/entidades/ambiente.py" beforeDir="false" afterPath="$PROJECT_DIR$/entidades/ambiente.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/entidades/bateria.py" beforeDir="false" afterPath="$PROJECT_DIR$/entidades/bateria.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/entidades/climatizador.py" beforeDir="false" afterPath="$PROJECT_DIR$/entidades/climatizador.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/registrador/registrador.py" beforeDir="false" afterPath="$PROJECT_DIR$/registrador/registrador.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicios_aplicacion/abs_seteo_temperatura.py" beforeDir="false" afterPath="$PROJECT_DIR$/servicios_aplicacion/abs_seteo_temperatura.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicios_aplicacion/operador_paralelo.py" beforeDir="false" afterPath="$PROJECT_DIR$/servicios_aplicacion/operador_paralelo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicios_aplicacion/operador_secuencial.py" beforeDir="false" afterPath="$PROJECT_DIR$/servicios_aplicacion/operador_secuencial.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+        <option value="UML Deployment" />
+      </list>
+    </option>
+  </component>
+  <component name="FlaskConsoleOptions" custom-start-script="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))">
+    <envs>
+      <env key="FLASK_APP" value="app" />
+    </envs>
+    <option name="myCustomStartScript" value="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))" />
+    <option name="myEnvs">
+      <map>
+        <entry key="FLASK_APP" value="app" />
+      </map>
+    </option>
+  </component>
+  <component name="Git.Merge.Settings">
+    <option name="BRANCH" value="ParaOCP" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;vvalotto&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/vvalotto/ISSE_Termostato.git&quot;,
+    &quot;accountId&quot;: &quot;155c11e5-a9f0-4864-a394-c15c0a760483&quot;
+  },
+  &quot;recentNewPullRequestHead&quot;: {
+    &quot;server&quot;: {
+      &quot;useHttp&quot;: false,
+      &quot;host&quot;: &quot;github.com&quot;,
+      &quot;port&quot;: null,
+      &quot;suffix&quot;: null
+    },
+    &quot;owner&quot;: &quot;vvalotto&quot;,
+    &quot;repository&quot;: &quot;ISSE_Termostato&quot;
+  }
+}</component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="29oMk8aQ9jwXLToFowWe3DSm8CK" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultPlantUmlFileTemplate": "UML Deployment",
+    "Python tests.Python tests in adaptadores.executor": "Run",
+    "Python tests.Python tests in bateria.executor": "Run",
+    "Python tests.Python tests in configurador.executor": "Run",
+    "Python tests.Python tests in entidades.executor": "Run",
+    "Python tests.Python tests in flujos.executor": "Run",
+    "Python tests.Python tests in gestores.executor": "Run",
+    "Python tests.Python tests in servicios_dominio.executor": "Run",
+    "Python tests.Python tests in test_ambiente.py.executor": "Run",
+    "Python tests.Python tests in test_bateria.py.executor": "Run",
+    "Python tests.Python tests in test_bateria_desde_archivo.py.executor": "Run",
+    "Python tests.Python tests in test_climatizador.py.executor": "Run",
+    "Python tests.Python tests in test_comparador_temperatura.py.executor": "Run",
+    "Python tests.Python tests in test_configurador.py.executor": "Run",
+    "Python tests.Python tests in test_controladorTemperatura.py.executor": "Run",
+    "Python tests.Python tests in test_controlador_climatizador_pe.py.executor": "Run",
+    "Python tests.Python tests in test_hal_adc.py.executor": "Run",
+    "Python tests.Python tests in test_presentador.py.executor": "Run",
+    "Python tests.Python tests in test_unitario.executor": "Run",
+    "Python.bateria.executor": "Run",
+    "Python.cartel_bateria.executor": "Run",
+    "Python.conftest.executor": "Run",
+    "Python.ejecutar.executor": "Run",
+    "Python.presentador.executor": "Run",
+    "Python.sensor_temperatura.executor": "Run",
+    "Python.seteo_temperatura_deseada.executor": "Run",
+    "Python.simulador_bateria.executor": "Run",
+    "Python.simulador_selector_temperatura.executor": "Run",
+    "Python.simulador_seteo_temperatura_deseada.executor": "Run",
+    "Python.simulador_temperatura.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "com.google.cloudcode.ide_session_index": "20240904_0001",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultAutoModeForALLUsers.v1": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "mejora/codigo__limpio__revision__transversal",
+    "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "/Users/victor/PycharmProjects/ISSE_Termostato/docs/Automartizacion de VyV",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "com.intellij.pycharm.community.ide.impl.configuration.PythonContentEntriesConfigurable",
+    "tasks.open.task.update.state.enabled": "true",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/docs/Automartizacion de VyV" />
+      <recent name="$PROJECT_DIR$/docs/Mediciones" />
+      <recent name="$PROJECT_DIR$/docs" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/agentes_sensores" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/docs/Analisis de Calidad de Codigo" />
+      <recent name="$PROJECT_DIR$/docs/Despliegue" />
+      <recent name="$PROJECT_DIR$/docs" />
+      <recent name="$PROJECT_DIR$/docs/Mediciones" />
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.ejecutar">
+    <configuration name="ejecutar" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="ISSE_Termostato" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="RUN_TOOL" value="" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ejecutar.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="simulador_bateria" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="ISSE_Termostato" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/actores_externos" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="RUN_TOOL" value="" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/actores_externos/simulador_bateria.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="simulador_selector_temperatura" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="ISSE_Termostato" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/actores_externos" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="RUN_TOOL" value="" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/actores_externos/simulador_selector_temperatura.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="simulador_seteo_temperatura_deseada" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="ISSE_Termostato" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/actores_externos" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="RUN_TOOL" value="" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/actores_externos/simulador_seteo_temperatura_deseada.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="simulador_temperatura" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="ISSE_Termostato" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/actores_externos" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="RUN_TOOL" value="" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/actores_externos/simulador_temperatura.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.simulador_temperatura" />
+        <item itemvalue="Python.simulador_seteo_temperatura_deseada" />
+        <item itemvalue="Python.simulador_selector_temperatura" />
+        <item itemvalue="Python.simulador_bateria" />
+        <item itemvalue="Python.ejecutar" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-c7e53b3be11b-JavaScript-PY-253.28294.256" />
+        <option value="bundled-python-sdk-f79232025321-b1aafe368c7f-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.28294.256" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ea2dcee9-3009-4fcf-b649-a2633db54d5c" name="Changes" comment="" />
+      <created>1653775124658</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1653775124658</updated>
+      <workItem from="1653775125865" duration="690000" />
+      <workItem from="1653826164775" duration="141000" />
+      <workItem from="1654194673573" duration="4727000" />
+      <workItem from="1654261041706" duration="5128000" />
+      <workItem from="1654370152585" duration="10519000" />
+      <workItem from="1654723155812" duration="152000" />
+      <workItem from="1654855378361" duration="440000" />
+      <workItem from="1654972208334" duration="13407000" />
+      <workItem from="1655142431891" duration="4153000" />
+      <workItem from="1655158862507" duration="413000" />
+      <workItem from="1655210691729" duration="8371000" />
+      <workItem from="1655312896644" duration="49000" />
+      <workItem from="1655411774234" duration="7509000" />
+      <workItem from="1655666387652" duration="3375000" />
+      <workItem from="1655749390287" duration="713000" />
+      <workItem from="1655751439912" duration="2301000" />
+      <workItem from="1656074530208" duration="419000" />
+      <workItem from="1656086168544" duration="1019000" />
+      <workItem from="1656101319393" duration="1197000" />
+      <workItem from="1656277302853" duration="1620000" />
+      <workItem from="1656279068550" duration="3587000" />
+      <workItem from="1656325633772" duration="2375000" />
+      <workItem from="1656418470296" duration="11275000" />
+      <workItem from="1656531084221" duration="632000" />
+      <workItem from="1656590392685" duration="3061000" />
+      <workItem from="1656624948999" duration="3407000" />
+      <workItem from="1656942308874" duration="1088000" />
+      <workItem from="1657216778620" duration="2503000" />
+      <workItem from="1661258233253" duration="817000" />
+      <workItem from="1677509220087" duration="601000" />
+      <workItem from="1677586180833" duration="688000" />
+      <workItem from="1677592947470" duration="1031000" />
+      <workItem from="1677870224822" duration="652000" />
+      <workItem from="1686581913793" duration="345000" />
+      <workItem from="1686693240630" duration="222000" />
+      <workItem from="1686693654054" duration="751000" />
+      <workItem from="1686760212557" duration="590000" />
+      <workItem from="1687117349138" duration="4242000" />
+      <workItem from="1687182249742" duration="1382000" />
+      <workItem from="1687358895155" duration="1205000" />
+      <workItem from="1701028039380" duration="172000" />
+      <workItem from="1701028317320" duration="8733000" />
+      <workItem from="1701436954387" duration="159000" />
+      <workItem from="1701437207099" duration="510000" />
+      <workItem from="1701986964125" duration="682000" />
+      <workItem from="1707323122926" duration="358000" />
+      <workItem from="1707323688342" duration="776000" />
+      <workItem from="1714484103437" duration="193000" />
+      <workItem from="1724939602433" duration="1934000" />
+      <workItem from="1724943358878" duration="271000" />
+      <workItem from="1725475881914" duration="204000" />
+      <workItem from="1725476101759" duration="360000" />
+      <workItem from="1725539279085" duration="140000" />
+      <workItem from="1725539540535" duration="247000" />
+      <workItem from="1725540155528" duration="364000" />
+      <workItem from="1725541637786" duration="1063000" />
+      <workItem from="1725629975930" duration="3253000" />
+      <workItem from="1725715329812" duration="20000" />
+      <workItem from="1728055601778" duration="340000" />
+      <workItem from="1728055976984" duration="163000" />
+      <workItem from="1728243244315" duration="72000" />
+      <workItem from="1728243339062" duration="96000" />
+      <workItem from="1728243468623" duration="377000" />
+      <workItem from="1728243891434" duration="67000" />
+      <workItem from="1728308431306" duration="377000" />
+      <workItem from="1728309132890" duration="13000" />
+      <workItem from="1743772384100" duration="84000" />
+      <workItem from="1743772490505" duration="716000" />
+      <workItem from="1752760248782" duration="521000" />
+      <workItem from="1752760879548" duration="206000" />
+      <workItem from="1752765333667" duration="7000" />
+      <workItem from="1756648089984" duration="1402000" />
+      <workItem from="1757622625669" duration="1650000" />
+      <workItem from="1760974515131" duration="1056000" />
+      <workItem from="1761138646110" duration="182000" />
+      <workItem from="1761139019345" duration="269000" />
+      <workItem from="1761155898234" duration="1336000" />
+      <workItem from="1761157285834" duration="1960000" />
+      <workItem from="1761400661590" duration="398000" />
+      <workItem from="1761765171672" duration="263000" />
+      <workItem from="1762348560804" duration="601000" />
+      <workItem from="1762950112273" duration="1368000" />
+      <workItem from="1762957645362" duration="6826000" />
+      <workItem from="1763044264277" duration="3887000" />
+      <workItem from="1763132728162" duration="3163000" />
+      <workItem from="1763212907939" duration="4686000" />
+      <workItem from="1763227341454" duration="1610000" />
+      <workItem from="1763589235962" duration="3423000" />
+      <workItem from="1763645809191" duration="305000" />
+      <workItem from="1763650627998" duration="892000" />
+      <workItem from="1763663678560" duration="114000" />
+      <workItem from="1763933434982" duration="3336000" />
+      <workItem from="1763983788563" duration="6144000" />
+      <workItem from="1763992620179" duration="2762000" />
+      <workItem from="1764006175502" duration="11884000" />
+      <workItem from="1764075142167" duration="14706000" />
+      <workItem from="1764094775697" duration="251000" />
+      <workItem from="1764163161971" duration="871000" />
+      <workItem from="1764180412276" duration="4838000" />
+      <workItem from="1764188443557" duration="220000" />
+      <workItem from="1764201426766" duration="1045000" />
+      <workItem from="1764240876275" duration="1929000" />
+      <workItem from="1764247341463" duration="2235000" />
+      <workItem from="1764251049916" duration="1174000" />
+      <workItem from="1764266654697" duration="5368000" />
+      <workItem from="1764275217115" duration="5229000" />
+      <workItem from="1764362203052" duration="4678000" />
+      <workItem from="1764422169342" duration="721000" />
+      <workItem from="1764445534693" duration="1437000" />
+      <workItem from="1764503562258" duration="5458000" />
+      <workItem from="1764595479379" duration="5144000" />
+      <workItem from="1764619367120" duration="3880000" />
+      <workItem from="1764679237488" duration="5267000" />
+      <workItem from="1764699457212" duration="4420000" />
+      <workItem from="1764770648115" duration="130000" />
+      <workItem from="1764783934694" duration="4240000" />
+      <workItem from="1764852291291" duration="2231000" />
+      <workItem from="1764937117642" duration="5183000" />
+      <workItem from="1765022707230" duration="1913000" />
+      <workItem from="1765048753995" duration="301000" />
+      <workItem from="1765049078742" duration="12355000" />
+      <workItem from="1765130750663" duration="4427000" />
+      <workItem from="1765217654475" duration="12355000" />
+      <workItem from="1765289511132" duration="3894000" />
+    </task>
+    <task id="LOCAL-00001" summary="Principio OCP:&#10;Se agrega otra manera de leer el nivel de bateria.&#10;Se viola el principio al modificar el código existente de la lectura de la bateria.&#10;Se agrega una lectura simulada usando socket, e ingreso por consola">
+      <created>1654196859148</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1654196859148</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Principio OCP:&#10;Se crea una extensión mediante otra clase. Pero se modifica el constructor del gestor correspondiente, violando el principio.">
+      <created>1654259892779</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1654259892779</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Principio OCP:&#10;Violando el principio tiene un impacto en las clases clientes, modificando su contrato, por lo tanto hay que cambiar todas las llamadas.">
+      <created>1654261514706</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1654261514706</updated>
+    </task>
+    <task id="LOCAL-00004" summary="OCP&#10; Es una mejora. Se establece clase abstracta para poder extenderla y maneja un configurador para definir que clase concreta se necesita">
+      <created>1654262345397</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1654262345397</updated>
+    </task>
+    <task id="LOCAL-00005" summary="OCP&#10;Se aplica el mismo patrón para el sensor de temperatura">
+      <created>1654263784398</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1654263784398</updated>
+    </task>
+    <task id="LOCAL-00006" summary="OCP&#10;Se extiende la configuración a los visualizadores. La dependencia se define en el configurador">
+      <created>1654264675898</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1654264675898</updated>
+    </task>
+    <task id="LOCAL-00007" summary="LSP&#10;Primer paso, se requiere pensar en un calefactor y no en un climatizador. Entonces se extiende por herencia. Se especializa en el calefactor.&#10;Ademas se mueve la función de evaluar acción del Gestor a la entidad, ya que es una reponsabilidad de climatizador y no del gestor.&#10;Se agrega en el configurador la fabricacipon del objeto calefactor.">
+      <created>1654438798973</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1654438798973</updated>
+    </task>
+    <task id="LOCAL-00008" summary="LSP&#10;Separa responsabilidades parar dejar una función de definir accion solo con ese objetivo">
+      <created>1654439285819</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1654439285819</updated>
+    </task>
+    <task id="LOCAL-00009" summary="LSP&#10;Se viola el principio de OCP en la funcion definir_acción y ademas se rompe la ventajas de la herencia, ya que hay que modificar la funcion de la clase padre si hay otra especializacion">
+      <created>1654440628263</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1654440628263</updated>
+    </task>
+    <task id="LOCAL-00010" summary="LSP&#10;Se viola el principio de OCP en la funcion definir_acción y ademas se rompe la ventajas de la herencia, ya que hay que modificar la funcion de la clase padre si hay otra especializacion">
+      <created>1654440697302</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1654440697302</updated>
+    </task>
+    <task id="LOCAL-00011" summary="LSP&#10;Se resuelve la violacion de los principios, mediante la creación de una clase abstracta, y sus especializaciones en Climatizador y Calefactor.&#10;Además se realizan alguna mejoras menores en Bateria y Gestor Bateria">
+      <created>1654442670057</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1654442670057</updated>
+    </task>
+    <task id="LOCAL-00012" summary="ISP&#10;Se requiere generar un registro de errores (implementado en el selector de temperatura) y un registro de auditoria cada vez que se acciona el climatizador. Se realizan la pruebas unitarias">
+      <created>1654973860973</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1654973860974</updated>
+    </task>
+    <task id="LOCAL-00013" summary="ISP&#10;Se muestra como se viola el principio, implementando un interfaz aun cuando no se necesita.">
+      <created>1654974794362</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1654974794362</updated>
+    </task>
+    <task id="LOCAL-00014" summary="ISP&#10;Resolución de la Violación: Creación de dos clases abstractas diferentes">
+      <created>1654975204835</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1654975204835</updated>
+    </task>
+    <task id="LOCAL-00015" summary="DIP&#10;Creación de las factorías que determinas como se especializan las clases abstractas">
+      <created>1655044794561</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1655044794561</updated>
+    </task>
+    <task id="LOCAL-00016" summary="DIP&#10;Se reorganiza la ubicación de las clases abstractas en capas de acuerdo la la propuesta de arquitectura limpia (La dependencia es hacia los aspectos mas estables)">
+      <created>1655058508795</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1655058508795</updated>
+    </task>
+    <task id="LOCAL-00017" summary="DIP&#10;Se abstraen los visualizadores. Se agregan simuladores de visualizador por socket. &#10;Se adecuan los test para usar los visualizadores abstractos.">
+      <created>1655066647492</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1655066647492</updated>
+    </task>
+    <task id="LOCAL-00018" summary="DIP&#10;Configuración por convención. Archivo JSON de configuración. Pruebas unitarias.">
+      <created>1655147108259</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1655147108259</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Integracion Final - 1">
+      <created>1655236583468</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1655236583468</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Integracion Final - 2&#10;Build de Paquetes para despliegue">
+      <created>1655666775022</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1655666775022</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Integracion Final - 2">
+      <created>1655667822877</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1655667822877</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Paquetizacion">
+      <created>1655669448405</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1655669448405</updated>
+    </task>
+    <task id="LOCAL-00023" summary="Visualización con webapi">
+      <created>1656086946119</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1656086946119</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Visualización con webapi - para todas los elementos del termostato">
+      <created>1656325757463</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1656325757463</updated>
+    </task>
+    <task id="LOCAL-00025" summary="Test Unitario - Ejemplo 1 - Caso Simple">
+      <created>1656622754041</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1656622754041</updated>
+    </task>
+    <task id="LOCAL-00026" summary="Test Unitario - Ejemplo 2 - Preparación de la corrida de tests">
+      <created>1656622924741</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1656622924741</updated>
+    </task>
+    <task id="LOCAL-00027" summary="Test Unitario - Ejemplo 3 - Se agregan test ad-hoc en ambiente. Se crea test unitario de batería con test de valores de frontera.">
+      <created>1656623529630</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1656623529630</updated>
+    </task>
+    <task id="LOCAL-00028" summary="Test Unitario - Ejemplo 4 - Controlador Climatizador y climatizador - Aplicar calculo de complejidad Ciclomática.">
+      <created>1656625050257</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1656625050257</updated>
+    </task>
+    <task id="LOCAL-00029" summary="Correcciones de Smell Code">
+      <created>1656706578901</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1656706578901</updated>
+    </task>
+    <task id="LOCAL-00030" summary="Envio de valores al servidor (Via API REST)">
+      <created>1687359085526</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1687359085526</updated>
+    </task>
+    <task id="LOCAL-00031" summary="Implementación simulada sde capa HAL">
+      <option name="closed" value="true" />
+      <created>1763650765300</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1763650765300</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Implementación simulada sde capa HAL - Documentación de la implementación">
+      <option name="closed" value="true" />
+      <created>1763933987893</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1763933987893</updated>
+    </task>
+    <task id="LOCAL-00033" summary="Actualización de README.md">
+      <option name="closed" value="true" />
+      <created>1764006540381</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1764006540381</updated>
+    </task>
+    <task id="LOCAL-00034" summary="  Documentación completa del proyecto incluyendo:&#10;  - Quick Start para ejecución local y distribuida&#10;  - Configuración de simulación distribuida (Raspberry Pi + MacBook)&#10;  - Arquitectura de despliegue&#10;  - Sección de troubleshooting&#10;  - API REST en Render&#10;  - Mejoras recientes y características implementadas&#10;&#10;  Refleja el estado actual del proyecto con Python 3.5+ y simulación distribuida completa.">
+      <option name="closed" value="true" />
+      <created>1764181108352</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1764181108352</updated>
+    </task>
+    <task id="LOCAL-00035" summary="refactor: Eliminar valores hardcodeados de configuración del sistema&#10;&#10;  Movidos valores hardcodeados a termostato.json para mejorar configurabilidad y mantenibilidad.&#10;&#10;  Cambios en configuración (termostato.json):&#10;  - Agregada sección &quot;bateria&quot; con carga_maxima (5.0V) y umbral_carga_baja (0.95)&#10;  - Agregada sección &quot;ambiente&quot; con histeresis (2.0°C), temperatura_inicial (22.0°C) e incremento_ajuste (1.0°C)&#10;&#10;  Cambios en código:&#10;  - configurador/configurador.py: Agregados 5 métodos para obtener configuración (obtener_carga_maxima_bateria, &#10;  obtener_umbral_bateria, obtener_histeresis, obtener_temperatura_inicial, obtener_incremento_temperatura)&#10;  - gestores_entidades/gestor_bateria.py: Eliminado valor hardcodeado Bateria(5, 0.95), ahora usa configuración&#10;  - servicios_dominio/controlador_climatizador.py: Eliminado atributo de clase histeris=2, ahora usa configuración dinámica + &#10;  agregada documentación completa&#10;  - entidades/ambiente.py: Constructor mejorado con parámetro opcional temperatura_deseada_inicial, valor por defecto cambiado de &#10;  0°C a 22°C (más realista), temperatura_ambiente inicializa en None en lugar de 0&#10;  - gestores_entidades/gestor_ambiente.py: Métodos aumentar/disminuir_temperatura_deseada ahora usan incremento_ajuste desde &#10;  configuración + agregada documentación&#10;&#10;  Cambios en tests (80/80 passing):&#10;  - Test/integration/gestores/test_gestor_bateria.py: Actualizados 8 tests con mocks de obtener_carga_maxima_bateria() y &#10;  obtener_umbral_bateria()&#10;  - Test/unit/servicios_dominio/test_controlador_temperatura.py: Agregado fixture para cargar configuración, actualizado test de &#10;  histéresis&#10;  - Test/unit/entidades/test_ambiente.py: Actualizadas assertions para nuevos valores por defecto (None y 22°C)&#10;  - Test/integration/gestores/test_gestor_ambiente.py: Actualizados 9 tests con mocks de obtener_temperatura_inicial() y &#10;  obtener_incremento_temperatura()&#10;&#10;  Beneficios:&#10;  - Configurabilidad total sin modificar código&#10;  - Valores por defecto sensatos y realistas&#10;  - Mejor testabilidad con valores inyectables&#10;  - Mantenibilidad mejorada (cambios centralizados)&#10;  - Consistencia con patrón de configuración del proyecto">
+      <option name="closed" value="true" />
+      <created>1764184071782</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1764184071782</updated>
+    </task>
+    <task id="LOCAL-00036" summary="correccion api indicador">
+      <option name="closed" value="true" />
+      <created>1764202552039</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1764202552040</updated>
+    </task>
+    <task id="LOCAL-00037" summary="docs: Actualizar README con estructura real del proyecto&#10;&#10;  Corrige nombres de archivos de simuladores, ubicación de simuladores_config.json, &#10;  estructura de tests, y documentación de registro_auditoria para reflejar el estado&#10;  actual del código.">
+      <option name="closed" value="true" />
+      <created>1764241703066</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1764241703066</updated>
+    </task>
+    <task id="LOCAL-00038" summary="Documentos de Análisis de Principios SOLID">
+      <option name="closed" value="true" />
+      <created>1764271588342</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1764271588342</updated>
+    </task>
+    <task id="LOCAL-00039" summary=" fix: Corregir tests unitarios y de integración (183 tests passed)&#10;&#10;  Correcciones para eliminar 11 tests fallidos y mejorar el manejo&#10;  de excepciones y configuración de tests.&#10;&#10;  Cambios principales:&#10;  - configurador.py: Lanzar excepciones específicas (FileNotFoundError,&#10;    JSONDecodeError, KeyError) en lugar de Exception genérica&#10;  - Test/unit/conftest.py: Agregar autouse=True a setup_configurador&#10;    para inicialización automática en todos los tests unitarios&#10;  - Test/integration/conftest.py: Agregar fixture setup_configurador_integration&#10;    con autouse=True para tests de integración&#10;  - test_controlador_temperatura.py: Eliminar fixture redundante que&#10;    intentaba leer archivo JSON físico&#10;  - test_visualizadores.py: Agregar parámetro timeout=5 a tests de API&#10;    y corregir test de manejo de errores&#10;  - test_ciclo_climatizacion.py: Configurar return_value en mocks del&#10;    Configurador (obtener_temperatura_inicial, obtener_incremento_temperatura,&#10;    obtener_histeresis)&#10;  - pytest.ini: Configurar testpaths específicos para evitar ejecutar&#10;    scripts de demostración">
+      <option name="closed" value="true" />
+      <created>1764505156588</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1764505156588</updated>
+    </task>
+    <task id="LOCAL-00040" summary=" fix: Corregir tests unitarios y de integración (183 tests passed)&#10;&#10;  Correcciones para eliminar 11 tests fallidos y mejorar el manejo&#10;  de excepciones y configuración de tests.&#10;&#10;  Cambios principales:&#10;  - configurador.py: Lanzar excepciones específicas (FileNotFoundError,&#10;    JSONDecodeError, KeyError) en lugar de Exception genérica&#10;  - Test/unit/conftest.py: Agregar autouse=True a setup_configurador&#10;    para inicialización automática en todos los tests unitarios&#10;  - Test/integration/conftest.py: Agregar fixture setup_configurador_integration&#10;    con autouse=True para tests de integración&#10;  - test_controlador_temperatura.py: Eliminar fixture redundante que&#10;    intentaba leer archivo JSON físico&#10;  - test_visualizadores.py: Agregar parámetro timeout=5 a tests de API&#10;    y corregir test de manejo de errores&#10;  - test_ciclo_climatizacion.py: Configurar return_value en mocks del&#10;    Configurador (obtener_temperatura_inicial, obtener_incremento_temperatura,&#10;    obtener_histeresis)&#10;  - pytest.ini: Configurar testpaths específicos para evitar ejecutar&#10;    scripts de demostración">
+      <option name="closed" value="true" />
+      <created>1764937595899</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1764937595899</updated>
+    </task>
+    <task id="LOCAL-00041" summary="  refactor: Mejorar código limpio y documentación de entidades&#10;&#10;  - Añadir documentación completa (docstrings) a todas las interfaces abstractas&#10;  - Renombrar AbsActuadorClimatizador a AbsProxyActuadorClimatizador&#10;  - Cambiar método estático a método de instancia en actuador&#10;  - Mejorar __repr__ de Ambiente con formato más legible&#10;  - Añadir validación de parámetros en constructor de Bateria&#10;  - Documentar patrones de diseño aplicados (Proxy, Template Method, State Machine)&#10;  - Mantener alias de compatibilidad para AbsActuadorClimatizador">
+      <option name="closed" value="true" />
+      <created>1765049418788</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1765049418788</updated>
+    </task>
+    <task id="LOCAL-00042" summary="Aplicar DIP e inyección de dependencias en gestores_entidades&#10;&#10;  - Modificar constructores de gestores para recibir dependencias inyectadas&#10;  - Convertir Lanzador en Composition Root (punto único de ensamblaje)&#10;  - Añadir documentación completa (docstrings) a clases y métodos&#10;  - Eliminar wildcard imports por imports explícitos&#10;  - Especificar excepciones (OSError, ValueError, TimeoutError) en lugar de Exception genérica&#10;  - Eliminar código muerto (pass innecesarios)&#10;  - Actualizar tests de integración para usar inyección directa (sin patch)">
+      <option name="closed" value="true" />
+      <created>1765111836206</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1765111836206</updated>
+    </task>
+    <task id="LOCAL-00043" summary="refactor(servicios_dominio): Aplicar DIP y mejorar calidad de código&#10;&#10;  - Inyectar histeresis como parámetro en ControladorTemperatura&#10;  - Eliminar import interno de Configurador (resuelve dependencia circular)&#10;  - Agregar docstrings completos a módulo, clase y método&#10;  - Formatear condicionales con estilo pythonico (early return)&#10;  - Actualizar Climatizador y Factory para propagar histeresis&#10;  - Pylint: 0.00/10 → 10.00/10&#10;  - Issues: 9 → 0">
+      <option name="closed" value="true" />
+      <created>1765113095750</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1765113095750</updated>
+    </task>
+    <task id="LOCAL-00044" summary=" refactor(configurador): Mejorar calidad de código del paquete&#10;&#10;  - Reemplazar wildcard imports por imports explícitos en todas las factories&#10;  - Agregar docstrings completos a clase Configurador y todos sus métodos&#10;  - Agregar docstrings a todas las factories (9 archivos)&#10;  - Corregir formato pythonico: elif → if después de return&#10;  - Usar f-strings en lugar de .format()&#10;  - Agregar encoding UTF-8 en open()&#10;  - Eliminar return innecesario">
+      <option name="closed" value="true" />
+      <created>1765117311083</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1765117311083</updated>
+    </task>
+    <task id="LOCAL-00045" summary=" refactor(servicios_aplicacion): Mejorar calidad de código del paquete&#10;&#10;  - Agregar docstrings de módulo, clase y métodos&#10;  - Reemplazar imports wildcard por imports explícitos&#10;  - Agregar comentarios pylint disable donde corresponde&#10;  - Eliminar return innecesarios en métodos void&#10;  - Refactorizar creación de hilos usando lista en operador_paralelo&#10;  - Corregir formato (trailing newlines, final newlines)">
+      <option name="closed" value="true" />
+      <created>1765131642152</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1765131642153</updated>
+    </task>
+    <task id="LOCAL-00046" summary="refactor(agentes_sensores): Mejorar calidad de código del paquete&#10;&#10;  - Reemplazar wildcard imports por imports explícitos&#10;  - Corregir errores E0702 (raise de strings)&#10;  - Agregar docstrings a módulos, clases y métodos&#10;  - Usar context managers (with) para operaciones de archivo&#10;  - Agregar encoding utf-8 a open()&#10;  - Reemplazar except Exception por excepciones específicas&#10;  - Corregir variables no usadas&#10;  - Agregar pylint disables justificado">
+      <option name="closed" value="true" />
+      <created>1765135395928</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1765135395928</updated>
+    </task>
+    <task id="LOCAL-00047" summary="refactor(agentes_actuadores): Mejorar calidad de código y aplicar DIP&#10;&#10;  - Reemplazar imports wildcard por imports explícitos&#10;  - Corregir errores E0702 (raising-bad-type)&#10;  - Agregar encoding='utf-8' a llamadas open()&#10;  - Eliminar llamadas redundantes a close()&#10;  - Agregar docstrings a clases y métodos&#10;  - Aplicar DIP en visualizadores API (inyección de api_url)&#10;  - Aplicar DIP en proxies Socket de agentes_sensores (inyección host/puerto)&#10;  - Actualizar factories para soportar parámetros de DIP&#10;  - Actualizar configurador.py como Composition Root">
+      <option name="closed" value="true" />
+      <created>1765221746923</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1765221746923</updated>
+    </task>
+    <task id="LOCAL-00048" summary="refactor(registrador): Mejorar calidad de código del paquete&#10;&#10;   - Agregar docstrings completos a módulo, clases y métodos&#10;   - Documentar patrón Template Method&#10;   - Agregar pylint disable para too-few-public-methods&#10;   - Crear __init__.py con exports explícitos&#10;   - Pylint: 1.43/10 → 10.00/10">
+      <option name="closed" value="true" />
+      <created>1765228451545</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1765228451545</updated>
+    </task>
+    <task id="LOCAL-00049" summary="&#10;  refactor(actores_externos): Mejorar calidad de código del &#10;  paquete&#10;&#10;  - Agregar docstrings de módulo a los 7 archivos (C0114)&#10;  - Mover docstrings al inicio en simuladores (W0105, C0413)&#10;  - Especificar encoding UTF-8 en open() (W1514)&#10;  - Cambiar except Exception por (OSError, socket.error) &#10;  (W0718)&#10;  - Agregar pylint disable para invalid-name y duplicate-code&#10;  - Agregar newline final en cartel_climatizador (C0304)&#10;  - Crear __init__.py con documentación del paquete&#10;&#10;  Pylint score: 7.80/10 → 10.00/10">
+      <option name="closed" value="true" />
+      <created>1765290479058</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1765290479058</updated>
+    </task>
+    <option name="localTasksCounter" value="50" />
+    <servers>
+      <JIRA url="https://vvalotto.atlassian.net">
+        <commitMessageFormat>{id} {summary} {project}</commitMessageFormat>
+        <option name="jiraVersion" value="1001.0.0-SNAPSHOT" />
+        <option name="shouldFormatCommitMessage" value="true" />
+        <username>vvalotto@ingenieria.uner.edu.ar</username>
+      </JIRA>
+    </servers>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="main" />
+                </option>
+              </RecentGroup>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="mejora/codigo_limpio_actores_externos" />
+                </option>
+              </RecentGroup>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="mejora/codigo_limpio_servicios_aplicacion" />
+                </option>
+              </RecentGroup>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="mejora/codigo_limpio_servicio_dominio" />
+                </option>
+              </RecentGroup>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="mejora/codigo_limpio_entidades" />
+                </option>
+              </RecentGroup>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="test/correccion_unitarios" />
+                </option>
+              </RecentGroup>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="HEAD" />
+                </option>
+              </RecentGroup>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ID_WIDTH">
+                <map>
+                  <entry key="Table.Default.Author.ColumnIdWidth" value="51" />
+                  <entry key="Table.Default.Date.ColumnIdWidth" value="59" />
+                  <entry key="Table.Space.CommitStatus.ColumnIdWidth" value="25" />
+                </map>
+              </option>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Visualización con webapi - para todas los elementos del termostato" />
+    <MESSAGE value="Test Unitario - Ejemplo 1 - Caso Simple" />
+    <MESSAGE value="Test Unitario - Ejemplo 2 - Preparación de la corrida de tests" />
+    <MESSAGE value="Test Unitario - Ejemplo 3 - Se agregan test ad-hoc en ambiente. Se crea test unitario de batería con test de valores de frontera." />
+    <MESSAGE value="Test Unitario - Ejemplo 4 - Controlador Climatizador y climatizador - Aplicar calculo de complejidad Ciclomática." />
+    <MESSAGE value="Correcciones de Smell Code" />
+    <MESSAGE value="Envio de valores al servidor (Via API REST)" />
+    <MESSAGE value="Implementación simulada sde capa HAL" />
+    <MESSAGE value="Implementación simulada sde capa HAL - Documentación de la implementación" />
+    <MESSAGE value="Actualización de README.md" />
+    <MESSAGE value="  Documentación completa del proyecto incluyendo:&#10;  - Quick Start para ejecución local y distribuida&#10;  - Configuración de simulación distribuida (Raspberry Pi + MacBook)&#10;  - Arquitectura de despliegue&#10;  - Sección de troubleshooting&#10;  - API REST en Render&#10;  - Mejoras recientes y características implementadas&#10;&#10;  Refleja el estado actual del proyecto con Python 3.5+ y simulación distribuida completa." />
+    <MESSAGE value="refactor: Eliminar valores hardcodeados de configuración del sistema&#10;&#10;  Movidos valores hardcodeados a termostato.json para mejorar configurabilidad y mantenibilidad.&#10;&#10;  Cambios en configuración (termostato.json):&#10;  - Agregada sección &quot;bateria&quot; con carga_maxima (5.0V) y umbral_carga_baja (0.95)&#10;  - Agregada sección &quot;ambiente&quot; con histeresis (2.0°C), temperatura_inicial (22.0°C) e incremento_ajuste (1.0°C)&#10;&#10;  Cambios en código:&#10;  - configurador/configurador.py: Agregados 5 métodos para obtener configuración (obtener_carga_maxima_bateria, &#10;  obtener_umbral_bateria, obtener_histeresis, obtener_temperatura_inicial, obtener_incremento_temperatura)&#10;  - gestores_entidades/gestor_bateria.py: Eliminado valor hardcodeado Bateria(5, 0.95), ahora usa configuración&#10;  - servicios_dominio/controlador_climatizador.py: Eliminado atributo de clase histeris=2, ahora usa configuración dinámica + &#10;  agregada documentación completa&#10;  - entidades/ambiente.py: Constructor mejorado con parámetro opcional temperatura_deseada_inicial, valor por defecto cambiado de &#10;  0°C a 22°C (más realista), temperatura_ambiente inicializa en None en lugar de 0&#10;  - gestores_entidades/gestor_ambiente.py: Métodos aumentar/disminuir_temperatura_deseada ahora usan incremento_ajuste desde &#10;  configuración + agregada documentación&#10;&#10;  Cambios en tests (80/80 passing):&#10;  - Test/integration/gestores/test_gestor_bateria.py: Actualizados 8 tests con mocks de obtener_carga_maxima_bateria() y &#10;  obtener_umbral_bateria()&#10;  - Test/unit/servicios_dominio/test_controlador_temperatura.py: Agregado fixture para cargar configuración, actualizado test de &#10;  histéresis&#10;  - Test/unit/entidades/test_ambiente.py: Actualizadas assertions para nuevos valores por defecto (None y 22°C)&#10;  - Test/integration/gestores/test_gestor_ambiente.py: Actualizados 9 tests con mocks de obtener_temperatura_inicial() y &#10;  obtener_incremento_temperatura()&#10;&#10;  Beneficios:&#10;  - Configurabilidad total sin modificar código&#10;  - Valores por defecto sensatos y realistas&#10;  - Mejor testabilidad con valores inyectables&#10;  - Mantenibilidad mejorada (cambios centralizados)&#10;  - Consistencia con patrón de configuración del proyecto" />
+    <MESSAGE value="correccion api indicador" />
+    <MESSAGE value="docs: Actualizar README con estructura real del proyecto&#10;&#10;  Corrige nombres de archivos de simuladores, ubicación de simuladores_config.json, &#10;  estructura de tests, y documentación de registro_auditoria para reflejar el estado&#10;  actual del código." />
+    <MESSAGE value="Documentos de Análisis de Principios SOLID" />
+    <MESSAGE value=" fix: Corregir tests unitarios y de integración (183 tests passed)&#10;&#10;  Correcciones para eliminar 11 tests fallidos y mejorar el manejo&#10;  de excepciones y configuración de tests.&#10;&#10;  Cambios principales:&#10;  - configurador.py: Lanzar excepciones específicas (FileNotFoundError,&#10;    JSONDecodeError, KeyError) en lugar de Exception genérica&#10;  - Test/unit/conftest.py: Agregar autouse=True a setup_configurador&#10;    para inicialización automática en todos los tests unitarios&#10;  - Test/integration/conftest.py: Agregar fixture setup_configurador_integration&#10;    con autouse=True para tests de integración&#10;  - test_controlador_temperatura.py: Eliminar fixture redundante que&#10;    intentaba leer archivo JSON físico&#10;  - test_visualizadores.py: Agregar parámetro timeout=5 a tests de API&#10;    y corregir test de manejo de errores&#10;  - test_ciclo_climatizacion.py: Configurar return_value en mocks del&#10;    Configurador (obtener_temperatura_inicial, obtener_incremento_temperatura,&#10;    obtener_histeresis)&#10;  - pytest.ini: Configurar testpaths específicos para evitar ejecutar&#10;    scripts de demostración" />
+    <MESSAGE value="  refactor: Mejorar código limpio y documentación de entidades&#10;&#10;  - Añadir documentación completa (docstrings) a todas las interfaces abstractas&#10;  - Renombrar AbsActuadorClimatizador a AbsProxyActuadorClimatizador&#10;  - Cambiar método estático a método de instancia en actuador&#10;  - Mejorar __repr__ de Ambiente con formato más legible&#10;  - Añadir validación de parámetros en constructor de Bateria&#10;  - Documentar patrones de diseño aplicados (Proxy, Template Method, State Machine)&#10;  - Mantener alias de compatibilidad para AbsActuadorClimatizador" />
+    <MESSAGE value="Aplicar DIP e inyección de dependencias en gestores_entidades&#10;&#10;  - Modificar constructores de gestores para recibir dependencias inyectadas&#10;  - Convertir Lanzador en Composition Root (punto único de ensamblaje)&#10;  - Añadir documentación completa (docstrings) a clases y métodos&#10;  - Eliminar wildcard imports por imports explícitos&#10;  - Especificar excepciones (OSError, ValueError, TimeoutError) en lugar de Exception genérica&#10;  - Eliminar código muerto (pass innecesarios)&#10;  - Actualizar tests de integración para usar inyección directa (sin patch)" />
+    <MESSAGE value="refactor(servicios_dominio): Aplicar DIP y mejorar calidad de código&#10;&#10;  - Inyectar histeresis como parámetro en ControladorTemperatura&#10;  - Eliminar import interno de Configurador (resuelve dependencia circular)&#10;  - Agregar docstrings completos a módulo, clase y método&#10;  - Formatear condicionales con estilo pythonico (early return)&#10;  - Actualizar Climatizador y Factory para propagar histeresis&#10;  - Pylint: 0.00/10 → 10.00/10&#10;  - Issues: 9 → 0" />
+    <MESSAGE value=" refactor(configurador): Mejorar calidad de código del paquete&#10;&#10;  - Reemplazar wildcard imports por imports explícitos en todas las factories&#10;  - Agregar docstrings completos a clase Configurador y todos sus métodos&#10;  - Agregar docstrings a todas las factories (9 archivos)&#10;  - Corregir formato pythonico: elif → if después de return&#10;  - Usar f-strings en lugar de .format()&#10;  - Agregar encoding UTF-8 en open()&#10;  - Eliminar return innecesario" />
+    <MESSAGE value=" refactor(servicios_aplicacion): Mejorar calidad de código del paquete&#10;&#10;  - Agregar docstrings de módulo, clase y métodos&#10;  - Reemplazar imports wildcard por imports explícitos&#10;  - Agregar comentarios pylint disable donde corresponde&#10;  - Eliminar return innecesarios en métodos void&#10;  - Refactorizar creación de hilos usando lista en operador_paralelo&#10;  - Corregir formato (trailing newlines, final newlines)" />
+    <MESSAGE value="refactor(agentes_sensores): Mejorar calidad de código del paquete&#10;&#10;  - Reemplazar wildcard imports por imports explícitos&#10;  - Corregir errores E0702 (raise de strings)&#10;  - Agregar docstrings a módulos, clases y métodos&#10;  - Usar context managers (with) para operaciones de archivo&#10;  - Agregar encoding utf-8 a open()&#10;  - Reemplazar except Exception por excepciones específicas&#10;  - Corregir variables no usadas&#10;  - Agregar pylint disables justificado" />
+    <MESSAGE value="refactor(agentes_actuadores): Mejorar calidad de código y aplicar DIP&#10;&#10;  - Reemplazar imports wildcard por imports explícitos&#10;  - Corregir errores E0702 (raising-bad-type)&#10;  - Agregar encoding='utf-8' a llamadas open()&#10;  - Eliminar llamadas redundantes a close()&#10;  - Agregar docstrings a clases y métodos&#10;  - Aplicar DIP en visualizadores API (inyección de api_url)&#10;  - Aplicar DIP en proxies Socket de agentes_sensores (inyección host/puerto)&#10;  - Actualizar factories para soportar parámetros de DIP&#10;  - Actualizar configurador.py como Composition Root" />
+    <MESSAGE value="refactor(registrador): Mejorar calidad de código del paquete&#10;&#10;   - Agregar docstrings completos a módulo, clases y métodos&#10;   - Documentar patrón Template Method&#10;   - Agregar pylint disable para too-few-public-methods&#10;   - Crear __init__.py con exports explícitos&#10;   - Pylint: 1.43/10 → 10.00/10" />
+    <MESSAGE value="&#10;  refactor(actores_externos): Mejorar calidad de código del &#10;  paquete&#10;&#10;  - Agregar docstrings de módulo a los 7 archivos (C0114)&#10;  - Mover docstrings al inicio en simuladores (W0105, C0413)&#10;  - Especificar encoding UTF-8 en open() (W1514)&#10;  - Cambiar except Exception por (OSError, socket.error) &#10;  (W0718)&#10;  - Agregar pylint disable para invalid-name y duplicate-code&#10;  - Agregar newline final en cartel_climatizador (C0304)&#10;  - Crear __init__.py con documentación del paquete&#10;&#10;  Pylint score: 7.80/10 → 10.00/10" />
+    <option name="LAST_COMMIT_MESSAGE" value="&#10;  refactor(actores_externos): Mejorar calidad de código del &#10;  paquete&#10;&#10;  - Agregar docstrings de módulo a los 7 archivos (C0114)&#10;  - Mover docstrings al inicio en simuladores (W0105, C0413)&#10;  - Especificar encoding UTF-8 en open() (W1514)&#10;  - Cambiar except Exception por (OSError, socket.error) &#10;  (W0718)&#10;  - Agregar pylint disable para invalid-name y duplicate-code&#10;  - Agregar newline final en cartel_climatizador (C0304)&#10;  - Crear __init__.py con documentación del paquete&#10;&#10;  Pylint score: 7.80/10 → 10.00/10" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$simulador_selector_temperatura.coverage" NAME="simulador_selector_temperatura Coverage Results" MODIFIED="1764093802314" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/actores_externos" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$gestor_ambiente.coverage" NAME="gestor_ambiente Coverage Results" MODIFIED="1654442437457" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/gestores_entidades" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$test_comparador_temperatura.coverage" NAME="test_comparador_temperatura Coverage Results" MODIFIED="1656443351861" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Test/climatizador" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$.coverage" NAME=" Coverage Results" MODIFIED="1764942296593" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Test/unit/entidades" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$controlador_climatizador.coverage" NAME="controlador_climatizador Coverage Results" MODIFIED="1701357790770" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/servicios_dominio" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$simulador_temperatura.coverage" NAME="simulador_temperatura Coverage Results" MODIFIED="1764093730061" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/actores_externos" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$selector_temperatura_deseada.coverage" NAME="seteo_temperatura_deseada Coverage Results" MODIFIED="1655146519704" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/actores_externos" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$test_lanzador.coverage" NAME="test_lanzador Coverage Results" MODIFIED="1656443559061" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Test/lanzador" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$cartel_temperatura.coverage" NAME="cartel_temperatura Coverage Results" MODIFIED="1687119976994" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/actores_externos" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$test_bateria_desde_socket.coverage" NAME="test_bateria_desde_socket Coverage Results" MODIFIED="1655067302648" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Test/bateria" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$selector_entrada.coverage" NAME="selector_entrada Coverage Results" MODIFIED="1655667706141" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/servicios_aplicacion" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$bateria_cliente.coverage" NAME="bateria_cliente Coverage Results" MODIFIED="1654264405876" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/actores_externos" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$sensor_temperatura.coverage" NAME="sensor_temperatura Coverage Results" MODIFIED="1764010796866" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/actores_externos" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$climatizador.coverage" NAME="climatizador Coverage Results" MODIFIED="1656624777624" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/entidades" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$test_climatizador.coverage" NAME="test_climatizador Coverage Results" MODIFIED="1656443355812" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Test/climatizador" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$lanzador.coverage" NAME="lanzador Coverage Results" MODIFIED="1656278977446" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/servicios_aplicacion" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$test_calefactor.coverage" NAME="test_calefactor Coverage Results" MODIFIED="1655142768833" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Test/climatizador" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$test_selector_temperatura.coverage" NAME="test_selector_temperatura Coverage Results" MODIFIED="1655146584522" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Test/selector_temperatura" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$bateria.coverage" NAME="bateria Coverage Results" MODIFIED="1764010789138" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/actores_externos" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$visualizador_temperatura.coverage" NAME="visualizador_temperatura Coverage Results" MODIFIED="1655065148857" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/agentes_actuadores" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$test_bateria_desde_archivo.coverage" NAME="test_bateria_desde_archivo Coverage Results" MODIFIED="1655057239700" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Test/bateria" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$test_presentador.coverage" NAME="test_presentador Coverage Results" MODIFIED="1656443130139" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Test/presentador" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$cartel_bateria.coverage" NAME="cartel_bateria Coverage Results" MODIFIED="1764016185095" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/actores_externos" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$test_bateria.coverage" NAME="test_bateria Coverage Results" MODIFIED="1656451730600" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Test/bateria" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$simulador_seteo_temperatura_deseada.coverage" NAME="simulador_seteo_temperatura_deseada Coverage Results" MODIFIED="1764093796973" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/actores_externos" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$test_operador.coverage" NAME="test_operador Coverage Results" MODIFIED="1656443443005" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Test/operador" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$gestor_bateria.coverage" NAME="gestor_bateria Coverage Results" MODIFIED="1654264082688" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/gestores_entidades" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$conftest.coverage" NAME="conftest Coverage Results" MODIFIED="1763986835537" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Test/unit" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$simulador_bateria.coverage" NAME="simulador_bateria Coverage Results" MODIFIED="1764093708376" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/actores_externos" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$test_temperatura.coverage" NAME="test_temperatura Coverage Results" MODIFIED="1656451796249" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Test/temperatura" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$presentador.coverage" NAME="presentador Coverage Results" MODIFIED="1762950356118" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/servicios_aplicacion" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$herencia.coverage" NAME="herencia Coverage Results" MODIFIED="1654437960163" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Test/temp" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$cartel_climatizador.coverage" NAME="cartel_climatizador Coverage Results" MODIFIED="1687120484089" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/actores_externos" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$ejecutar.coverage" NAME="ejecutar Coverage Results" MODIFIED="1765117801826" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$operador_secuencial.coverage" NAME="operador_secuencial Coverage Results" MODIFIED="1654260365321" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/servicios_aplicacion" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$seteo_temperatura_deseada.coverage" NAME="seteo_temperatura_deseada Coverage Results" MODIFIED="1764010802621" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/actores_externos" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$proxy_selector_temperatura.coverage" NAME="proxy_selector_temperatura Coverage Results" MODIFIED="1655143657877" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/agentes_sensores" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$test_seteo_temperatura.coverage" NAME="test_seteo_temperatura Coverage Results" MODIFIED="1655143195482" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Test/seteo_temperatura" />
+    <SUITE FILE_PATH="coverage/ISSE_Termostato$sensor_temperatura_cliente.coverage" NAME="sensor_temperatura_cliente Coverage Results" MODIFIED="1655043262884" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/actores_externos" />
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
+  </component>
+</project>
