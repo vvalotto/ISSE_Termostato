@@ -360,7 +360,7 @@ MacBook/PC                     Raspberry Pi
 ### Documentación Adicional
 
 - [Estrategia de Despliegue Completa](docs/Despliegue/estrategia_despliegue_raspberry_pi.md)
-- [Análisis de Calidad de Diseño](docs/Analisis%20de%20Calidad%20de%20Código/analisis_integral_calidad_diseno.md)
+- [Análisis de Calidad de Diseño](docs/Analisis de Calidad de Codigo/analisis_integral_calidad_diseno.md)
 - [README Principal](README.md)
 
 ### Requisitos del Sistema

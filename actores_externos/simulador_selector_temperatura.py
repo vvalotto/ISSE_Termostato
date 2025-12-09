@@ -1,3 +1,15 @@
+"""
+Simulador de selector de modo de temperatura via socket TCP.
+
+Este script simula el boton selector que alterna entre mostrar
+la temperatura ambiente o la temperatura deseada en el display.
+Funciona como un boton toggle de dos estados.
+"""
+# pylint: disable=invalid-name,duplicate-code
+# Las variables de script (contador, conectado, etc.) son mutables,
+# no constantes, por lo que no requieren UPPER_CASE.
+# El codigo duplicado entre simuladores es aceptable (scripts independientes).
+
 import socket
 import time
 import json
@@ -5,17 +17,12 @@ import os
 from datetime import datetime
 from os import system
 
-"""
-Simula el botón selector de modo del display (ambiente/deseada)
-Funciona como un botón toggle de dos estados
-"""
-
 # Cargar configuración (buscar en directorio actual o padre)
 config_file = "simuladores_config.json"
 if not os.path.exists(config_file):
     config_file = os.path.join("..", "simuladores_config.json")
 
-with open(config_file, "r") as f:
+with open(config_file, "r", encoding="utf-8") as f:
     config = json.load(f)
 
 HOST = config["raspberry_pi"]["host"]
@@ -103,8 +110,8 @@ while True:
     except KeyboardInterrupt:
         print("\n\nSaliendo...")
         break
-    except Exception as e:
+    except (OSError, socket.error) as e:
         conectado = False
-        print(f"\n✗ Error inesperado: {e}")
+        print(f"\n✗ Error de conexion: {e}")
 
     time.sleep(2)
