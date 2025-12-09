@@ -18,6 +18,7 @@ Ejemplo de uso:
 from abc import ABCMeta, abstractmethod
 
 
+# pylint: disable=too-few-public-methods
 class AbsProxyActuadorClimatizador(metaclass=ABCMeta):
     """
     Interfaz abstracta para proxies de actuador de climatizador.
@@ -63,7 +64,6 @@ class AbsProxyActuadorClimatizador(metaclass=ABCMeta):
             Como metodo de instancia, puede acceder al estado del objeto
             (self) para mantener configuracion, contadores, etc.
         """
-        pass
 
 
 # Alias para compatibilidad con codigo existente

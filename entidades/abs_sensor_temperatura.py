@@ -16,6 +16,7 @@ Ejemplo de uso:
 from abc import ABCMeta, abstractmethod
 
 
+# pylint: disable=too-few-public-methods
 class AbsProxySensorTemperatura(metaclass=ABCMeta):
     """
     Interfaz abstracta para proxies de lectura de temperatura.
@@ -53,4 +54,3 @@ class AbsProxySensorTemperatura(metaclass=ABCMeta):
             apropiadamente y lanzar excepciones descriptivas para
             facilitar el diagnostico de problemas de hardware.
         """
-        pass

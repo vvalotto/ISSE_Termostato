@@ -103,8 +103,11 @@ class Ambiente:
             temperatura_deseada_inicial: Temperatura deseada inicial en °C.
                                         Si es None, se usa 22°C por defecto.
         """
-        self.__temperatura_ambiente = None  # Aún no leída del sensor
-        self.__temperatura_deseada = temperatura_deseada_inicial if temperatura_deseada_inicial is not None else 22
+        self.__temperatura_ambiente = None  # Aun no leida del sensor
+        if temperatura_deseada_inicial is not None:
+            self.__temperatura_deseada = temperatura_deseada_inicial
+        else:
+            self.__temperatura_deseada = 22
         self.__temperatura_a_mostrar = "ambiente"
 
     def __repr__(self):

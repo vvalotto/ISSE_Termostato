@@ -1,8 +1,11 @@
 """
-Clase responsable de sacar el dato de las temperaturas
-a un visualizador
-Clase dummy
+Clase responsable de sacar el dato de las temperaturas a un visualizador.
+
+Clase dummy que simula la visualizacion de los parametros.
 """
+# pylint: disable=duplicate-code
+# El codigo de socket es similar entre visualizadores (patron comun aceptable)
+
 import socket
 import requests
 from entidades.abs_visualizador_temperatura import AbsVisualizadorTemperatura
@@ -19,8 +22,7 @@ class VisualizadorTemperatura(AbsVisualizadorTemperatura):
         - Presenter: Presenta datos de temperatura al usuario
     """
 
-    @staticmethod
-    def mostrar_temperatura_ambiente(temperatura_ambiente):
+    def mostrar_temperatura_ambiente(self, temperatura_ambiente):
         """
         Muestra la temperatura ambiente en consola.
 
@@ -29,8 +31,7 @@ class VisualizadorTemperatura(AbsVisualizadorTemperatura):
         """
         print(str(temperatura_ambiente))
 
-    @staticmethod
-    def mostrar_temperatura_deseada(temperatura_deseada):
+    def mostrar_temperatura_deseada(self, temperatura_deseada):
         """
         Muestra la temperatura deseada en consola.
 
@@ -51,8 +52,7 @@ class VisualizadorTemperaturaSocket(AbsVisualizadorTemperatura):
         - Proxy: Envia datos a visualizador remoto
     """
 
-    @staticmethod
-    def mostrar_temperatura_ambiente(temperatura_ambiente):
+    def mostrar_temperatura_ambiente(self, temperatura_ambiente):
         """
         Envia la temperatura ambiente via socket TCP.
 
@@ -69,8 +69,7 @@ class VisualizadorTemperaturaSocket(AbsVisualizadorTemperatura):
         except ConnectionError:
             print("Intentar de vuelta")
 
-    @staticmethod
-    def mostrar_temperatura_deseada(temperatura_deseada):
+    def mostrar_temperatura_deseada(self, temperatura_deseada):
         """
         Envia la temperatura deseada via socket TCP.
 

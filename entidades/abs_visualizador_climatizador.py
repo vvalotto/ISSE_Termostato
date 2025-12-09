@@ -30,6 +30,7 @@ Implementaciones tipicas:
 from abc import ABCMeta, abstractmethod
 
 
+# pylint: disable=too-few-public-methods
 class AbsVisualizadorClimatizador(metaclass=ABCMeta):
     """
     Interfaz abstracta para visualizadores de estado del climatizador.
@@ -42,13 +43,12 @@ class AbsVisualizadorClimatizador(metaclass=ABCMeta):
         mostrar_estado_climatizador: Visualiza el estado actual del climatizador
 
     Note:
-        El metodo es @staticmethod porque los visualizadores tipicamente
-        no mantienen estado propio, solo presentan datos que reciben.
+        El metodo puede ser de instancia para permitir que implementaciones
+        mantengan estado (ej: URLs de API, conexiones socket).
     """
 
-    @staticmethod
     @abstractmethod
-    def mostrar_estado_climatizador(estado_climatizador):
+    def mostrar_estado_climatizador(self, estado_climatizador):
         """
         Muestra el estado operacional actual del climatizador.
 
@@ -64,4 +64,3 @@ class AbsVisualizadorClimatizador(metaclass=ABCMeta):
             cada estado de forma clara y distinguible (iconos, colores,
             texto, LEDs, etc.).
         """
-        pass

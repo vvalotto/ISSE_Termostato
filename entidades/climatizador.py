@@ -90,7 +90,8 @@ class AbsClimatizador(metaclass=ABCMeta):
         """
         clave = (self._estado, accion)
         if clave not in self._transiciones:
-            raise ValueError("Transicion no valida: estado={}, accion={}".format(self._estado, accion))
+            mensaje = "Transicion no valida: estado={}, accion={}"
+            raise ValueError(mensaje.format(self._estado, accion))
         self._estado = self._transiciones[clave]
         return self._estado
 
@@ -111,7 +112,6 @@ class AbsClimatizador(metaclass=ABCMeta):
                 ("calentando", "apagar"): "apagado",
             }
         """
-        pass
 
     def evaluar_accion(self, ambiente):
         """
@@ -159,7 +159,6 @@ class AbsClimatizador(metaclass=ABCMeta):
             Este es el hook method que permite variacion en el algoritmo
             definido por evaluar_accion() (template method).
         """
-        pass
 
 
 class Climatizador(AbsClimatizador):

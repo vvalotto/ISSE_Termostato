@@ -7,6 +7,9 @@ permitiendo leer la temperatura ambiente desde archivo o via socket TCP.
 Patron de Diseno:
     - Proxy: Representa el sensor de temperatura real/remoto
 """
+# pylint: disable=duplicate-code
+# El codigo de socket es similar entre proxies (patron comun aceptable)
+
 import socket
 from entidades.abs_sensor_temperatura import AbsProxySensorTemperatura
 

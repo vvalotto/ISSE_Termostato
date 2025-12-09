@@ -7,6 +7,9 @@ termostato de manera secuencial en un ciclo infinito.
 Patron de Diseno:
     - Controller (GRASP): Coordina el flujo de operaciones del sistema
 """
+# pylint: disable=duplicate-code
+# La inicializacion es similar a operador_paralelo (patron comun aceptable)
+
 import time
 from os import system
 from servicios_aplicacion.selector_entrada import SelectorEntradaTemperatura

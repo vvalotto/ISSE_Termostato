@@ -7,6 +7,9 @@ permitiendo leer el nivel de carga desde archivo o via socket TCP.
 Patron de Diseno:
     - Proxy: Representa el sensor de bateria real/remoto
 """
+# pylint: disable=duplicate-code
+# El codigo de socket es similar entre proxies (patron comun aceptable)
+
 import socket
 from entidades.abs_bateria import AbsProxyBateria
 

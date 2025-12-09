@@ -16,6 +16,7 @@ Ejemplo de uso:
 from abc import ABCMeta, abstractmethod
 
 
+# pylint: disable=too-few-public-methods
 class AbsProxyBateria(metaclass=ABCMeta):
     """
     Interfaz abstracta para proxies de lectura de bateria.
@@ -46,4 +47,3 @@ class AbsProxyBateria(metaclass=ABCMeta):
             Exception: Puede lanzar excepciones especificas segun
                       la implementacion concreta (IOError, ConnectionError, etc.).
         """
-        pass

@@ -1,7 +1,11 @@
-""""
-Muestra los valores de carga de la Bateria
-Clase dummy que simula la visualizacion de los parametros
 """
+Muestra los valores de carga de la Bateria.
+
+Clase dummy que simula la visualizacion de los parametros.
+"""
+# pylint: disable=duplicate-code
+# El codigo de socket es similar entre visualizadores (patron comun aceptable)
+
 import socket
 import requests
 
@@ -19,8 +23,7 @@ class VisualizadorBateria(AbsVisualizadorBateria):
         - Presenter: Presenta datos de bateria al usuario
     """
 
-    @staticmethod
-    def mostrar_tension(tension_bateria):
+    def mostrar_tension(self, tension_bateria):
         """
         Muestra la tension de la bateria en consola.
 
@@ -29,8 +32,7 @@ class VisualizadorBateria(AbsVisualizadorBateria):
         """
         print(str(tension_bateria))
 
-    @staticmethod
-    def mostrar_indicador(indicador_bateria):
+    def mostrar_indicador(self, indicador_bateria):
         """
         Muestra el indicador de bateria en consola.
 

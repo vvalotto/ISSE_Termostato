@@ -46,12 +46,14 @@ class AbsAuditor:
 
     @staticmethod
     @abstractmethod
-    def auditar_funcion(registro):
+    def auditar_funcion(clase, mensaje, fecha_hora):
         """
         Registra una entrada de auditoria para una funcion.
 
         Args:
-            registro (str): Informacion de auditoria formateada.
+            clase (str): Nombre de la clase que genera el evento.
+            mensaje (str): Descripcion del evento auditado.
+            fecha_hora (str): Timestamp del evento.
 
         Note:
             Las implementaciones concretas deben definir el formato

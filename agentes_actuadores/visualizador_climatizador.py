@@ -19,8 +19,7 @@ class VisualizadorClimatizador(AbsVisualizadorClimatizador):
         - Presenter: Presenta estado del climatizador al usuario
     """
 
-    @staticmethod
-    def mostrar_estado_climatizador(estado_climatizador):
+    def mostrar_estado_climatizador(self, estado_climatizador):
         """
         Muestra el estado del climatizador en consola.
 
