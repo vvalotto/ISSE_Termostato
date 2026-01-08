@@ -119,7 +119,7 @@ class VisualizadorTemperaturaApi(AbsVisualizadorTemperatura):
             temperatura_ambiente: Valor de temperatura ambiente.
         """
         try:
-            requests.post("{}/termostato/temperatura_ambiente".format(self._api_url),
+            requests.post("{}/termostato/temperatura_ambiente/".format(self._api_url),
                          json={"ambiente": int(temperatura_ambiente)},
                          timeout=5)
         except requests.RequestException as e:
@@ -133,7 +133,7 @@ class VisualizadorTemperaturaApi(AbsVisualizadorTemperatura):
             temperatura_deseada: Valor de temperatura deseada.
         """
         try:
-            requests.post("{}/termostato/temperatura_deseada".format(self._api_url),
+            requests.post("{}/termostato/temperatura_deseada/".format(self._api_url),
                          json={"deseada": int(temperatura_deseada)},
                          timeout=5)
         except requests.RequestException as e:

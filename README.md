@@ -89,7 +89,7 @@ python ejecutar.py
 {
   "red": {
     "host_escucha": "0.0.0.0",
-    "api_url": "https://termostato-api.onrender.com"
+    "api_url": "https://app-termostato-1090421346746.us-central1.run.app"
   }
 }
 
@@ -121,7 +121,7 @@ cd actores_externos
 - Validacion de configuracion al inicio del sistema
 
 ### Visualizacion y API
-- Integracion con API REST desplegada en Render (https://termostato-api.onrender.com)
+- Integracion con API REST desplegada en Google Cloud Run (https://app-termostato-1090421346746.us-central1.run.app)
 - Visualizadores con timeout y manejo robusto de errores
 - Soporte para 3 modos: consola, socket, API REST
 
@@ -538,7 +538,7 @@ Los visualizadores con sufijo `Api` envian datos via HTTP POST a un servidor RES
 ```json
 {
   "red": {
-    "api_url": "https://termostato-api.onrender.com"
+    "api_url": "https://app-termostato-1090421346746.us-central1.run.app"
   }
 }
 ```
@@ -547,16 +547,18 @@ Los visualizadores con sufijo `Api` envian datos via HTTP POST a un servidor RES
 
 | Endpoint | Metodo | Payload | Descripcion |
 |----------|--------|---------|-------------|
-| `/termostato/temperatura_ambiente` | POST | `{"ambiente": valor}` | Temperatura actual |
-| `/termostato/temperatura_deseada` | POST | `{"deseada": valor}` | Temperatura objetivo |
-| `/termostato/bateria` | POST | `{"bateria": valor}` | Nivel de carga |
-| `/bateria/indicador` | POST | `{"indicador": valor}` | Estado NORMAL/BAJA |
-| `/termostato/estado_climatizador` | POST | `{"climatizador": valor}` | Estado del climatizador |
+| `/termostato/temperatura_ambiente/` | POST | `{"ambiente": valor}` | Temperatura actual |
+| `/termostato/temperatura_deseada/` | POST | `{"deseada": valor}` | Temperatura objetivo |
+| `/termostato/bateria/` | POST | `{"bateria": valor}` | Nivel de carga |
+| `/termostato/indicador/` | GET | - | Estado NORMAL/BAJO/CRITICO (calculado) |
+| `/termostato/estado_climatizador/` | POST | `{"climatizador": valor}` | Estado del climatizador |
+| `/termostato/` | GET | - | Estado completo del termostato |
+| `/termostato/historial/` | GET | `?limite=N` | Historial de temperaturas |
 
 ### Servidor API Desplegado
 
 El proyecto incluye integracion con un servidor API REST desplegado en:
-- **URL de produccion**: https://termostato-api.onrender.com
+- **URL de produccion**: https://app-termostato-1090421346746.us-central1.run.app
 - **Timeout**: 5 segundos
 - **Manejo de errores**: Reintentos automaticos y logging
 
@@ -592,7 +594,7 @@ El sistema se configura mediante `termostato.json`:
       "seteo_temperatura": 13000,
       "selector_temperatura": 14000
     },
-    "api_url": "https://termostato-api.onrender.com"
+    "api_url": "https://app-termostato-1090421346746.us-central1.run.app"
   }
 }
 ```
@@ -727,8 +729,8 @@ cd actores_externos
 │                          INTERNET                                │
 │                                                                  │
 │  ┌────────────────────────────────────────────────────────┐     │
-│  │  Servidor API REST (Render)                            │     │
-│  │  https://termostato-api.onrender.com                   │     │
+│  │  Servidor API REST (Google Cloud Run)                  │     │
+│  │  https://app-termostato-1090421346746.us-central1.run.app│    │
 │  │  - Endpoints REST                                      │     │
 │  │  - Almacenamiento de metricas                          │     │
 │  └────────────────────────────────────────────────────────┘     │
@@ -744,7 +746,7 @@ cd actores_externos
 │  │  - Python 3.5+                                         │     │
 │  │  - Termostato (ejecutar.py)                            │     │
 │  │  - Escucha en 0.0.0.0:11000-14000                      │     │
-│  │  - VisualizadoresApi -> Envia a Render                 │     │
+│  │  - VisualizadoresApi -> Envia a Cloud Run              │     │
 │  └────────────────────────────────────────────────────────┘     │
 │                            ▲                                     │
 │                            │ Socket TCP                          │

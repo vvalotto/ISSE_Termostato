@@ -120,7 +120,7 @@ class VisualizadorBateriaApi(AbsVisualizadorBateria):
             tension_bateria: Valor de tension a enviar.
         """
         try:
-            requests.post("{}/termostato/bateria".format(self._api_url),
+            requests.post("{}/termostato/bateria/".format(self._api_url),
                          json={"bateria": tension_bateria},
                          timeout=5)
         except requests.RequestException as e:
@@ -128,14 +128,15 @@ class VisualizadorBateriaApi(AbsVisualizadorBateria):
 
     def mostrar_indicador(self, indicador_bateria):
         """
-        Envia el indicador de bateria a la API REST.
+        Muestra el indicador de bateria.
+
+        Nota: La API calcula el indicador automaticamente basado en el
+        nivel de bateria enviado a /termostato/bateria/. Este metodo
+        no realiza ninguna accion ya que el indicador es de solo lectura.
 
         Args:
-            indicador_bateria: Valor del indicador a enviar.
+            indicador_bateria: Valor del indicador (no se envia).
         """
-        try:
-            requests.post("{}/termostato/indicador".format(self._api_url),
-                         json={"indicador": indicador_bateria},
-                         timeout=5)
-        except requests.RequestException as e:
-            print("Error al enviar indicador batería: {}".format(e))
+        # El indicador se calcula automaticamente en la API
+        # basado en el nivel de bateria enviado a /termostato/bateria/
+        pass

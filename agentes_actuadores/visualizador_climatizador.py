@@ -92,7 +92,7 @@ class VisualizadorClimatizadorApi(AbsVisualizadorClimatizador):
             estado_climatizador: Estado actual del climatizador.
         """
         try:
-            requests.post("{}/termostato/estado_climatizador".format(self._api_url),
+            requests.post("{}/termostato/estado_climatizador/".format(self._api_url),
                          json={"climatizador": estado_climatizador},
                          timeout=5)
         except requests.RequestException as e:
