@@ -23,22 +23,25 @@ class TestVisualizadorTemperaturaConsola:
     # VIS-001: Consola muestra valor
     def test_mostrar_temperatura_ambiente_imprime_valor(self, capsys):
         """mostrar_temperatura_ambiente debe imprimir el valor"""
-        VisualizadorTemperatura.mostrar_temperatura_ambiente(25)
+        visualizador = VisualizadorTemperatura()
+        visualizador.mostrar_temperatura_ambiente(25)
         captured = capsys.readouterr()
         assert "25" in captured.out
 
     def test_mostrar_temperatura_deseada_imprime_valor(self, capsys):
         """mostrar_temperatura_deseada debe imprimir el valor"""
-        VisualizadorTemperatura.mostrar_temperatura_deseada(22)
+        visualizador = VisualizadorTemperatura()
+        visualizador.mostrar_temperatura_deseada(22)
         captured = capsys.readouterr()
         assert "22" in captured.out
 
     def test_mostrar_temperaturas_diversas(self, capsys):
         """Debe mostrar correctamente diversos valores"""
+        visualizador = VisualizadorTemperatura()
         test_values = [0, 25, -5, 100, 22.5]
 
         for valor in test_values:
-            VisualizadorTemperatura.mostrar_temperatura_ambiente(valor)
+            visualizador.mostrar_temperatura_ambiente(valor)
             captured = capsys.readouterr()
             assert str(valor) in captured.out
 
@@ -50,9 +53,10 @@ class TestVisualizadorTemperaturaSocket:
     def test_mostrar_temperatura_ambiente_envia_a_socket(self):
         """Debe enviar datos al socket"""
         mock_socket = Mock()
+        visualizador = VisualizadorTemperaturaSocket()
 
         with patch('socket.socket', return_value=mock_socket):
-            VisualizadorTemperaturaSocket.mostrar_temperatura_ambiente(25)
+            visualizador.mostrar_temperatura_ambiente(25)
 
             mock_socket.connect.assert_called_once_with(("localhost", 14001))
             mock_socket.send.assert_called_once()
@@ -61,9 +65,10 @@ class TestVisualizadorTemperaturaSocket:
     def test_mostrar_temperatura_deseada_envia_a_socket(self):
         """Debe enviar datos al socket"""
         mock_socket = Mock()
+        visualizador = VisualizadorTemperaturaSocket()
 
         with patch('socket.socket', return_value=mock_socket):
-            VisualizadorTemperaturaSocket.mostrar_temperatura_deseada(22)
+            visualizador.mostrar_temperatura_deseada(22)
 
             mock_socket.connect.assert_called_once_with(("localhost", 14001))
             mock_socket.send.assert_called_once()
@@ -72,9 +77,10 @@ class TestVisualizadorTemperaturaSocket:
     def test_formato_mensaje_ambiente(self):
         """El mensaje debe tener el formato correcto"""
         mock_socket = Mock()
+        visualizador = VisualizadorTemperaturaSocket()
 
         with patch('socket.socket', return_value=mock_socket):
-            VisualizadorTemperaturaSocket.mostrar_temperatura_ambiente(25)
+            visualizador.mostrar_temperatura_ambiente(25)
 
             # Verificar que el mensaje contiene "ambiente: 25"
             call_args = mock_socket.send.call_args[0][0]
@@ -83,9 +89,10 @@ class TestVisualizadorTemperaturaSocket:
     def test_formato_mensaje_deseada(self):
         """El mensaje debe tener el formato correcto"""
         mock_socket = Mock()
+        visualizador = VisualizadorTemperaturaSocket()
 
         with patch('socket.socket', return_value=mock_socket):
-            VisualizadorTemperaturaSocket.mostrar_temperatura_deseada(22)
+            visualizador.mostrar_temperatura_deseada(22)
 
             call_args = mock_socket.send.call_args[0][0]
             assert b"deseada: 22" in call_args
@@ -95,10 +102,11 @@ class TestVisualizadorTemperaturaSocket:
         """Cuando el socket no esta disponible, debe manejar el error"""
         mock_socket = Mock()
         mock_socket.connect.side_effect = ConnectionError("Connection refused")
+        visualizador = VisualizadorTemperaturaSocket()
 
         with patch('socket.socket', return_value=mock_socket):
             # No debe lanzar excepcion
-            VisualizadorTemperaturaSocket.mostrar_temperatura_ambiente(25)
+            visualizador.mostrar_temperatura_ambiente(25)
 
             captured = capsys.readouterr()
             assert "Intentar de vuelta" in captured.out
@@ -110,33 +118,38 @@ class TestVisualizadorTemperaturaApi:
     # VIS-003: API POST correcto
     def test_mostrar_temperatura_ambiente_hace_post(self):
         """Debe hacer POST al endpoint correcto"""
+        visualizador = VisualizadorTemperaturaApi("http://localhost:5050")
+
         with patch('requests.post') as mock_post:
-            VisualizadorTemperaturaApi.mostrar_temperatura_ambiente(25)
+            visualizador.mostrar_temperatura_ambiente(25)
 
             mock_post.assert_called_once_with(
-                "http://localhost:5050/termostato/temperatura_ambiente",
+                "http://localhost:5050/termostato/temperatura_ambiente/",
                 json={"ambiente": 25},
                 timeout=5
             )
 
     def test_mostrar_temperatura_deseada_hace_post(self):
         """Debe hacer POST al endpoint correcto"""
+        visualizador = VisualizadorTemperaturaApi("http://localhost:5050")
+
         with patch('requests.post') as mock_post:
-            VisualizadorTemperaturaApi.mostrar_temperatura_deseada(22)
+            visualizador.mostrar_temperatura_deseada(22)
 
             mock_post.assert_called_once_with(
-                "http://localhost:5050/termostato/temperatura_deseada",
+                "http://localhost:5050/termostato/temperatura_deseada/",
                 json={"deseada": 22},
                 timeout=5
             )
 
     def test_post_con_diferentes_valores(self):
         """Debe enviar correctamente diferentes valores"""
+        visualizador = VisualizadorTemperaturaApi("http://localhost:5050")
         test_values = [0, 25, -5, 100]
 
         for valor in test_values:
             with patch('requests.post') as mock_post:
-                VisualizadorTemperaturaApi.mostrar_temperatura_ambiente(valor)
+                visualizador.mostrar_temperatura_ambiente(valor)
                 mock_post.assert_called_once()
                 call_args = mock_post.call_args
                 assert call_args[1]['json']['ambiente'] == valor
@@ -145,12 +158,13 @@ class TestVisualizadorTemperaturaApi:
     def test_api_no_disponible_maneja_error(self, capsys):
         """Cuando la API no esta disponible, maneja el error e imprime mensaje"""
         import requests
+        visualizador = VisualizadorTemperaturaApi("http://localhost:5050")
 
         with patch('requests.post', side_effect=requests.exceptions.ConnectionError("API no disponible")):
             # No debe lanzar excepcion, debe manejarlo
-            VisualizadorTemperaturaApi.mostrar_temperatura_ambiente(25)
+            visualizador.mostrar_temperatura_ambiente(25)
 
-            # Verificar que se imprimió mensaje de error
+            # Verificar que se imprimio mensaje de error
             captured = capsys.readouterr()
             assert "Error al enviar temperatura ambiente" in captured.out
 
@@ -161,35 +175,41 @@ class TestVisualizadoresIntegracion:
     def test_todos_los_visualizadores_aceptan_enteros(self, capsys):
         """Todos los visualizadores deben aceptar enteros"""
         # Consola
-        VisualizadorTemperatura.mostrar_temperatura_ambiente(25)
+        vis_consola = VisualizadorTemperatura()
+        vis_consola.mostrar_temperatura_ambiente(25)
         captured = capsys.readouterr()
         assert "25" in captured.out
 
         # Socket (mock)
         mock_socket = Mock()
+        vis_socket = VisualizadorTemperaturaSocket()
         with patch('socket.socket', return_value=mock_socket):
-            VisualizadorTemperaturaSocket.mostrar_temperatura_ambiente(25)
+            vis_socket.mostrar_temperatura_ambiente(25)
             mock_socket.send.assert_called()
 
         # API (mock)
+        vis_api = VisualizadorTemperaturaApi("http://localhost:5050")
         with patch('requests.post') as mock_post:
-            VisualizadorTemperaturaApi.mostrar_temperatura_ambiente(25)
+            vis_api.mostrar_temperatura_ambiente(25)
             mock_post.assert_called()
 
     def test_todos_los_visualizadores_aceptan_floats(self, capsys):
         """Todos los visualizadores deben aceptar floats"""
         # Consola
-        VisualizadorTemperatura.mostrar_temperatura_ambiente(25.5)
+        vis_consola = VisualizadorTemperatura()
+        vis_consola.mostrar_temperatura_ambiente(25.5)
         captured = capsys.readouterr()
         assert "25.5" in captured.out
 
         # Socket (mock)
         mock_socket = Mock()
+        vis_socket = VisualizadorTemperaturaSocket()
         with patch('socket.socket', return_value=mock_socket):
-            VisualizadorTemperaturaSocket.mostrar_temperatura_ambiente(25.5)
+            vis_socket.mostrar_temperatura_ambiente(25.5)
             mock_socket.send.assert_called()
 
         # API (mock)
+        vis_api = VisualizadorTemperaturaApi("http://localhost:5050")
         with patch('requests.post') as mock_post:
-            VisualizadorTemperaturaApi.mostrar_temperatura_ambiente(25.5)
+            vis_api.mostrar_temperatura_ambiente(25.5)
             mock_post.assert_called()
