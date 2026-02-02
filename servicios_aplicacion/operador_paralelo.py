@@ -32,7 +32,13 @@ class OperadorParalelo:
         _gestor_climatizador: Gestor de operaciones de climatizador.
     """
 
-    def __init__(self, gestor_bateria, gestor_ambiente, gestor_climatizador):
+    def __init__(
+        self,
+        gestor_bateria,
+        gestor_ambiente,
+        gestor_climatizador,
+        visualizador_consolidado=None
+    ):
         """
         Inicializa el operador con los gestores necesarios.
 
@@ -40,14 +46,18 @@ class OperadorParalelo:
             gestor_bateria: Gestor de bateria.
             gestor_ambiente: Gestor de ambiente.
             gestor_climatizador: Gestor de climatizador.
+            visualizador_consolidado: Visualizador de estado consolidado (opcional).
         """
         self._gestor_bateria = gestor_bateria
         self._gestor_ambiente = gestor_ambiente
         self._gestor_climatizador = gestor_climatizador
         self._selector = SelectorEntradaTemperatura(self._gestor_ambiente)
-        self._presentador = Presentador(self._gestor_bateria,
-                                        self._gestor_ambiente,
-                                        self._gestor_climatizador)
+        self._presentador = Presentador(
+            self._gestor_bateria,
+            self._gestor_ambiente,
+            self._gestor_climatizador,
+            visualizador_consolidado=visualizador_consolidado
+        )
 
     def lee_carga_bateria(self):
         """Lee periodicamente la carga de bateria (cada 1 segundo)."""

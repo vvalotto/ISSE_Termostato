@@ -23,7 +23,13 @@ class Presentador:
         _gestor_climatizador: Gestor de climatizador para mostrar estado.
     """
 
-    def __init__(self, gestor_bateria, gestor_ambiente, gestor_climatizador):
+    def __init__(
+        self,
+        gestor_bateria,
+        gestor_ambiente,
+        gestor_climatizador,
+        visualizador_consolidado=None
+    ):
         """
         Inicializa el presentador con los gestores necesarios.
 
@@ -31,10 +37,13 @@ class Presentador:
             gestor_bateria: Gestor de bateria.
             gestor_ambiente: Gestor de ambiente.
             gestor_climatizador: Gestor de climatizador.
+            visualizador_consolidado: Visualizador de estado consolidado (opcional).
+                                     Si se provee, envía el estado completo en JSON.
         """
         self._gestor_bateria = gestor_bateria
         self._gestor_ambiente = gestor_ambiente
         self._gestor_climatizador = gestor_climatizador
+        self._visualizador_consolidado = visualizador_consolidado
 
     def ejecutar(self):
         """Muestra todos los parametros del sistema en consola."""
@@ -51,3 +60,11 @@ class Presentador:
         self._gestor_climatizador.mostrar_estado_climatizador()
         print("------------------------------------")
         print("\n")
+
+        # Enviar estado consolidado a UX (si está configurado)
+        if self._visualizador_consolidado is not None:
+            self._visualizador_consolidado.mostrar_estado_completo(
+                self._gestor_ambiente,
+                self._gestor_climatizador,
+                self._gestor_bateria
+            )

@@ -8,8 +8,12 @@ o via socket TCP.
 Patron de Diseno:
     - Proxy: Representa el control de seteo real/remoto
 """
+import logging
 import socket
 from servicios_aplicacion.abs_seteo_temperatura import AbsSeteoTemperatura
+
+# Configurar logger para este módulo
+logger = logging.getLogger(__name__)
 
 
 # pylint: disable=too-few-public-methods
@@ -22,10 +26,12 @@ class SeteoTemperatura(AbsSeteoTemperatura):
     """
 
     def obtener_seteo(self):
+        logger.debug("Esperando entrada de usuario para seteo de temperatura")
         opcion = "0"
         while opcion not in ["1", "2"]:
             opcion = input(">")
         diferencia = "aumentar" if opcion == "1" else "disminuir"
+        logger.info("Usuario seleccionó: %s temperatura", diferencia)
         return diferencia
 
 
@@ -52,6 +58,7 @@ class SeteoTemperaturaSocket(AbsSeteoTemperatura):
             host: Direccion IP para escuchar conexiones.
             puerto: Puerto TCP para escuchar conexiones.
         """
+        logger.info("Inicializando seteo de temperatura socket en %s:%d", host, puerto)
         self._servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._servidor.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
@@ -61,6 +68,7 @@ class SeteoTemperaturaSocket(AbsSeteoTemperatura):
 
         self._conexion = None
         self._servidor.settimeout(2.0)  # Timeout para accept
+        logger.debug("Socket de seteo listo para recibir comandos")
 
     def obtener_seteo(self):
         """
@@ -75,9 +83,10 @@ class SeteoTemperaturaSocket(AbsSeteoTemperatura):
                 try:
                     self._conexion, direccion_cliente = self._servidor.accept()
                     self._conexion.settimeout(5.0)  # Timeout para recv
-                    print("[Seteo] Cliente conectado: {}".format(direccion_cliente))
+                    logger.info("Cliente de seteo conectado desde: %s", direccion_cliente)
                 except socket.timeout:
                     # No hay cliente, retornar None
+                    logger.debug("Sin cliente de seteo conectado")
                     return None
 
             # Leer comando (bloqueante con timeout)
@@ -85,23 +94,24 @@ class SeteoTemperaturaSocket(AbsSeteoTemperatura):
                 datos = self._conexion.recv(4096)
                 if datos:
                     diferencia = str(datos.decode("utf-8"))
-                    print("[Seteo] Comando recibido: {}".format(diferencia))
+                    logger.info("Comando de seteo recibido: %s", diferencia)
                 else:
                     # Cliente cerró conexión
-                    print("[Seteo] Cliente desconectado")
+                    logger.debug("Cliente de seteo desconectado")
                     self._conexion.close()
                     self._conexion = None
             except socket.timeout:
                 # Timeout esperando comando, retornar None
+                logger.debug("Timeout esperando comando de seteo")
                 return None
             except ConnectionError as e:
-                print("[Seteo] Error de conexión: {}".format(e))
+                logger.error("Error de conexión en seteo: %s", str(e))
                 if self._conexion:
                     self._conexion.close()
                 self._conexion = None
 
         except (socket.error, OSError) as e:
-            print("[Seteo] Error: {}".format(e))
+            logger.error("Error en socket de seteo: %s", str(e))
 
         return diferencia
 

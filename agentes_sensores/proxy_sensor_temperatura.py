@@ -10,8 +10,12 @@ Patron de Diseno:
 # pylint: disable=duplicate-code
 # El codigo de socket es similar entre proxies (patron comun aceptable)
 
+import logging
 import socket
 from entidades.abs_sensor_temperatura import AbsProxySensorTemperatura
+
+# Configurar logger para este módulo
+logger = logging.getLogger(__name__)
 
 
 # pylint: disable=too-few-public-methods
@@ -25,11 +29,17 @@ class ProxySensorTemperaturaArchivo(AbsProxySensorTemperatura):
 
     def leer_temperatura(self):
         """Lee la temperatura desde el archivo 'temperatura'."""
+        logger.debug("Intentando leer temperatura desde archivo 'temperatura'")
         try:
             with open("temperatura", "r", encoding="utf-8") as archivo:
                 temperatura = int(archivo.read())
+                logger.info("Temperatura leída exitosamente: %d°C", temperatura)
         except IOError as exc:
+            logger.error("Error al leer archivo 'temperatura': %s", str(exc))
             raise IOError("Error de Lectura de Sensor") from exc
+        except ValueError as exc:
+            logger.error("Valor inválido en archivo 'temperatura': %s", str(exc))
+            raise ValueError("Valor de temperatura inválido") from exc
         return temperatura
 
 
@@ -62,6 +72,8 @@ class ProxySensorTemperaturaSocket(AbsProxySensorTemperatura):
 
     def leer_temperatura(self):
         """Lee la temperatura via socket TCP."""
+        logger.debug("Iniciando servidor socket en %s:%d para lectura de temperatura",
+                    self._host, self._puerto)
         temperatura = None
         servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         servidor.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # Permite reusar puerto
@@ -70,18 +82,25 @@ class ProxySensorTemperaturaSocket(AbsProxySensorTemperatura):
         servidor.bind(direccion_servidor)
 
         servidor.listen(1)
-        conexion, _ = servidor.accept()
+        logger.info("Esperando conexión en %s:%d...", self._host, self._puerto)
+        conexion, direccion_cliente = servidor.accept()
+        logger.info("Cliente conectado desde: %s", direccion_cliente)
 
         try:
             while True:
                 datos = conexion.recv(4096)
                 if not datos:
+                    logger.debug("Cliente cerró la conexión")
                     break
                 temperatura = float(datos.decode("utf-8"))
+                logger.info("Temperatura recibida: %.1f°C", temperatura)
+        except ValueError as e:
+            logger.error("Valor inválido recibido del sensor: %s", str(e))
         except ConnectionError as e:  # FIX: sintaxis correcta
-            print("Error de conexión: {}".format(e))
+            logger.error("Error de conexión: %s", str(e))
         finally:  # FIX: asegurar cierre
             conexion.close()
             servidor.close()
+            logger.debug("Socket cerrado")
 
         return temperatura

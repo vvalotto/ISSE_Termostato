@@ -16,7 +16,7 @@
 
   "ambiente": {
     "histeresis": 2.0,
-    "temperatura_inicial": 22.0,
+    "temperatura_inicial": 24.0,
     "incremento_ajuste": 1.0
   },
 

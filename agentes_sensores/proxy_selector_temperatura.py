@@ -12,10 +12,14 @@ Patron de Diseno:
 # El codigo de socket y registro es similar entre proxies (patron comun aceptable)
 
 import datetime
+import logging
 import socket
 
 from registrador.registrador import AbsRegistrador
 from servicios_aplicacion.abs_selector_temperatura import AbsSelectorTemperatura
+
+# Configurar logger para este módulo
+logger = logging.getLogger(__name__)
 
 
 class SelectorTemperaturaArchivo(AbsSelectorTemperatura, AbsRegistrador):
@@ -29,11 +33,14 @@ class SelectorTemperaturaArchivo(AbsSelectorTemperatura, AbsRegistrador):
     @staticmethod
     def obtener_selector():
         """Obtiene el modo de temperatura desde archivo."""
+        logger.debug("Intentando leer tipo de temperatura desde archivo 'tipo_temperatura'")
         try:
             with open("tipo_temperatura", "r", encoding="utf-8") as archivo:
                 tipo_temperatura = archivo.read().strip()
+                logger.info("Tipo de temperatura leído: %s", tipo_temperatura)
         except IOError as exc:
             mensaje_error = "Error al leer el tipo de temperatura"
+            logger.error("Error al leer archivo 'tipo_temperatura': %s", str(exc))
             registro_error = SelectorTemperaturaArchivo._armar_registro_error(
                 SelectorTemperaturaArchivo.__name__,
                 SelectorTemperaturaArchivo.obtener_selector.__name__,
@@ -89,6 +96,7 @@ class SelectorTemperaturaSocket(AbsSelectorTemperatura):
             host: Direccion IP para escuchar conexiones.
             puerto: Puerto TCP para escuchar conexiones.
         """
+        logger.info("Inicializando selector de temperatura socket en %s:%d", host, puerto)
         self._estado_actual = "ambiente"  # Estado inicial
         self._servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._servidor.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -99,6 +107,7 @@ class SelectorTemperaturaSocket(AbsSelectorTemperatura):
 
         self._conexion = None
         self._servidor.settimeout(1.0)  # Timeout para accept
+        logger.debug("Selector socket listo, modo inicial: %s", self._estado_actual)
 
     # pylint: disable=arguments-differ
     def obtener_selector(self):
@@ -110,10 +119,12 @@ class SelectorTemperaturaSocket(AbsSelectorTemperatura):
             # Si no hay conexión activa, intentar aceptar una (con timeout)
             if self._conexion is None:
                 try:
-                    self._conexion, _ = self._servidor.accept()
+                    self._conexion, direccion_cliente = self._servidor.accept()
                     self._conexion.settimeout(0.1)  # Timeout corto para recv
+                    logger.info("Cliente selector conectado desde: %s", direccion_cliente)
                 except socket.timeout:
                     # No hay cliente intentando conectar, devolver estado actual
+                    logger.debug("Sin nuevas conexiones, modo actual: %s", self._estado_actual)
                     return self._estado_actual
 
             # Intentar leer datos (no bloqueante)
@@ -122,22 +133,23 @@ class SelectorTemperaturaSocket(AbsSelectorTemperatura):
                 if datos:
                     nuevo_estado = str(datos.decode("utf-8"))
                     self._estado_actual = nuevo_estado
-                    print("[Selector] Cambio a modo: {}".format(self._estado_actual.upper()))
+                    logger.info("Cambio a modo: %s", self._estado_actual.upper())
                 else:
                     # Cliente cerró conexión
+                    logger.debug("Cliente selector cerró la conexión")
                     self._conexion.close()
                     self._conexion = None
             except socket.timeout:
                 # No hay datos nuevos, mantener estado actual
-                pass
+                logger.debug("Sin nuevos datos, manteniendo modo: %s", self._estado_actual)
             except ConnectionError as e:
-                print("[Selector] Error de conexión: {}".format(e))
+                logger.error("Error de conexión en selector: %s", str(e))
                 if self._conexion:
                     self._conexion.close()
                 self._conexion = None
 
         except (socket.error, OSError) as e:
-            print("[Selector] Error: {}".format(e))
+            logger.error("Error en selector socket: %s", str(e))
 
         return self._estado_actual
 

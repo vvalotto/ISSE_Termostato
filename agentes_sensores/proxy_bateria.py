@@ -10,8 +10,12 @@ Patron de Diseno:
 # pylint: disable=duplicate-code
 # El codigo de socket es similar entre proxies (patron comun aceptable)
 
+import logging
 import socket
 from entidades.abs_bateria import AbsProxyBateria
+
+# Configurar logger para este módulo
+logger = logging.getLogger(__name__)
 
 
 # pylint: disable=too-few-public-methods
@@ -25,10 +29,16 @@ class ProxyBateriaArchivo(AbsProxyBateria):
 
     def leer_carga(self):
         """Lee el nivel de carga desde el archivo 'bateria'."""
+        logger.debug("Intentando leer nivel de carga desde archivo 'bateria'")
         try:
             with open("bateria", "r", encoding="utf-8") as archivo:
                 carga = float(archivo.read())
-        except IOError:
+                logger.info("Nivel de carga leído exitosamente: %.2f%%", carga)
+        except IOError as e:
+            logger.error("Error al leer archivo 'bateria': %s", str(e))
+            carga = None
+        except ValueError as e:
+            logger.error("Valor inválido en archivo 'bateria': %s", str(e))
             carga = None
         return carga
 
@@ -62,6 +72,8 @@ class ProxyBateriaSocket(AbsProxyBateria):
 
     def leer_carga(self):
         """Lee el nivel de carga via socket TCP."""
+        logger.debug("Iniciando servidor socket en %s:%d para lectura de carga",
+                    self._host, self._puerto)
         carga = None
         servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         servidor.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # Permite reusar puerto
@@ -70,18 +82,25 @@ class ProxyBateriaSocket(AbsProxyBateria):
         servidor.bind(direccion_servidor)
 
         servidor.listen(1)
-        conexion, _ = servidor.accept()
+        logger.info("Esperando conexión en %s:%d...", self._host, self._puerto)
+        conexion, direccion_cliente = servidor.accept()
+        logger.info("Cliente conectado desde: %s", direccion_cliente)
 
         try:
             while True:
                 datos = conexion.recv(4096)
                 if not datos:
+                    logger.debug("Cliente cerró la conexión")
                     break
                 carga = float(datos.decode("utf-8"))
+                logger.info("Nivel de carga recibido: %.2f%%", carga)
+        except ValueError as e:
+            logger.error("Valor inválido recibido del sensor: %s", str(e))
         except ConnectionError as e:  # FIX: sintaxis correcta
-            print("Error de conexión: {}".format(e))
+            logger.error("Error de conexión: %s", str(e))
         finally:  # FIX: asegurar cierre
             conexion.close()
             servidor.close()
+            logger.debug("Socket cerrado")
 
         return carga

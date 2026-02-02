@@ -18,6 +18,9 @@ from servicios_aplicacion.presentador import Presentador
 from configurador.configurador import Configurador
 from entidades.ambiente import Ambiente
 from entidades.bateria import Bateria
+from agentes_actuadores.visualizador_estado_consolidado import (
+    VisualizadorEstadoConsolidadoSocket
+)
 
 
 # pylint: disable=too-few-public-methods
@@ -76,13 +79,25 @@ class Lanzador:
             visualizador=visualizador_climatizador
         )
 
+        # Crear visualizador consolidado para enviar estado JSON a UX
+        visualizador_consolidado = VisualizadorEstadoConsolidadoSocket(
+            host="localhost",
+            port=14001
+        )
+
         # Crear presentador y operador
-        self._presentador = Presentador(self._gestor_bateria,
-                                        self._gestor_ambiente,
-                                        self._gestor_climatizador)
-        self._operador = OperadorParalelo(self._gestor_bateria,
-                                          self._gestor_ambiente,
-                                          self._gestor_climatizador)
+        self._presentador = Presentador(
+            self._gestor_bateria,
+            self._gestor_ambiente,
+            self._gestor_climatizador,
+            visualizador_consolidado=visualizador_consolidado
+        )
+        self._operador = OperadorParalelo(
+            self._gestor_bateria,
+            self._gestor_ambiente,
+            self._gestor_climatizador,
+            visualizador_consolidado=visualizador_consolidado
+        )
 
     def ejecutar(self):
         """
