@@ -134,3 +134,24 @@ dmypy.json
 
 # Application logs
 termostato.log
+
+# IDE - PyCharm
+.idea/
+
+# macOS
+.DS_Store
+
+# Project-specific runtime files (generated during execution)
+bateria
+climatizador
+temperatura
+tipo_temperatura
+registro_auditoria
+agentes_sensores/bateria
+
+# Backup files
+*.backup
+
+# Generated reports
+report/
+jscpd-report.json
