@@ -1,346 +1,135 @@
-# CLAUDE.md - Guía para Claude Code
+# CLAUDE.md
 
-Este archivo proporciona contexto y guías para trabajar eficientemente con el proyecto ISSE_Termostato usando Claude Code.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## 📋 Descripción del Proyecto
+## Descripción del Proyecto
 
-**ISSE_Termostato** es un sistema de control de termostato inteligente desarrollado como proyecto educativo para demostrar principios de arquitectura de software y patrones de diseño. Implementa **Clean Architecture** con separación estricta de capas y uso exhaustivo de patrones GRASP, GoF y principios SOLID.
+Sistema de control de termostato inteligente desarrollado como proyecto educativo. Implementa **Clean Architecture** con Python 3.5+ (compatible con Raspberry Pi OS Lite), patrones GRASP/GoF y principios SOLID.
 
-### Características Principales
-- Clean Architecture con 4 capas bien definidas
-- Sistema de logging centralizado
-- Simulación distribuida (Raspberry Pi + MacBook via TCP sockets)
-- API REST integrada (Google Cloud Run)
-- Visualizador consolidado JSON para UX
-- Python 3.5+ (compatible con Raspberry Pi OS Lite)
-- Sistema de auditoría y registro de eventos
+## Comandos Esenciales
 
-## 🏗️ Arquitectura del Proyecto
+```bash
+# Ejecutar el sistema
+python ejecutar.py
 
-### Clean Architecture - Capas
+# Lanzar simuladores externos (macOS)
+cd actores_externos && ./lanzar_simuladores.sh
 
-El proyecto sigue Clean Architecture de Robert C. Martin con dependencias apuntando hacia el centro:
+# Tests
+pytest Test/ -v
+pytest Test/unit/ -v
+pytest Test/integration/ -v
+pytest Test/ --cov=. --cov-report=html
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│ FRAMEWORKS & DRIVERS (actores_externos/)                    │
-│   - Simuladores de entrada (temperatura, batería, etc.)     │
-│   - Displays de salida (carteles vía socket)                │
-│ ┌───────────────────────────────────────────────────────┐   │
-│ │ INTERFACE ADAPTERS                                    │   │
-│ │   agentes_sensores/ - Proxies (Archivo, Socket)      │   │
-│ │   agentes_actuadores/ - Visualizadores (Consola,     │   │
-│ │                         Socket, API)                  │   │
-│ │ ┌─────────────────────────────────────────────────┐   │   │
-│ │ │ USE CASES (Application)                         │   │   │
-│ │ │   gestores_entidades/ - Gestores de dominio    │   │   │
-│ │ │   servicios_aplicacion/ - Lanzador, Operador   │   │   │
-│ │ │ ┌───────────────────────────────────────────┐   │   │   │
-│ │ │ │ ENTITIES (Domain)                         │   │   │   │
-│ │ │ │   entidades/ - Ambiente, Bateria,         │   │   │   │
-│ │ │ │                Climatizador               │   │   │   │
-│ │ │ │   servicios_dominio/ - Lógica de negocio │   │   │   │
-│ │ │ └───────────────────────────────────────────┘   │   │   │
-│ │ └─────────────────────────────────────────────────┘   │   │
-│ └───────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────┘
+# Un test específico
+pytest Test/unit/entidades/test_bateria.py -v
+
+# Instalar dependencias de desarrollo
+pip install -e ".[dev]"
 ```
 
-**Regla fundamental:** Las dependencias SOLO apuntan hacia adentro. Las capas internas NO conocen las externas.
+No hay dependencias externas en runtime (solo stdlib). `requests` se usa únicamente en los visualizadores de tipo `api`. Dependencias de dev: `pytest`, `pytest-cov`, `radon`, `pylint`.
 
-### Estructura de Carpetas
+## Arquitectura Clean Architecture
+
+Las dependencias apuntan **solo hacia adentro**. Las capas internas no conocen las externas.
 
 ```
-ISSE_Termostato/
-├── entidades/              # Dominio - Lógica de negocio pura
-│   ├── abs_*.py           # Interfaces abstractas (ABC)
-│   ├── ambiente.py        # Entidad de temperatura
-│   ├── bateria.py         # Entidad de batería
-│   └── climatizador.py    # Máquina de estados
-├── servicios_dominio/      # Lógica de dominio (histeresis)
-├── gestores_entidades/     # Casos de uso - Orquestación
-├── agentes_sensores/       # Adaptadores de entrada (Proxies)
-├── agentes_actuadores/     # Adaptadores de salida (Visualizadores)
-├── servicios_aplicacion/   # Coordinación de la app
-├── configurador/           # Factories y configuración
-├── registrador/            # Sistema de auditoría
-├── actores_externos/       # Simuladores y displays
-├── Test/                   # Tests unitarios e integración
-└── docs/                   # Documentación técnica
-    ├── quality/            # Documentación de calidad
-    └── Despliegue/         # Estrategias de despliegue
+actores_externos/          ← Frameworks & Drivers (simuladores, displays)
+agentes_sensores/          ← Interface Adapters: Proxies de entrada
+agentes_actuadores/        ← Interface Adapters: Visualizadores de salida
+gestores_entidades/        ← Use Cases: Orquestación
+servicios_aplicacion/      ← Use Cases: Coordinación de la app
+  └── lanzador.py          ← Composition Root (inyección de dependencias)
+entidades/                 ← Entities: Lógica de dominio pura + interfaces ABC
+servicios_dominio/         ← Entities: Reglas de negocio (histeresis)
+configurador/              ← Abstract Factory (9 factories + termostato.json)
+registrador/               ← Auditoría y logging
 ```
 
-## 🎨 Patrones de Diseño Implementados
+**`servicios_aplicacion/lanzador.py`** es el Composition Root: crea todas las entidades, adaptadores y gestores, inyecta dependencias, y lanza el operador principal.
 
-### Patrones GRASP
-- **Information Expert:** Entidades contienen su lógica
-- **Creator:** Gestores crean las entidades que manipulan
-- **Controller:** Gestores coordinan casos de uso
-- **Low Coupling:** Inyección de dependencias + interfaces
-- **High Cohesion:** Responsabilidades enfocadas
-- **Polymorphism:** Implementaciones intercambiables
-- **Pure Fabrication:** Proxies (no existen en dominio)
-- **Indirection:** Capas intermedias
-- **Protected Variations:** Interfaces abstractas
+**`configurador/configurador.py`** carga `configurador/termostato.json` y provee métodos estáticos factory para crear todos los componentes según la configuración.
 
-### Patrones GoF
-- **Proxy:** ProxySensorTemperatura, ProxyBateria
-- **Factory Method:** 9 factories en configurador/
-- **Strategy:** Múltiples implementaciones de proxies/visualizadores
-- **State:** Máquina de estados en Climatizador
-- **Facade:** VisualizadorEstadoConsolidadoSocket
-- **Adapter:** Adaptadores entre capas
+## Configuración: `configurador/termostato.json`
 
-### Principios SOLID
-- **S**ingle Responsibility: Una responsabilidad por clase
-- **O**pen/Closed: Extensible sin modificación
-- **L**iskov Substitution: Implementaciones intercambiables
-- **I**nterface Segregation: Interfaces mínimas
-- **D**ependency Inversion: Depende de abstracciones
-
-## 🔧 Configuración del Sistema
-
-### Archivo Principal: `termostato.json`
-
-**Ubicación:** Raíz del proyecto
-
-**Opciones disponibles:**
 ```json
 {
-  "proxy_bateria": "archivo" | "socket",
-  "proxy_sensor_temperatura": "archivo" | "socket",
-  "climatizador": "climatizador" | "calefactor",
-  "visualizador_bateria": "consola" | "socket" | "api",
-  "visualizador_temperatura": "consola" | "socket" | "api",
-  "visualizador_climatizador": "consola" | "socket" | "api",
+  "proxy_bateria": "archivo | socket",
+  "proxy_sensor_temperatura": "archivo | socket",
+  "climatizador": "climatizador | calefactor",
+  "actuador_climatizador": "general",
+  "selector_temperatura": "archivo | socket",
+  "seteo_temperatura": "archivo | socket",
+  "visualizador_bateria": "consola | socket | api",
+  "visualizador_temperatura": "consola | socket | api",
+  "visualizador_climatizador": "consola | socket | api",
+  "bateria": {
+    "carga_maxima": 5.0,
+    "umbral_carga_baja": 0.95
+  },
+  "ambiente": {
+    "histeresis": 2.0,
+    "temperatura_inicial": 24.0,
+    "incremento_ajuste": 1.0
+  },
   "red": {
-    "host_escucha": "0.0.0.0" | "localhost",
-    "puertos": { ... },
+    "host_escucha": "0.0.0.0",
+    "puertos": {
+      "bateria": 11000,
+      "temperatura": 12000,
+      "seteo_temperatura": 13000,
+      "selector_temperatura": 14000
+    },
     "api_url": "https://..."
   }
 }
 ```
 
-### Sistema de Logging
+Puertos TCP de referencia: `11000` batería, `12000` temperatura, `13000` seteo, `14000` selector, `14001` display consolidado UX, `14002` display climatizador.
 
-**Configuración:** `ejecutar.py` (líneas 8-16)
-- Log file: `termostato.log` (⚠️ ignorado en git)
-- Formato: timestamp - módulo - nivel - mensaje
-- Niveles: INFO, DEBUG, ERROR
-- Handlers: Archivo + Consola
+## Convenciones de Código
 
-## 💡 Convenciones de Código
+- **NO usar f-strings** → usar `.format()` (Python 3.5 no soporta f-strings)
+- Interfaces abstractas usan `metaclass=ABCMeta` (no herencia de `ABC`):
+  ```python
+  from abc import ABCMeta, abstractmethod
+  class AbsProxySensor(metaclass=ABCMeta):
+      @abstractmethod
+      def leer_temperatura(self):
+          pass
+  ```
+- Docstrings en español; `snake_case` funciones/variables; `PascalCase` clases
+- Nombres de archivos: `abs_*.py`, `factory_*.py`, `proxy_*.py`, `visualizador_*.py`
 
-### Estilo
-- **Python 3.5+** compatible (Raspberry Pi)
-- **NO usar f-strings** (usar `.format()`)
-- **snake_case** para funciones y variables
-- **PascalCase** para clases
-- **Docstrings** en español para todos los módulos/clases
-- **Type hints** opcionales (no en Python 3.5)
+## Reglas de Arquitectura
 
-### Nombres de Archivos
-- Clases abstractas: `abs_*.py`
-- Factories: `factory_*.py`
-- Proxies: `proxy_*.py`
-- Visualizadores: `visualizador_*.py`
+**NUNCA** poner lógica de dominio fuera de `entidades/` y `servicios_dominio/`:
+- Proxies (`agentes_sensores/`) → solo lectura/escritura de fuentes externas
+- Visualizadores (`agentes_actuadores/`) → solo presentación de datos
+- Gestores (`gestores_entidades/`) → solo orquestación entre componentes
 
-### Importaciones
-```python
-# Orden:
-# 1. Biblioteca estándar
-import json
-import socket
+Lógica de histeresis: `servicios_dominio/controlador_climatizador.py` (constante `histeresis` viene de configuración).
 
-# 2. Terceros
-import requests
+## Extender el Sistema
 
-# 3. Locales
-from entidades.ambiente import Ambiente
-```
+Para agregar un nuevo visualizador/proxy:
+1. Crear clase en `agentes_actuadores/` o `agentes_sensores/` implementando la interfaz abstracta de `entidades/`
+2. Crear `factory_*.py` en `configurador/`
+3. Agregar opción en `configurador/termostato.json`
+4. Registrar la opción en `configurador/configurador.py`
 
-### Interfaces Abstractas (ABC)
-Todas las interfaces usan `ABC` y `abstractmethod`:
-```python
-from abc import ABC, abstractmethod
+## Tests
 
-class AbsProxySensor(ABC):
-    @abstractmethod
-    def leer_temperatura(self):
-        pass
-```
+Estructura en `Test/`:
+- `unit/entidades/` — tests de entidades de dominio
+- `unit/servicios_dominio/` — tests de lógica de negocio
+- `unit/configurador/` — tests de factories y configuración
+- `integration/gestores/` — tests de gestores con dependencias mockeadas
+- `integration/flujos/` — tests de ciclos completos de climatización
+- `integration/adaptadores/` — tests de proxies y visualizadores
+- `conftest.py` en `unit/` e `integration/` con fixtures compartidos (incluyendo `setup_configurador` con `autouse=True`)
 
-## 🧪 Testing
+## Archivos de Runtime (NO commitear)
 
-### Ejecutar Tests
-```bash
-# Todos los tests
-pytest Test/ -v
-
-# Tests específicos
-pytest Test/unit/ -v
-pytest Test/integration/ -v
-
-# Con cobertura
-pytest Test/ --cov=. --cov-report=html
-```
-
-### Estructura de Tests
-- `Test/unit/` - Tests unitarios
-- `Test/integration/` - Tests de integración
-- Usar mocks para dependencias externas
-- Cobertura objetivo: >80%
-
-## 🚀 Comandos Útiles
-
-### Ejecución Local
-```bash
-# Ejecutar sistema
-python ejecutar.py
-
-# Lanzar simuladores (macOS)
-cd actores_externos
-./lanzar_simuladores.sh
-```
-
-### Git Workflow
-```bash
-# Crear branch de feature
-git checkout -b feature/nombre-descriptivo
-
-# Commits descriptivos
-git commit -m "tipo(scope): descripción"
-# Tipos: feat, fix, refactor, docs, chore, test
-
-# Push y PR
-git push -u origin feature/nombre-descriptivo
-```
-
-### Limpieza
-```bash
-# Limpiar archivos generados
-rm -rf build/ dist/ *.egg-info/ .coverage
-rm bateria climatizador temperatura tipo_temperatura
-rm termostato.log registro_auditoria
-```
-
-## 📝 Guías de Desarrollo
-
-### Agregar un Nuevo Visualizador
-
-1. **Crear clase en `agentes_actuadores/`:**
-   ```python
-   class VisualizadorNuevo(AbsVisualizador):
-       def mostrar(self, valor):
-           # Implementación
-   ```
-
-2. **Crear factory en `configurador/`:**
-   ```python
-   class FactoryVisualizadorNuevo:
-       @staticmethod
-       def crear():
-           return VisualizadorNuevo()
-   ```
-
-3. **Agregar opción en `termostato.json`:**
-   ```json
-   "visualizador_X": "nuevo"
-   ```
-
-4. **Registrar en `configurador.py`**
-
-### Agregar un Nuevo Proxy
-
-Similar al visualizador, pero en `agentes_sensores/` extendiendo la interfaz abstracta correspondiente.
-
-### Modificar Lógica de Dominio
-
-⚠️ **IMPORTANTE:** La lógica de dominio está en:
-- `entidades/` - Estado y comportamiento de entidades
-- `servicios_dominio/` - Reglas de negocio (ej: histeresis)
-
-**NUNCA** poner lógica de dominio en:
-- Proxies (solo lectura/escritura)
-- Visualizadores (solo presentación)
-- Gestores (solo orquestación)
-
-## 🔍 Debugging
-
-### Archivos de Runtime (NO commitear)
-Estos archivos se generan durante la ejecución y están en `.gitignore`:
-- `bateria` - Valor actual de batería
-- `climatizador` - Estado del climatizador
-- `temperatura` - Temperatura actual
-- `tipo_temperatura` - Tipo de temperatura
-- `registro_auditoria` - Log de auditoría
-- `termostato.log` - Log de aplicación
-
-### Puertos TCP
-- 11000: Sensor de batería
-- 12000: Sensor de temperatura
-- 13000: Seteo de temperatura
-- 14000: Selector de temperatura
-- 14001: Display de temperatura / UX consolidada
-- 14002: Display de climatizador
-
-## 📚 Documentación Adicional
-
-- **README.md** - Documentación completa del proyecto
-- **DEPLOYMENT.md** - Guía de despliegue
-- **docs/quality/** - Análisis de calidad y métricas
-- **docs/Despliegue/** - Estrategias de despliegue
-
-## ⚠️ Advertencias Importantes
-
-### NO hacer:
-1. ❌ NO usar f-strings (incompatible con Python 3.5)
-2. ❌ NO commitear archivos de runtime (bateria, climatizador, etc.)
-3. ❌ NO modificar `.gitignore` para trackear logs
-4. ❌ NO poner lógica de dominio fuera de entidades/servicios_dominio
-5. ❌ NO crear dependencias desde capas internas hacia externas
-6. ❌ NO usar `git push --force` a main/master
-
-### SÍ hacer:
-1. ✅ Usar `.format()` en lugar de f-strings
-2. ✅ Crear tests para código nuevo
-3. ✅ Documentar con docstrings
-4. ✅ Seguir la arquitectura en capas
-5. ✅ Usar inyección de dependencias
-6. ✅ Crear branches descriptivos para features
-
-## 🎯 Tareas Comunes
-
-### "Agregar nueva feature de visualización"
-1. Leer la arquitectura de visualizadores existentes
-2. Crear nueva clase extendiendo interfaz abstracta
-3. Crear factory correspondiente
-4. Actualizar configurador
-5. Agregar tests
-6. Documentar en README.md
-
-### "Debugging de problemas de conexión"
-1. Verificar puertos en `termostato.json`
-2. Revisar logs en `termostato.log`
-3. Verificar que simuladores estén ejecutándose
-4. Probar con `netstat -an | grep <puerto>`
-
-### "Cambiar lógica de histeresis"
-1. Ir a `servicios_dominio/controlador_climatizador.py`
-2. Modificar constante `DELTA_TEMP`
-3. Actualizar tests en `Test/climatizador/`
-4. Documentar cambio en commit
-
-## 🤝 Colaboración
-
-- El proyecto usa **conventional commits**
-- Cada PR debe pasar los tests
-- Mantener cobertura >80%
-- Documentar cambios en README.md si aplica
-
----
-
-**Última actualización:** 2026-02-02
-**Versión del proyecto:** 2.0
-**Python:** 3.5+
+Generados durante ejecución, en `.gitignore`: `bateria`, `climatizador`, `temperatura`, `tipo_temperatura`, `registro_auditoria`, `termostato.log`.
