@@ -130,6 +130,40 @@ Estructura en `Test/`:
 - `integration/adaptadores/` — tests de proxies y visualizadores
 - `conftest.py` en `unit/` e `integration/` con fixtures compartidos (incluyendo `setup_configurador` con `autouse=True`)
 
+## Herramientas de Calidad (software_limpio)
+
+Entorno dedicado: `.venv-quality/` (Python 3.11). Activar antes de usar.
+
+```bash
+source .venv-quality/bin/activate
+```
+
+### codeguard — por ticket (Fase 7 de /implement-us)
+Análisis estático pre-commit. Se ejecuta sobre los módulos afectados por el ticket.
+
+```bash
+codeguard <modulo>          # ej: codeguard configurador
+codeguard <modulo> --fix    # con corrección automática
+```
+
+### designreviewer — por PR de fase
+Gate obligatorio antes de crear el PR de cierre de cada fase de mejoras.
+Analiza las capas afectadas por los tickets de esa fase.
+
+```bash
+designreviewer <modulo>     # ej: designreviewer entidades agentes_sensores
+```
+
+El PR **no se crea** hasta que designreviewer no reporte 0 issues críticos.
+
+## Workflow de PR por Fase de Mejoras
+
+1. Completar todos los tickets de la fase (cada uno con su `/implement-us`)
+2. Ejecutar `designreviewer` sobre las capas afectadas
+3. Resolver issues críticos si los hay
+4. Crear PR con título `mejora/fase-N-descripcion` y referenciar los issues cerrados
+5. Actualizar `docs/Plan/BITACORA.md` con estado `Hecho` para cada ticket
+
 ## Archivos de Runtime (NO commitear)
 
 Generados durante ejecución, en `.gitignore`: `bateria`, `climatizador`, `temperatura`, `tipo_temperatura`, `registro_auditoria`, `termostato.log`.
