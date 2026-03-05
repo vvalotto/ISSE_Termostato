@@ -155,3 +155,7 @@ agentes_sensores/bateria
 # Generated reports
 report/
 jscpd-report.json
+
+# Quality tools
+.venv-quality/
+.quality_control/

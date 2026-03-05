@@ -48,3 +48,48 @@ packages = [
 
 [tool.setuptools.package-data]
 configurador = ["termostato.json"]
+
+# =============================================================================
+# software_limpio — Agentes de calidad automatizados
+# Requiere: pip install git+https://github.com/vvalotto/software_limpio.git
+# (en un virtualenv separado con Python 3.11+)
+# =============================================================================
+
+[tool.codeguard]
+# Advierte sin bloquear (pre-commit)
+max_complexity = 10
+max_line_length = 120
+
+[tool.designreviewer]
+# Bloquea en CRITICAL — umbrales calibrados para este proyecto
+# Configurador tiene WMC=19, lo dejamos con margen
+max_cbo = 6
+max_wmc = 22
+max_dit = 3
+
+[tool.architectanalyst]
+# Capas de la Clean Architecture del proyecto
+# Las dependencias deben apuntar hacia adentro (dominio)
+max_instability = 0.8
+max_distance_critical = 0.5
+exclude_patterns = [
+    "__pycache__",
+    ".venv",
+    ".venv-quality",
+    "venv",
+    ".claude",
+    "Test",
+    "test_",
+    "conftest",
+    "dist",
+    "build",
+    "actores_externos",
+    "docs",
+    "scripts",
+]
+
+[tool.architectanalyst.layers]
+domain = ["entidades", "servicios_dominio"]
+application = ["gestores_entidades", "servicios_aplicacion"]
+adapters = ["agentes_sensores", "agentes_actuadores", "configurador", "registrador"]
+infrastructure = ["actores_externos"]

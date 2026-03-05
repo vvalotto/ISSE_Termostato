@@ -1,0 +1,13 @@
+# Pre-commit hooks para ISSE_Termostato
+# Requiere: pip install pre-commit
+#           pre-commit install
+#
+# CodeGuard usa un virtualenv separado con Python 3.11+ y software_limpio.
+# Ver scripts/setup_quality_tools.sh para instalación.
+
+repos:
+  - repo: https://github.com/vvalotto/software_limpio
+    rev: v0.3.0
+    hooks:
+      - id: codeguard
+        args: ['--analysis-type', 'pre-commit']
