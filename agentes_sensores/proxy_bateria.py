@@ -51,6 +51,13 @@ class ProxyBateriaSocket(AbsProxyBateria):
     Implementa la interfaz AbsProxyBateria escuchando conexiones
     TCP para recibir el nivel de carga de un cliente remoto.
 
+    Ciclo de vida del socket: EFIMERO — el socket se crea y cierra en cada
+    llamada a leer_carga(). Esta estrategia es adecuada porque el sensor es
+    consultado periodicamente por el sistema y el actor externo actua como
+    cliente que siempre esta disponible. Si el cliente se reinicia, la proxima
+    lectura se reconecta automaticamente sin logica adicional.
+    Ver: docs/decisions/ADR-001-ciclo-vida-sockets.md
+
     Patron de Diseno:
         - DIP: Recibe host y puerto via inyeccion de dependencias
 

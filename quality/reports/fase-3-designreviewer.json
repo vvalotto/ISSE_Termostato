@@ -1,0 +1,67 @@
+{
+  "reporte": "designreviewer — Fase 3 (TKT-06 + TKT-07)",
+  "fecha": "2026-03-06",
+  "herramienta": "designreviewer",
+  "version": "0.2.0",
+  "fase": 3,
+  "tickets": ["TKT-06", "TKT-07"],
+  "modulos_analizados": ["agentes_sensores"],
+  "resumen": {
+    "criticos_total": 1,
+    "warnings_total": 4,
+    "deuda_horas_total": 4.7,
+    "bloquea_pr": true,
+    "nota": "El crítico es pre-existente (SelectorTemperaturaArchivo NOP=2). Ninguno introducido por TKT-06/07. La clase no fue modificada en esta fase. Será abordado en TKT-16 (Fase 6)."
+  },
+  "modulos": {
+    "agentes_sensores": {
+      "archivos": 5,
+      "criticos": 1,
+      "warnings": 4,
+      "deuda_horas": 4.7,
+      "bloquea": true,
+      "hallazgos": [
+        {
+          "severidad": "critical",
+          "analyzer": "NOPAnalyzer",
+          "clase": "SelectorTemperaturaArchivo",
+          "mensaje": "Clase con 2 métodos NOP (umbral: 1)",
+          "archivo": "agentes_sensores/proxy_selector_temperatura.py",
+          "nota": "Pre-existente. No introducido por TKT-06/07. Relacionado con herencia múltiple de AbsRegistrador. Será resuelto en TKT-16 (Fase 6, Issue #32)."
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "ProxyBateriaSocket",
+          "mensaje": "leer_carga tiene 34 líneas (umbral: 20)",
+          "archivo": "agentes_sensores/proxy_bateria.py",
+          "nota": "Pre-existente. Complejidad estructural del protocolo socket."
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "SeteoTemperaturaSocket",
+          "mensaje": "obtener_seteo tiene 44 líneas (umbral: 20)",
+          "archivo": "agentes_sensores/proxy_seteo_temperatura.py",
+          "nota": "Pre-existente. Complejidad estructural del protocolo socket."
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "SelectorTemperaturaSocket",
+          "mensaje": "obtener_selector tiene 42 líneas (umbral: 20)",
+          "archivo": "agentes_sensores/proxy_selector_temperatura.py",
+          "nota": "Pre-existente. Complejidad estructural del protocolo socket."
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "ProxySensorTemperaturaSocket",
+          "mensaje": "leer_temperatura tiene 34 líneas (umbral: 20)",
+          "archivo": "agentes_sensores/proxy_sensor_temperatura.py",
+          "nota": "Pre-existente. Complejidad estructural del protocolo socket."
+        }
+      ]
+    }
+  }
+}

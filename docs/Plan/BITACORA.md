@@ -13,7 +13,7 @@ El sistema de tracking oficial es **GitHub Issues** (referenciado en columna `#I
 |------|-------------|---------|-------------|
 | 1 | Compliance: Reglas del proyecto y arquitectura | TKT-01, TKT-02 | 2/2 |
 | 2 | Diseño: Coherencia y convenciones | TKT-03, TKT-04, TKT-05 | 3/3 |
-| 3 | Arquitectura de sockets | TKT-06, TKT-07 | 0/2 |
+| 3 | Arquitectura de sockets | TKT-06, TKT-07 | 2/2 |
 | 4 | Organización estructural | TKT-08, TKT-09 | 0/2 |
 | 5 | Refinamiento | TKT-10, TKT-11, TKT-12, TKT-13, TKT-14 | 0/5 |
 | 6 | SOLID: Cross-cutting concerns | TKT-15, TKT-16, TKT-17, TKT-18, TKT-19 | 0/5 |
@@ -29,8 +29,8 @@ El sistema de tracking oficial es **GitHub Issues** (referenciado en columna `#I
 | TKT-03 | Unificar uso de Configurador como clase estática | 2 | 2 | Alto | Bajo | — | #19 | Hecho |
 | TKT-04 | Reemplazar wildcard imports en ejecutar.py | 2 | 2 | Medio | Bajo | TKT-03 | #20 | Hecho |
 | TKT-05 | Reemplazar print() por logging en _validar_configuracion | 2 | 2 | Medio | Bajo | — | #21 | Hecho |
-| TKT-06 | Unificar ciclo de vida de sockets | 3 | 3 | Medio | Medio | Decisión diseño | #22 | Backlog |
-| TKT-07 | Context manager para sockets persistentes | 3 | 3 | Medio | Medio | TKT-06 | #23 | Backlog |
+| TKT-06 | Unificar ciclo de vida de sockets | 3 | 3 | Medio | Medio | Decisión diseño | #22 | Hecho |
+| TKT-07 | Context manager para sockets persistentes | 3 | 3 | Medio | Medio | TKT-06 | #23 | Hecho |
 | TKT-08 | Consolidar estructura de tests en subdirectorios | 4 | 2 | Medio | Medio | Fases 1 y 2 | #24 | Backlog |
 | TKT-09 | Separar AbsClimatizador en abs_climatizador.py | 4 | 3 | Medio | Bajo | — | #25 | Backlog |
 | TKT-10 | ControladorTemperatura como función de módulo | 5 | 3 | Medio | Bajo | — | #26 | Backlog |
@@ -62,3 +62,5 @@ El sistema de tracking oficial es **GitHub Issues** (referenciado en columna `#I
 - TKT-03: Unificar uso de Configurador como clase estática — **Hecho**. Eliminadas 4 instanciaciones `Configurador()` en `ejecutar.py`, `lanzador.py` y test. codeguard: 0 errores.
 - TKT-04: Reemplazar wildcard imports en ejecutar.py — **Hecho**. Imports explícitos: `Lanzador` y `Configurador`. codeguard: 0 errores.
 - TKT-05: Reemplazar print() por logging en _validar_configuracion — **Hecho**. 6 `print()` reemplazados por `logger.warning()`. Logger inicializado con `getLogger(__name__)`. codeguard: 0 errores.
+- TKT-06: Unificar ciclo de vida de sockets — **Hecho**. ADR-001 creado en `docs/decisions/ADR-001-ciclo-vida-sockets.md` documentando estrategia EFIMERO (sensores periódicos) vs PERSISTENTE (comandos de usuario). Docstrings actualizados en los 4 proxies socket con referencia al ADR. codeguard: 0 errores, 2 warnings pre-existentes.
+- TKT-07: Context manager para sockets persistentes — **Hecho**. Reemplazado `__del__` por `__enter__`/`__exit__` en `SeteoTemperaturaSocket` y `SelectorTemperaturaSocket`. Cierre determinista de recursos. codeguard: 0 errores.
