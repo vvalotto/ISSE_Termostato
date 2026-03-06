@@ -360,7 +360,7 @@ MacBook/PC                     Raspberry Pi
 ### Documentación Adicional
 
 - [Estrategia de Despliegue Completa](docs/Despliegue/estrategia_despliegue_raspberry_pi.md)
-- [Análisis de Calidad de Diseño](docs/Analisis de Calidad de Codigo/analisis_integral_calidad_diseno.md)
+- [Análisis de Calidad de Diseño](docs/quality/mediciones/analisis_calidad_diseno_2025-12-02.md)
 - [README Principal](README.md)
 
 ### Requisitos del Sistema
@@ -370,7 +370,7 @@ MacBook/PC                     Raspberry Pi
 | Raspberry Pi | Pi Zero W | Pi 3 Model B+ |
 | RAM | 512 MB | 1 GB+ |
 | Almacenamiento | 8 GB | 16 GB+ |
-| Python | 3.7+ | 3.9+ |
+| Python | 3.5+ | 3.9+ |
 | Raspberry Pi OS | Lite | Full Desktop |
 
 ### Contacto y Soporte

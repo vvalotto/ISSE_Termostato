@@ -36,8 +36,8 @@ Sistema de control de termostato inteligente desarrollado como proyecto educativ
 
 ## Estado del Proyecto
 
-**Version actual:** 2.0 (Simulacion Distribuida + Python 3.5)
-**Ultima actualizacion:** Noviembre 2025
+**Version actual:** 2.1 (Plan de Mejoras Fase 1-6 completado)
+**Ultima actualizacion:** Marzo 2026
 **Estado:** Produccion - Funcional en Raspberry Pi + API REST desplegada
 
 ### Features Principales
@@ -107,23 +107,17 @@ cd actores_externos
 
 ## Mejoras Recientes
 
-### Simulacion Distribuida (Sprint Actual)
-- Soporte para ejecucion en arquitectura distribuida (Raspberry Pi + MacBook)
-- Configuracion centralizada de red en `termostato.json`
-- Archivo `simuladores_config.json` para configurar IP remota
-- Script `lanzar_simuladores.sh` para macOS (lanza 4 terminales automaticamente)
-- Mejoras en manejo de errores y reconexion
-- Soporte para `SO_REUSEADDR` en sockets (evita "Address already in use")
+### Plan de Mejoras v1 (Fases 1-6 — Dic 2025 / Mar 2026)
 
-### Compatibilidad Python 3.5
-- Migracion completa a Python 3.5+ (compatible con Raspberry Pi OS Lite)
-- Reemplazo de f-strings por `.format()` (21 cambios en 8 archivos)
-- Validacion de configuracion al inicio del sistema
+19 tickets ejecutados en 6 fases cubriendo todas las capas del sistema:
 
-### Visualizacion y API
-- Integracion con API REST desplegada en Google Cloud Run (https://app-termostato-1090421346746.us-central1.run.app)
-- Visualizadores con timeout y manejo robusto de errores
-- Soporte para 3 modos: consola, socket, API REST
+- **Arquitectura**: interfaces abstractas movidas a `entidades/`, eliminada herencia incorrecta en proxies y actuadores
+- **Inyeccion de dependencias**: host/puerto inyectados via DI en todos los visualizadores y proxies socket
+- **Patrones de diseño**: Registry Pattern (OCP) en las 9 factories via `RegistryFactory`
+- **Registrador**: clases concretas `RegistradorArchivo` y `AuditorArchivo` extraidas del actuador
+- **Calidad**: 0 errores en codeguard, 0 issues criticos en designreviewer en todas las fases
+
+Ver `docs/Plan/BITACORA.md` para el detalle completo de tickets.
 
 ## Arquitectura
 
@@ -236,15 +230,13 @@ ISSE_Termostato/
 |
 +-- Test/                         # Tests unitarios e integración
 |   +-- unit/                     # Tests unitarios
-|   +-- integration/              # Tests de integración
-|   +-- hal/
-|   +-- bateria/
-|   +-- temperatura/
-|   +-- climatizador/
-|   +-- operador/
-|   +-- presentador/
-|   +-- lanzador/
-|   +-- selector_temperatura/
+|   |   +-- entidades/            # Tests de dominio
+|   |   +-- servicios_dominio/    # Tests de logica de negocio
+|   |   +-- configurador/         # Tests de factories
+|   +-- integration/              # Tests de integracion
+|   |   +-- gestores/             # Tests de gestores con mocks
+|   |   +-- flujos/               # Tests de ciclos completos
+|   |   +-- adaptadores/          # Tests de proxies y visualizadores
 |
 +-- docs/                         # Documentacion
 +-- termostato.json               # Configuracion
@@ -821,23 +813,20 @@ pip3 install requests
 
 ## Documentacion Adicional
 
-### Documentos de Arquitectura y Diseno
-- `docs/Patrones_y_Decisiones_de_Diseno.md` - Analisis detallado de patrones GRASP, GoF y SOLID
-- `docs/Elicitacion_Requerimientos.md` - Requerimientos funcionales y no funcionales del sistema
+### Arquitectura y Diseno
+- [`docs/Arquitectura/ADR-001-ciclo-vida-sockets.md`](docs/Arquitectura/ADR-001-ciclo-vida-sockets.md) - Decision arquitectonica sobre ciclo de vida de sockets
+- [`docs/Arquitectura/Patrones_y_Decisiones_de_Diseno.md`](docs/Arquitectura/Patrones_y_Decisiones_de_Diseno.md) - Analisis de patrones GRASP, GoF y SOLID aplicados
+- [`docs/Arquitectura/Buenos_Ejemplos_SOLID.md`](docs/Arquitectura/Buenos_Ejemplos_SOLID.md) - Ejemplos de buenas practicas SOLID en el proyecto
 
-### Documentos de Testing y Calidad
-- `docs/Plan_de_Pruebas.md` - Estrategia y plan de pruebas
-- `docs/Reporte_Tests_Unitarios.md` - Resultados de tests unitarios
-- `docs/Reporte_Tests_Integracion.md` - Resultados de tests de integracion
-- `docs/Informe_Calidad_Codigo_ISSE_Termostato.pdf` - Analisis de calidad del codigo
-- `docs/Reporte_Analisis_Tecnico_ISSE_Termostato.pdf` - Analisis tecnico completo
+### Plan de Mejoras y Calidad
+- [`docs/Plan/MEJORAS.md`](docs/Plan/MEJORAS.md) - Plan de mejoras completo (19 tickets, 6 fases)
+- [`docs/Plan/BITACORA.md`](docs/Plan/BITACORA.md) - Bitacora de ejecucion de tickets
+- [`docs/Plan/PLAN-TESTING.md`](docs/Plan/PLAN-TESTING.md) - Plan de cobertura de testing (target 85%)
+- [`quality/REPORTE-CALIDAD.md`](quality/REPORTE-CALIDAD.md) - Reporte consolidado de calidad (codeguard + designreviewer)
 
-### Planes de Migracion y Mejoras
-- `docs/plan_simulacion_distribuida.md` - Plan completo de implementacion distribuida
-- `docs/plan_migracion_python35.md` - Guia de migracion a Python 3.5 (Raspberry Pi)
-
-### Historias de Usuario
-- `Historias Sprint 1.md` - Historias de usuario del primer sprint
+### Despliegue
+- [`docs/Despliegue/estrategia_despliegue_raspberry_pi.md`](docs/Despliegue/estrategia_despliegue_raspberry_pi.md) - Estrategia completa de despliegue en Raspberry Pi
+- [`DEPLOYMENT.md`](DEPLOYMENT.md) - Guia practica de instalacion y gestion del servicio
 
 ## Licencia y Contribuciones
 
