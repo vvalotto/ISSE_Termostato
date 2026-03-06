@@ -156,6 +156,19 @@ designreviewer <modulo>     # ej: designreviewer entidades agentes_sensores
 
 El PR **no se crea** hasta que designreviewer no reporte 0 issues críticos.
 
+## Gestión de Tickets de Mejora
+
+Los tickets del plan de mejoras tienen correspondencia directa con **GitHub Issues**:
+
+- `docs/Plan/MEJORAS.md` — descripción detallada de cada ticket
+- `docs/Plan/BITACORA.md` — estado actual de cada ticket (columna `#Issue` con el número de issue)
+- GitHub Issues `#17`–`#35` — fuente oficial de estado; cerrar el issue al completar cada ticket
+
+**Al completar un ticket:**
+1. Actualizar `BITACORA.md`: estado → `Hecho`
+2. Cerrar el GitHub Issue con `gh issue close <N> --comment "<resumen>"`
+3. Hacer commit referenciando el issue (`Closes #N`)
+
 ## Workflow de PR por Fase de Mejoras
 
 1. Completar todos los tickets de la fase (cada uno con su `/implement-us`)
