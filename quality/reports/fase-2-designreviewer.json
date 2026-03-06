@@ -1,0 +1,126 @@
+{
+  "reporte": "designreviewer — Fase 2 (TKT-03 + TKT-04 + TKT-05)",
+  "fecha": "2026-03-06",
+  "herramienta": "designreviewer",
+  "version": "0.2.0",
+  "fase": 2,
+  "tickets": ["TKT-03", "TKT-04", "TKT-05"],
+  "modulos_analizados": ["configurador", "servicios_aplicacion"],
+  "resumen": {
+    "criticos_total": 2,
+    "warnings_total": 10,
+    "deuda_horas_total": 14.9,
+    "bloquea_pr": true,
+    "nota": "Los 2 críticos son pre-existentes. Ninguno introducido por TKT-03/04/05. El CBO de Lanzador bajó de 9 a 8 tras TKT-03 (Configurador ya no cuenta como dependencia acoplada)."
+  },
+  "comparativa_fase1": {
+    "Lanzador CBO": {"fase1": 9, "fase2": 8, "delta": -1, "causa": "TKT-03 eliminó instanciación Configurador() en lanzador.py"}
+  },
+  "modulos": {
+    "configurador": {
+      "archivos": 11,
+      "criticos": 1,
+      "warnings": 2,
+      "deuda_horas": 6.5,
+      "bloquea": true,
+      "hallazgos": [
+        {
+          "severidad": "critical",
+          "analyzer": "WMCAnalyzer",
+          "clase": "Configurador",
+          "mensaje": "WMC=36 (umbral: 20): complejidad total de métodos excesiva",
+          "archivo": "configurador/configurador.py",
+          "ticket_asociado": "TKT-03",
+          "nota": "Pre-existente. Relacionado con complejidad estructural de Configurador"
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "Configurador",
+          "mensaje": "cargar_configuracion tiene 40 líneas (umbral: 20)",
+          "archivo": "configurador/configurador.py"
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "Configurador",
+          "mensaje": "_validar_configuracion tiene 34 líneas (umbral: 20)",
+          "archivo": "configurador/configurador.py"
+        }
+      ]
+    },
+    "servicios_aplicacion": {
+      "archivos": 7,
+      "criticos": 1,
+      "warnings": 8,
+      "deuda_horas": 8.4,
+      "bloquea": true,
+      "hallazgos": [
+        {
+          "severidad": "critical",
+          "analyzer": "CBOAnalyzer",
+          "clase": "Lanzador",
+          "mensaje": "CBO=8 (umbral: 5) — mejora vs Fase 1 (CBO=9)",
+          "archivo": "servicios_aplicacion/lanzador.py",
+          "nota": "Pre-existente. Lanzador es el Composition Root — alto acoplamiento es estructural y esperado. Evaluar exención."
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "FeatureEnvyAnalyzer",
+          "clase": "Inicializador",
+          "mensaje": "iniciar accede 3 veces a gestor_ambiente vs 0 a self",
+          "archivo": "servicios_aplicacion/inicializador.py"
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "Inicializador",
+          "mensaje": "iniciar tiene 30 líneas (umbral: 20)",
+          "archivo": "servicios_aplicacion/inicializador.py"
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LCOMAnalyzer",
+          "clase": "OperadorParalelo",
+          "mensaje": "LCOM=2: 2 grupos de métodos sin atributos compartidos",
+          "archivo": "servicios_aplicacion/operador_paralelo.py"
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "OperadorParalelo",
+          "mensaje": "__init__ tiene 26 líneas (umbral: 20)",
+          "archivo": "servicios_aplicacion/operador_paralelo.py"
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "OperadorSecuencial",
+          "mensaje": "ejecutar tiene 34 líneas (umbral: 20)",
+          "archivo": "servicios_aplicacion/operador_secuencial.py"
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "Presentador",
+          "mensaje": "__init__ tiene 21 líneas (umbral: 20)",
+          "archivo": "servicios_aplicacion/presentador.py"
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "Presentador",
+          "mensaje": "ejecutar tiene 23 líneas (umbral: 20)",
+          "archivo": "servicios_aplicacion/presentador.py"
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "Lanzador",
+          "mensaje": "__init__ tiene 65 líneas (umbral: 20)",
+          "archivo": "servicios_aplicacion/lanzador.py"
+        }
+      ]
+    }
+  }
+}
