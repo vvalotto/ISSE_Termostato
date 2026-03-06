@@ -146,6 +146,25 @@ codeguard <modulo>          # ej: codeguard configurador
 codeguard <modulo> --fix    # con corrección automática
 ```
 
+**Reporte obligatorio:** el resultado de cada ejecución de quality gates debe persistirse en disco, independientemente de la herramienta usada. Guardar en `quality/reports/TKT-XX-quality.json` con el siguiente formato mínimo:
+
+```json
+{
+  "us_id": "TKT-01",
+  "fecha": "YYYY-MM-DD",
+  "herramienta": "codeguard",
+  "modulos": ["configurador"],
+  "errores": 0,
+  "advertencias": 0,
+  "informativos": 33,
+  "hallazgos": []
+}
+```
+
+Si la herramienta soporta salida JSON (`codeguard --format json`), usarla. Si no, generar el archivo manualmente con los datos del output. Crear el directorio `quality/reports/` si no existe.
+
+Ref: vvalotto/claude-dev-kit#36
+
 ### designreviewer — por PR de fase
 Gate obligatorio antes de crear el PR de cierre de cada fase de mejoras.
 Analiza las capas afectadas por los tickets de esa fase.
