@@ -1,0 +1,25 @@
+{
+  "reporte": "codeguard — TKT-08",
+  "fecha": "2026-03-06",
+  "herramienta": "sin codeguard (no hay código Python modificado)",
+  "ticket": "TKT-08",
+  "tipo": "limpieza estructural",
+  "resumen": {
+    "errores": 0,
+    "advertencias": 0,
+    "bloquea_pr": false
+  },
+  "directorios_eliminados": [
+    "Test/bateria/",
+    "Test/climatizador/",
+    "Test/lanzador/",
+    "Test/operador/",
+    "Test/presentador/",
+    "Test/temperatura/",
+    "Test/selector_temperatura/"
+  ],
+  "razon": "Scripts de ejecución sin asserts ni formato pytest. Todos fallaban durante collection. No aportaban cobertura adicional.",
+  "tests_antes": "181 passed, 2 failed (pre-existentes), 10 errors (collection)",
+  "tests_despues": "181 passed, 2 failed (pre-existentes), 0 errors",
+  "nota": "Test/hal/ mantenido para TKT-13 (Fase 5). El módulo hal/ no existe aún."
+}

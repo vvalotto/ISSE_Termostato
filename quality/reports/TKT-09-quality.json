@@ -1,0 +1,21 @@
+{
+  "reporte": "codeguard — TKT-09",
+  "fecha": "2026-03-06",
+  "herramienta": "codeguard",
+  "version": "0.2.0",
+  "ticket": "TKT-09",
+  "modulos": ["entidades", "configurador"],
+  "resumen": {
+    "errores": 0,
+    "advertencias": 0,
+    "bloquea_pr": false
+  },
+  "archivos_creados": [
+    "entidades/abs_climatizador.py"
+  ],
+  "archivos_modificados": [
+    "entidades/climatizador.py",
+    "configurador/factory_climatizador.py"
+  ],
+  "nota": "TKT-09: AbsClimatizador extraída a entidades/abs_climatizador.py. climatizador.py ahora solo contiene Climatizador y Calefactor. factory_climatizador.py actualizado para importar AbsClimatizador desde entidades.abs_climatizador. codeguard: 0 errores en entidades y configurador."
+}
