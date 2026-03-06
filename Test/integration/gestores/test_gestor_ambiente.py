@@ -12,7 +12,7 @@ Casos de prueba del Plan de Pruebas:
 import pytest
 from unittest.mock import Mock
 from gestores_entidades.gestor_ambiente import GestorAmbiente
-from entidades.ambiente import Ambiente
+from entidades.ambiente import Ambiente, TEMP_AMBIENTE, TEMP_DESEADA
 
 
 class TestGestorAmbienteIntegracion:
@@ -159,7 +159,7 @@ class TestGestorAmbienteMostrarTemperatura:
             visualizador=mock_visualizador
         )
         gestor.leer_temperatura_ambiente()
-        gestor.indicar_temperatura_a_mostrar("ambiente")
+        gestor.indicar_temperatura_a_mostrar(TEMP_AMBIENTE)
         gestor.mostrar_temperatura()
 
         mock_visualizador.mostrar_temperatura_ambiente.assert_called_with(22.0)
@@ -176,7 +176,7 @@ class TestGestorAmbienteMostrarTemperatura:
             incremento=1.0
         )
         gestor.aumentar_temperatura_deseada()  # temp = 22+1 = 23
-        gestor.indicar_temperatura_a_mostrar("deseada")
+        gestor.indicar_temperatura_a_mostrar(TEMP_DESEADA)
         gestor.mostrar_temperatura()
 
         mock_visualizador.mostrar_temperatura_deseada.assert_called_with(23)

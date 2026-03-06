@@ -8,6 +8,15 @@ Patron de Diseno:
     - Service: Encapsula logica de dominio sin estado
     - Strategy: El algoritmo de comparacion puede variar
     - DIP: Recibe histeresis como parametro (inyeccion de dependencias)
+
+Nota de diseno (TKT-10):
+    ControladorTemperatura es una clase sin estado con un unico @staticmethod.
+    Se mantiene como clase (en lugar de funcion de modulo) de forma intencional
+    para preservar el patron Service explicitamente: el nombre de la clase actua
+    como namespace semantico que comunica que esta logica pertenece al dominio
+    de control de temperatura. Esto facilita la lectura del codigo en el contexto
+    pedagogico del proyecto y permite futura extension (ej: inyeccion de
+    estrategias de histeresis distintas).
 """
 
 

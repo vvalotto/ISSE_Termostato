@@ -1,0 +1,12 @@
+{
+  "reporte": "codeguard — TKT-12",
+  "fecha": "2026-03-06",
+  "ticket": "TKT-12",
+  "tipo": "verificación (DoD ya cumplido)",
+  "resumen": {
+    "errores": 0,
+    "advertencias": 0,
+    "bloquea_pr": false
+  },
+  "nota": "TKT-12: VisualizadorBateriaApi.mostrar_indicador() ya tenía docstring y comentario inline explicando por qué el método es pass (la API calcula el indicador automáticamente). DoD satisfecho sin cambios adicionales."
+}

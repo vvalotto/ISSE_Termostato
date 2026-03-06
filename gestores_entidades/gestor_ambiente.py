@@ -16,7 +16,7 @@ Responsabilidades:
     - Controlar que temperatura se muestra (ambiente vs deseada)
 """
 
-# Las dependencias se inyectan en el constructor (Dependency Injection)
+from entidades.ambiente import TEMP_AMBIENTE, TEMP_DESEADA
 
 
 class GestorAmbiente:
@@ -125,10 +125,10 @@ class GestorAmbiente:
         Si el modo es "ambiente", muestra la temperatura ambiente.
         Si el modo es "deseada", muestra la temperatura deseada.
         """
-        if self._ambiente.temperatura_a_mostrar == "ambiente":
+        if self._ambiente.temperatura_a_mostrar == TEMP_AMBIENTE:
             temperatura = self._ambiente.temperatura_ambiente
             self._visualizador_temperatura.mostrar_temperatura_ambiente(temperatura)
-        elif self._ambiente.temperatura_a_mostrar == "deseada":
+        elif self._ambiente.temperatura_a_mostrar == TEMP_DESEADA:
             temperatura = self._ambiente.temperatura_deseada
             self._visualizador_temperatura.mostrar_temperatura_deseada(temperatura)
 

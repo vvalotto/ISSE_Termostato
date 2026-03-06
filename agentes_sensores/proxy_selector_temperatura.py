@@ -17,6 +17,7 @@ import socket
 
 from registrador.registrador import AbsRegistrador
 from entidades.abs_selector_temperatura import AbsSelectorTemperatura
+from entidades.ambiente import TEMP_AMBIENTE
 
 # Configurar logger para este módulo
 logger = logging.getLogger(__name__)
@@ -108,7 +109,7 @@ class SelectorTemperaturaSocket(AbsSelectorTemperatura):
             puerto: Puerto TCP para escuchar conexiones.
         """
         logger.info("Inicializando selector de temperatura socket en %s:%d", host, puerto)
-        self._estado_actual = "ambiente"  # Estado inicial
+        self._estado_actual = TEMP_AMBIENTE  # Estado inicial
         self._servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._servidor.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
