@@ -116,22 +116,34 @@ class Configurador:
     def configurar_visualizador_temperatura():
         """Crea y retorna el visualizador de temperatura segun configuracion."""
         tipo = Configurador.configuracion_termostato["visualizador_temperatura"]
+        if tipo == "socket":
+            host = Configurador.obtener_host_escucha()
+            puerto = Configurador.obtener_puerto("visualizador_temperatura")
+            return FactoryVisualizadorTemperatura.crear(tipo, host=host, puerto=puerto)
         api_url = Configurador.obtener_api_url() if tipo == "api" else None
-        return FactoryVisualizadorTemperatura.crear(tipo, api_url)
+        return FactoryVisualizadorTemperatura.crear(tipo, api_url=api_url)
 
     @staticmethod
     def configurar_visualizador_bateria():
         """Crea y retorna el visualizador de bateria segun configuracion."""
         tipo = Configurador.configuracion_termostato["visualizador_bateria"]
+        if tipo == "socket":
+            host = Configurador.obtener_host_escucha()
+            puerto = Configurador.obtener_puerto("visualizador_bateria")
+            return FactoryVisualizadorBateria.crear(tipo, host=host, puerto=puerto)
         api_url = Configurador.obtener_api_url() if tipo == "api" else None
-        return FactoryVisualizadorBateria.crear(tipo, api_url)
+        return FactoryVisualizadorBateria.crear(tipo, api_url=api_url)
 
     @staticmethod
     def configurar_visualizador_climatizador():
         """Crea y retorna el visualizador de climatizador segun configuracion."""
         tipo = Configurador.configuracion_termostato["visualizador_climatizador"]
+        if tipo == "socket":
+            host = Configurador.obtener_host_escucha()
+            puerto = Configurador.obtener_puerto("visualizador_climatizador")
+            return FactoryVisualizadorClimatizador.crear(tipo, host=host, puerto=puerto)
         api_url = Configurador.obtener_api_url() if tipo == "api" else None
-        return FactoryVisualizadorClimatizador.crear(tipo, api_url)
+        return FactoryVisualizadorClimatizador.crear(tipo, api_url=api_url)
 
     @staticmethod
     def configurar_climatizador():
@@ -172,7 +184,10 @@ class Configurador:
         puertos_default = {
             "bateria": 11000,
             "temperatura": 12000,
-            "seteo_temperatura": 13000
+            "seteo_temperatura": 13000,
+            "visualizador_bateria": 14000,
+            "visualizador_temperatura": 14001,
+            "visualizador_climatizador": 14002
         }
         config = Configurador.configuracion_termostato
         puertos = config.get("red", {}).get("puertos", puertos_default)

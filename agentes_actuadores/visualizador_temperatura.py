@@ -50,7 +50,23 @@ class VisualizadorTemperaturaSocket(AbsVisualizadorTemperatura):
 
     Patron de Diseno:
         - Proxy: Envia datos a visualizador remoto
+        - DIP: Recibe host y puerto via inyeccion de dependencias
+
+    Args:
+        host: Direccion IP del servidor de visualizacion.
+        puerto: Puerto TCP del servidor de visualizacion.
     """
+
+    def __init__(self, host, puerto):
+        """
+        Inicializa el visualizador con la configuracion de red.
+
+        Args:
+            host: Direccion IP del servidor de visualizacion.
+            puerto: Puerto TCP del servidor de visualizacion.
+        """
+        self._host = host
+        self._puerto = puerto
 
     def mostrar_temperatura_ambiente(self, temperatura_ambiente):
         """
@@ -61,9 +77,7 @@ class VisualizadorTemperaturaSocket(AbsVisualizadorTemperatura):
         """
         try:
             cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            direccion_servidor = ("localhost", 14001)
-            cliente.connect(direccion_servidor)
-
+            cliente.connect((self._host, self._puerto))
             cliente.send(bytes(("ambiente: " + str(temperatura_ambiente)).encode()))
             cliente.close()
         except ConnectionError:
@@ -78,9 +92,7 @@ class VisualizadorTemperaturaSocket(AbsVisualizadorTemperatura):
         """
         try:
             cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            direccion_servidor = ("localhost", 14001)
-            cliente.connect(direccion_servidor)
-
+            cliente.connect((self._host, self._puerto))
             cliente.send(bytes(("deseada: " + str(temperatura_deseada)).encode()))
             cliente.close()
         except ConnectionError:
