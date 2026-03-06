@@ -7,7 +7,8 @@ Este modulo contiene el factory para crear instancias de climatizadores
 Patron de Diseno:
     - Factory Method: Crea objetos sin especificar la clase exacta
 """
-from entidades.climatizador import Climatizador, Calefactor, AbsClimatizador
+from entidades.climatizador import Climatizador, Calefactor
+from entidades.abs_climatizador import AbsClimatizador
 
 
 # pylint: disable=too-few-public-methods

@@ -14,7 +14,7 @@ El sistema de tracking oficial es **GitHub Issues** (referenciado en columna `#I
 | 1 | Compliance: Reglas del proyecto y arquitectura | TKT-01, TKT-02 | 2/2 |
 | 2 | Diseño: Coherencia y convenciones | TKT-03, TKT-04, TKT-05 | 3/3 |
 | 3 | Arquitectura de sockets | TKT-06, TKT-07 | 2/2 |
-| 4 | Organización estructural | TKT-08, TKT-09 | 1/2 |
+| 4 | Organización estructural | TKT-08, TKT-09 | 2/2 |
 | 5 | Refinamiento | TKT-10, TKT-11, TKT-12, TKT-13, TKT-14 | 0/5 |
 | 6 | SOLID: Cross-cutting concerns | TKT-15, TKT-16, TKT-17, TKT-18, TKT-19 | 0/5 |
 
@@ -32,7 +32,7 @@ El sistema de tracking oficial es **GitHub Issues** (referenciado en columna `#I
 | TKT-06 | Unificar ciclo de vida de sockets | 3 | 3 | Medio | Medio | Decisión diseño | #22 | Hecho |
 | TKT-07 | Context manager para sockets persistentes | 3 | 3 | Medio | Medio | TKT-06 | #23 | Hecho |
 | TKT-08 | Consolidar estructura de tests en subdirectorios | 4 | 2 | Medio | Medio | Fases 1 y 2 | #24 | Hecho |
-| TKT-09 | Separar AbsClimatizador en abs_climatizador.py | 4 | 3 | Medio | Bajo | — | #25 | Backlog |
+| TKT-09 | Separar AbsClimatizador en abs_climatizador.py | 4 | 3 | Medio | Bajo | — | #25 | Hecho |
 | TKT-10 | ControladorTemperatura como función de módulo | 5 | 3 | Medio | Bajo | — | #26 | Backlog |
 | TKT-11 | Constantes para tipos de temperatura | 5 | 3 | Medio | Bajo | — | #27 | Backlog |
 | TKT-12 | Documentar o implementar mostrar_indicador() | 5 | 4 | Bajo | Bajo | — | #28 | Backlog |
@@ -67,3 +67,4 @@ El sistema de tracking oficial es **GitHub Issues** (referenciado en columna `#I
 
 ### 2026-03-06 (Fase 4)
 - TKT-08: Consolidar estructura de tests en subdirectorios — **Hecho**. Eliminados 7 directorios legacy (bateria/, climatizador/, lanzador/, operador/, presentador/, temperatura/, selector_temperatura/). Eran scripts sin asserts que fallaban en collection. Tests: 181 passed (misma cobertura). Test/hal/ conservado para TKT-13.
+- TKT-09: Separar AbsClimatizador en abs_climatizador.py — **Hecho**. AbsClimatizador extraída a `entidades/abs_climatizador.py`. `climatizador.py` solo contiene Climatizador y Calefactor. Import actualizado en `factory_climatizador.py`. codeguard: 0 errores.
