@@ -1,0 +1,100 @@
+{
+  "reporte": "designreviewer — Fase 4 (TKT-08 + TKT-09)",
+  "fecha": "2026-03-06",
+  "herramienta": "designreviewer",
+  "version": "0.2.0",
+  "fase": 4,
+  "tickets": ["TKT-08", "TKT-09"],
+  "modulos_analizados": ["entidades", "configurador"],
+  "resumen": {
+    "criticos_total": 1,
+    "warnings_total": 8,
+    "deuda_horas_total": 10.2,
+    "bloquea_pr": true,
+    "nota": "El crítico es pre-existente (Configurador WMC=36, reportado en Fase 2). Ningún issue introducido por TKT-08/09. entidades: 0 críticos."
+  },
+  "modulos": {
+    "entidades": {
+      "archivos": 11,
+      "criticos": 0,
+      "warnings": 6,
+      "deuda_horas": 3.7,
+      "bloquea": false,
+      "hallazgos": [
+        {
+          "severidad": "warning",
+          "analyzer": "LCOMAnalyzer",
+          "clase": "Climatizador",
+          "mensaje": "LCOM=2 (umbral: 1)",
+          "nota": "Pre-existente."
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LCOMAnalyzer",
+          "clase": "Calefactor",
+          "mensaje": "LCOM=2 (umbral: 1)",
+          "nota": "Pre-existente."
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "Ambiente",
+          "mensaje": "21 líneas (umbral: 20)",
+          "nota": "Pre-existente."
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "AbsProxyActuadorClimatizador",
+          "mensaje": "27 líneas (umbral: 20)",
+          "nota": "Pre-existente."
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "Bateria",
+          "mensaje": "25 líneas (umbral: 20)",
+          "nota": "Pre-existente."
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "AbsProxySensorTemperatura",
+          "mensaje": "22 líneas (umbral: 20)",
+          "nota": "Pre-existente."
+        }
+      ]
+    },
+    "configurador": {
+      "archivos": 11,
+      "criticos": 1,
+      "warnings": 2,
+      "deuda_horas": 6.5,
+      "bloquea": true,
+      "hallazgos": [
+        {
+          "severidad": "critical",
+          "analyzer": "WMCAnalyzer",
+          "clase": "Configurador",
+          "mensaje": "WMC=36 (umbral: 20): complejidad total de métodos excesiva",
+          "archivo": "configurador/configurador.py",
+          "nota": "Pre-existente. Reportado en Fase 2. No introducido por TKT-08/09."
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "Configurador",
+          "mensaje": "cargar_configuracion tiene 40 líneas (umbral: 20)",
+          "nota": "Pre-existente."
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "Configurador",
+          "mensaje": "_validar_configuracion tiene 34 líneas (umbral: 20)",
+          "nota": "Pre-existente."
+        }
+      ]
+    }
+  }
+}
