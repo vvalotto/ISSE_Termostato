@@ -42,6 +42,14 @@ class SeteoTemperaturaSocket(AbsSeteoTemperatura):
     Escucha conexiones TCP para recibir comandos de ajuste
     de temperatura ('aumentar' o 'disminuir').
 
+    Ciclo de vida del socket: PERSISTENTE — el socket se crea al inicializar
+    el proxy y se mantiene abierto entre llamadas. Esta estrategia es adecuada
+    porque los comandos de usuario son esporadicos e impredecibles en el tiempo.
+    El proxy actua como servidor (bind/listen/accept), por lo que debe mantenerse
+    activo permanentemente: cerrar y reabrir el socket en cada ciclo crearía una
+    ventana donde los comandos podrian perderse.
+    Ver: docs/decisions/ADR-001-ciclo-vida-sockets.md
+
     Patron de Diseno:
         - DIP: Recibe host y puerto via inyeccion de dependencias
 
