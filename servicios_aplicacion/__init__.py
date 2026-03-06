@@ -8,7 +8,6 @@ Contiene los casos de uso y la logica de orquestacion del sistema:
     - operador_secuencial: Ejecucion secuencial de tareas
     - presentador: Presentacion de datos al usuario
     - selector_entrada: Seleccion de modo de temperatura
-    - abs_selector_temperatura: Abstraccion del selector
-    - abs_seteo_temperatura: Abstraccion del seteo
+    (AbsSeteoTemperatura y AbsSelectorTemperatura movidas a entidades/)
 """
 # pylint: disable=consider-using-f-string

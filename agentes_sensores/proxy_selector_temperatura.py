@@ -16,7 +16,7 @@ import logging
 import socket
 
 from registrador.registrador import AbsRegistrador
-from servicios_aplicacion.abs_selector_temperatura import AbsSelectorTemperatura
+from entidades.abs_selector_temperatura import AbsSelectorTemperatura
 
 # Configurar logger para este módulo
 logger = logging.getLogger(__name__)

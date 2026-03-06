@@ -10,7 +10,7 @@ Patron de Diseno:
 """
 import logging
 import socket
-from servicios_aplicacion.abs_seteo_temperatura import AbsSeteoTemperatura
+from entidades.abs_seteo_temperatura import AbsSeteoTemperatura
 
 # Configurar logger para este módulo
 logger = logging.getLogger(__name__)

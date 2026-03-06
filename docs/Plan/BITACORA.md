@@ -11,7 +11,7 @@ El sistema de tracking oficial es **GitHub Issues** (referenciado en columna `#I
 
 | Fase | Descripción | Tickets | Completados |
 |------|-------------|---------|-------------|
-| 1 | Compliance: Reglas del proyecto y arquitectura | TKT-01, TKT-02 | 1/2 |
+| 1 | Compliance: Reglas del proyecto y arquitectura | TKT-01, TKT-02 | 2/2 |
 | 2 | Diseño: Coherencia y convenciones | TKT-03, TKT-04, TKT-05 | 0/3 |
 | 3 | Arquitectura de sockets | TKT-06, TKT-07 | 0/2 |
 | 4 | Organización estructural | TKT-08, TKT-09 | 0/2 |
@@ -25,7 +25,7 @@ El sistema de tracking oficial es **GitHub Issues** (referenciado en columna `#I
 | Ticket | Título | Fase | Prioridad | Impacto | Esfuerzo | Depende de | #Issue | Estado |
 |--------|--------|------|-----------|---------|----------|------------|--------|--------|
 | TKT-01 | Eliminar f-strings en configurador | 1 | 1 | Alto | Bajo | — | #17 | Hecho |
-| TKT-02 | Mover interfaces AbsSeteo/AbsSelector a entidades/ | 1 | 1 | Alto | Medio | — | #18 | Backlog |
+| TKT-02 | Mover interfaces AbsSeteo/AbsSelector a entidades/ | 1 | 1 | Alto | Medio | — | #18 | Hecho |
 | TKT-03 | Unificar uso de Configurador como clase estática | 2 | 2 | Alto | Bajo | — | #19 | Backlog |
 | TKT-04 | Reemplazar wildcard imports en ejecutar.py | 2 | 2 | Medio | Bajo | TKT-03 | #20 | Backlog |
 | TKT-05 | Reemplazar print() por logging en _validar_configuracion | 2 | 2 | Medio | Bajo | — | #21 | Backlog |
@@ -58,3 +58,4 @@ El sistema de tracking oficial es **GitHub Issues** (referenciado en columna `#I
 
 ### 2026-03-06
 - TKT-01: Eliminar f-strings en configurador — **Hecho**. 3 f-strings reemplazados por `.format()` en `configurador/configurador.py`. codeguard: 0 errores, 0 advertencias.
+- TKT-02: Mover interfaces AbsSeteo/AbsSelector a entidades/ — **Hecho**. Interfaces movidas a `entidades/`, imports actualizados en proxies. `agentes_sensores/` ya no depende de `servicios_aplicacion/`. codeguard: 0 errores.
