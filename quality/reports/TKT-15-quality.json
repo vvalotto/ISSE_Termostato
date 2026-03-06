@@ -1,0 +1,25 @@
+{
+  "reporte": "codeguard — TKT-15",
+  "fecha": "2026-03-06",
+  "herramienta": "codeguard",
+  "version": "0.2.0",
+  "ticket": "TKT-15",
+  "modulos": ["agentes_actuadores", "registrador", "configurador"],
+  "resumen": {
+    "errores": 0,
+    "advertencias": 11,
+    "bloquea_pr": false,
+    "nota": "11 warnings E128 pre-existentes en visualizadores (no modificados por TKT-15). registrador y configurador: 0 warnings."
+  },
+  "archivos_creados": [],
+  "archivos_modificados": [
+    "registrador/registrador.py",
+    "agentes_actuadores/actuador_climatizador.py",
+    "configurador/factory_actuador_climatizador.py"
+  ],
+  "cambios": [
+    "registrador.py: agregadas clases concretas RegistradorArchivo y AuditorArchivo",
+    "ActuadorClimatizadorGeneral: hereda solo de AbsProxyActuadorClimatizador; registrador y auditor inyectados en constructor",
+    "FactoryActuadorClimatizador: inyecta RegistradorArchivo() y AuditorArchivo() al crear"
+  ]
+}

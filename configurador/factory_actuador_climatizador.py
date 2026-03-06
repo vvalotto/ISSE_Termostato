@@ -6,6 +6,7 @@ Patron de Diseno:
 """
 from agentes_actuadores.actuador_climatizador import ActuadorClimatizadorGeneral
 from entidades.abs_actuador_climatizador import AbsProxyActuadorClimatizador
+from registrador.registrador import RegistradorArchivo, AuditorArchivo
 
 
 # pylint: disable=too-few-public-methods
@@ -17,6 +18,9 @@ class FactoryActuadorClimatizador:
         """
         Crea un actuador de climatizador segun el tipo especificado.
 
+        Inyecta RegistradorArchivo y AuditorArchivo como implementaciones
+        concretas de los servicios de logging y auditoria.
+
         Args:
             tipo (str): Tipo de actuador ("general").
 
@@ -24,5 +28,8 @@ class FactoryActuadorClimatizador:
             AbsProxyActuadorClimatizador: Instancia del actuador o None si tipo invalido.
         """
         if tipo == "general":
-            return ActuadorClimatizadorGeneral()
+            return ActuadorClimatizadorGeneral(
+                registrador=RegistradorArchivo(),
+                auditor=AuditorArchivo()
+            )
         return None
