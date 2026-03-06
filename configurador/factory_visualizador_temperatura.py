@@ -3,6 +3,7 @@ Factory para crear visualizadores de temperatura.
 
 Patron de Diseno:
     - Factory Method: Crea objetos sin especificar la clase exacta
+    - Registry: Permite registrar nuevas implementaciones sin modificar este archivo
 """
 from agentes_actuadores.visualizador_temperatura import (
     AbsVisualizadorTemperatura,
@@ -10,31 +11,22 @@ from agentes_actuadores.visualizador_temperatura import (
     VisualizadorTemperaturaSocket,
     VisualizadorTemperaturaApi
 )
+from configurador.registry_factory import RegistryFactory
 
 
 # pylint: disable=too-few-public-methods
-class FactoryVisualizadorTemperatura:
+class FactoryVisualizadorTemperatura(RegistryFactory):
     """Factory para crear instancias de visualizador de temperatura."""
 
-    @staticmethod
-    def crear(tipo: str, host: str = None, puerto: int = None,
-              api_url: str = None) -> AbsVisualizadorTemperatura:
-        """
-        Crea un visualizador de temperatura segun el tipo especificado.
+    _registry = {}
 
-        Args:
-            tipo (str): Tipo de visualizador ("archivo", "socket" o "api").
-            host (str): Direccion IP del servidor (requerido si tipo es "socket").
-            puerto (int): Puerto TCP del servidor (requerido si tipo es "socket").
-            api_url (str): URL de la API REST (requerido si tipo es "api").
 
-        Returns:
-            AbsVisualizadorTemperatura: Instancia del visualizador o None si tipo invalido.
-        """
-        if tipo == "archivo":
-            return VisualizadorTemperatura()
-        if tipo == "socket":
-            return VisualizadorTemperaturaSocket(host, puerto)
-        if tipo == "api":
-            return VisualizadorTemperaturaApi(api_url)
-        return None
+FactoryVisualizadorTemperatura.registrar("archivo", lambda **kw: VisualizadorTemperatura())
+FactoryVisualizadorTemperatura.registrar(
+    "socket",
+    lambda host=None, puerto=None, **kw: VisualizadorTemperaturaSocket(host, puerto)
+)
+FactoryVisualizadorTemperatura.registrar(
+    "api",
+    lambda api_url=None, **kw: VisualizadorTemperaturaApi(api_url)
+)

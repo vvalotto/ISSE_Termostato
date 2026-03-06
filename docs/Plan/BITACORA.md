@@ -16,7 +16,7 @@ El sistema de tracking oficial es **GitHub Issues** (referenciado en columna `#I
 | 3 | Arquitectura de sockets | TKT-06, TKT-07 | 2/2 |
 | 4 | Organización estructural | TKT-08, TKT-09 | 2/2 |
 | 5 | Refinamiento | TKT-10, TKT-11, TKT-12, TKT-13, TKT-14 | 5/5 |
-| 6 | SOLID: Cross-cutting concerns | TKT-15, TKT-16, TKT-17, TKT-18, TKT-19 | 4/5 |
+| 6 | SOLID: Cross-cutting concerns | TKT-15, TKT-16, TKT-17, TKT-18, TKT-19 | 5/5 |
 
 ---
 
@@ -42,7 +42,7 @@ El sistema de tracking oficial es **GitHub Issues** (referenciado en columna `#I
 | TKT-16 | Quitar herencia de AbsRegistrador en SelectorTemperaturaArchivo | 6 | 3 | Medio | Bajo | TKT-15 | #32 | Hecho |
 | TKT-17 | Corregir @staticmethod en SelectorTemperaturaArchivo | 6 | 3 | Medio | Bajo | TKT-16 | #33 | Hecho |
 | TKT-18 | Inyectar host/puerto en visualizadores socket | 6 | 3 | Medio | Bajo | — | #34 | Hecho |
-| TKT-19 | Registry Pattern en factories (OCP) | 6 | 4 | Bajo | Alto | — | #35 | Backlog |
+| TKT-19 | Registry Pattern en factories (OCP) | 6 | 4 | Bajo | Alto | — | #35 | Hecho |
 
 **Estados posibles:** `Backlog` → `Listo` → `En curso` → `En revisión` → `Hecho`
 
@@ -81,3 +81,4 @@ El sistema de tracking oficial es **GitHub Issues** (referenciado en columna `#I
 - TKT-16: Quitar herencia de AbsRegistrador en SelectorTemperaturaArchivo — **Hecho**. Eliminada herencia de AbsRegistrador en SelectorTemperaturaArchivo; logging directo via logger. codeguard: 0 errores.
 - TKT-17: Corregir @staticmethod en SelectorTemperaturaArchivo — **Hecho**. `obtener_selector` convertido a método de instancia en implementaciones y en la interfaz abstracta. codeguard: 0 errores.
 - TKT-18: Inyectar host/puerto en visualizadores socket — **Hecho**. `VisualizadorBateriaSocket`, `VisualizadorTemperaturaSocket` y `VisualizadorClimatizadorSocket` reciben `host`/`puerto` vía `__init__`. Factories y `configurador.py` actualizados. Tests de integración corregidos. codeguard: 0 errores.
+- TKT-19: Registry Pattern en factories (OCP) — **Hecho**. `RegistryFactory` base en `configurador/registry_factory.py`. Las 9 factories heredan de ella; tipos registrados con `registrar()` en módulo nivel. Agregar nuevo tipo solo requiere llamar `Factory.registrar()` sin modificar archivos existentes. codeguard: 0 errores.

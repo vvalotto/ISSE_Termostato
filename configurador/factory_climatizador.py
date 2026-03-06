@@ -6,29 +6,25 @@ Este modulo contiene el factory para crear instancias de climatizadores
 
 Patron de Diseno:
     - Factory Method: Crea objetos sin especificar la clase exacta
+    - Registry: Permite registrar nuevas implementaciones sin modificar este archivo
 """
 from entidades.climatizador import Climatizador, Calefactor
 from entidades.abs_climatizador import AbsClimatizador
+from configurador.registry_factory import RegistryFactory
 
 
 # pylint: disable=too-few-public-methods
-class FactoryClimatizador:
+class FactoryClimatizador(RegistryFactory):
     """Factory para crear instancias de climatizadores."""
 
-    @staticmethod
-    def crear(tipo: str, histeresis: float = 2) -> AbsClimatizador:
-        """
-        Crea una instancia del climatizador segun el tipo especificado.
+    _registry = {}
 
-        Args:
-            tipo (str): Tipo de climatizador ("climatizador" o "calefactor").
-            histeresis (float): Margen de tolerancia en grados. Por defecto 2.
 
-        Returns:
-            AbsClimatizador: Instancia del climatizador o None si tipo invalido.
-        """
-        if tipo == "climatizador":
-            return Climatizador(histeresis=histeresis)
-        if tipo == "calefactor":
-            return Calefactor(histeresis=histeresis)
-        return None
+FactoryClimatizador.registrar(
+    "climatizador",
+    lambda histeresis=2, **kw: Climatizador(histeresis=histeresis)
+)
+FactoryClimatizador.registrar(
+    "calefactor",
+    lambda histeresis=2, **kw: Calefactor(histeresis=histeresis)
+)

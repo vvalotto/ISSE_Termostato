@@ -93,7 +93,7 @@ class Configurador:
         if tipo == "socket":
             host = Configurador.obtener_host_escucha()
             puerto = Configurador.obtener_puerto("bateria")
-            return FactoryProxyBateria.crear(tipo, host, puerto)
+            return FactoryProxyBateria.crear(tipo, host=host, puerto=puerto)
         return FactoryProxyBateria.crear(tipo)
 
     @staticmethod
@@ -103,7 +103,7 @@ class Configurador:
         if tipo == "socket":
             host = Configurador.obtener_host_escucha()
             puerto = Configurador.obtener_puerto("temperatura")
-            return FactoryProxySensorTemperatura.crear(tipo, host, puerto)
+            return FactoryProxySensorTemperatura.crear(tipo, host=host, puerto=puerto)
         return FactoryProxySensorTemperatura.crear(tipo)
 
     @staticmethod
@@ -159,7 +159,7 @@ class Configurador:
         if tipo == "socket":
             host = Configurador.obtener_host_escucha()
             puerto = Configurador.obtener_puerto("selector_temperatura")
-            return FactorySelectorTemperatura.crear(tipo, host, puerto)
+            return FactorySelectorTemperatura.crear(tipo, host=host, puerto=puerto)
         return FactorySelectorTemperatura.crear(tipo)
 
     @staticmethod
@@ -169,7 +169,7 @@ class Configurador:
         if tipo == "socket":
             host = Configurador.obtener_host_escucha()
             puerto = Configurador.obtener_puerto("seteo_temperatura")
-            return FactorySeteoTemperatura.crear(tipo, host, puerto)
+            return FactorySeteoTemperatura.crear(tipo, host=host, puerto=puerto)
         return FactorySeteoTemperatura.crear(tipo)
 
     @staticmethod

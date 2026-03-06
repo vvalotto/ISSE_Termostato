@@ -3,33 +3,25 @@ Factory para crear proxies de lectura de bateria.
 
 Patron de Diseno:
     - Factory Method: Crea objetos sin especificar la clase exacta
+    - Registry: Permite registrar nuevas implementaciones sin modificar este archivo
 """
 from agentes_sensores.proxy_bateria import (
     AbsProxyBateria,
     ProxyBateriaArchivo,
     ProxyBateriaSocket
 )
+from configurador.registry_factory import RegistryFactory
 
 
 # pylint: disable=too-few-public-methods
-class FactoryProxyBateria:
+class FactoryProxyBateria(RegistryFactory):
     """Factory para crear instancias de proxy de bateria."""
 
-    @staticmethod
-    def crear(tipo: str, host: str = None, puerto: int = None) -> AbsProxyBateria:
-        """
-        Crea un proxy de bateria segun el tipo especificado.
+    _registry = {}
 
-        Args:
-            tipo (str): Tipo de proxy ("archivo" o "socket").
-            host (str): Direccion IP (requerido si tipo es "socket").
-            puerto (int): Puerto TCP (requerido si tipo es "socket").
 
-        Returns:
-            AbsProxyBateria: Instancia del proxy o None si tipo invalido.
-        """
-        if tipo == "archivo":
-            return ProxyBateriaArchivo()
-        if tipo == "socket":
-            return ProxyBateriaSocket(host, puerto)
-        return None
+FactoryProxyBateria.registrar("archivo", lambda **kw: ProxyBateriaArchivo())
+FactoryProxyBateria.registrar(
+    "socket",
+    lambda host=None, puerto=None, **kw: ProxyBateriaSocket(host, puerto)
+)
