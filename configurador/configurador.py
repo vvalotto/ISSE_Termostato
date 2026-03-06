@@ -10,6 +10,7 @@ Patron de Diseno:
     - Singleton (configuracion): Una sola configuracion global
 """
 import json
+import logging
 import os
 from configurador.factory_proxy_bateria import FactoryProxyBateria
 from configurador.factory_sensor_temperatura import FactoryProxySensorTemperatura
@@ -20,6 +21,8 @@ from configurador.factory_climatizador import FactoryClimatizador
 from configurador.factory_visualizador_temperatura import FactoryVisualizadorTemperatura
 from configurador.factory_selector_temperatura import FactorySelectorTemperatura
 from configurador.factory_seteo_temperatura import FactorySeteoTemperatura
+
+logger = logging.getLogger(__name__)
 
 
 # pylint: disable=unsubscriptable-object,unsupported-membership-test
@@ -235,12 +238,14 @@ class Configurador:
         if "red" in config:
             red = config["red"]
             if "host_escucha" not in red:
-                print("ADVERTENCIA: Falta 'host_escucha', usando 'localhost'")
+                logger.warning("Falta 'host_escucha' en configuracion, usando 'localhost'")
             if "puertos" not in red:
-                print("ADVERTENCIA: Falta 'puertos', usando valores por defecto")
+                logger.warning("Falta 'puertos' en configuracion, usando valores por defecto")
             if "api_url" not in red:
-                print("ADVERTENCIA: Falta 'api_url', usando default")
+                logger.warning("Falta 'api_url' en configuracion, usando default")
         else:
-            print("ADVERTENCIA: No hay seccion 'red' en termostato.json")
-            print("  -> Proxies socket usaran 'localhost' y puertos default")
-            print("  -> Visualizadores API usaran 'http://localhost:5050'")
+            logger.warning(
+                "No hay seccion 'red' en termostato.json. "
+                "Proxies socket usaran 'localhost' y puertos default. "
+                "Visualizadores API usaran 'http://localhost:5050'"
+            )

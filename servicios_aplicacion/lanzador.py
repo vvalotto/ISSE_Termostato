@@ -45,7 +45,7 @@ class Lanzador:
         carga_maxima = Configurador.obtener_carga_maxima_bateria()
         umbral = Configurador.obtener_umbral_bateria()
         bateria = Bateria(carga_maxima, umbral)
-        proxy_bateria = Configurador().configurar_proxy_bateria()
+        proxy_bateria = Configurador.configurar_proxy_bateria()
         visualizador_bateria = Configurador.configurar_visualizador_bateria()
 
         self._gestor_bateria = GestorBateria(
@@ -58,7 +58,7 @@ class Lanzador:
         temperatura_inicial = Configurador.obtener_temperatura_inicial()
         ambiente = Ambiente(temperatura_deseada_inicial=temperatura_inicial)
         proxy_sensor = Configurador.configurar_proxy_temperatura()
-        visualizador_temperatura = Configurador().configurar_visualizador_temperatura()
+        visualizador_temperatura = Configurador.configurar_visualizador_temperatura()
         incremento = Configurador.obtener_incremento_temperatura()
 
         self._gestor_ambiente = GestorAmbiente(

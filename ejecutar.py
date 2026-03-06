@@ -1,6 +1,6 @@
 import logging
-from servicios_aplicacion.lanzador import *
-from configurador.configurador import *
+from servicios_aplicacion.lanzador import Lanzador
+from configurador.configurador import Configurador
 
 def main():
     """Punto de entrada principal del sistema de termostato"""
@@ -18,7 +18,7 @@ def main():
     logger = logging.getLogger(__name__)
     logger.info("=== Iniciando sistema de termostato ===")
 
-    Configurador().cargar_configuracion()
+    Configurador.cargar_configuracion()
     Lanzador().ejecutar()
 
 if __name__ == "__main__":

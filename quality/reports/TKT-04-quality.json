@@ -1,0 +1,11 @@
+{
+  "us_id": "TKT-04",
+  "fecha": "2026-03-06",
+  "herramienta": "codeguard",
+  "modulos": ["servicios_aplicacion"],
+  "nota": "ejecutar.py es archivo raíz — codeguard solo acepta directorios",
+  "errores": 0,
+  "advertencias": 0,
+  "informativos": 23,
+  "hallazgos": []
+}
