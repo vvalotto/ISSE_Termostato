@@ -1,0 +1,46 @@
+{
+  "reporte": "designreviewer — Fase 5 (TKT-10..TKT-14)",
+  "fecha": "2026-03-06",
+  "herramienta": "designreviewer",
+  "version": "0.2.0",
+  "fase": 5,
+  "tickets": ["TKT-10", "TKT-11", "TKT-12", "TKT-13", "TKT-14"],
+  "modulos_analizados": ["servicios_dominio", "entidades", "gestores_entidades"],
+  "resumen": {
+    "criticos_total": 0,
+    "warnings_total": 7,
+    "deuda_horas_total": 5.2,
+    "bloquea_pr": false,
+    "nota": "0 críticos en todos los módulos. Todos los warnings son pre-existentes. Ningún issue introducido por Fase 5."
+  },
+  "modulos": {
+    "servicios_dominio": {
+      "criticos": 0,
+      "warnings": 0,
+      "bloquea": false,
+      "nota": "Limpio. 0 violaciones."
+    },
+    "entidades": {
+      "criticos": 0,
+      "warnings": 6,
+      "deuda_horas": 3.7,
+      "bloquea": false,
+      "nota": "6 warnings pre-existentes (LCOM Climatizador/Calefactor, LongMethod Ambiente/Bateria/AbsProxy). Igual que Fase 4."
+    },
+    "gestores_entidades": {
+      "criticos": 0,
+      "warnings": 1,
+      "deuda_horas": 1.5,
+      "bloquea": false,
+      "hallazgos": [
+        {
+          "severidad": "warning",
+          "analyzer": "LCOMAnalyzer",
+          "clase": "GestorAmbiente",
+          "mensaje": "LCOM=2 (umbral: 1)",
+          "nota": "Pre-existente."
+        }
+      ]
+    }
+  }
+}
