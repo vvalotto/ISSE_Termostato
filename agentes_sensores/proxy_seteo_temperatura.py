@@ -50,6 +50,9 @@ class SeteoTemperaturaSocket(AbsSeteoTemperatura):
     ventana donde los comandos podrian perderse.
     Ver: docs/decisions/ADR-001-ciclo-vida-sockets.md
 
+    Soporta uso como context manager para garantizar cierre determinista
+    del socket: usar con bloque `with` en el Lanzador o OperadorParalelo.
+
     Patron de Diseno:
         - DIP: Recibe host y puerto via inyeccion de dependencias
 
@@ -123,9 +126,17 @@ class SeteoTemperaturaSocket(AbsSeteoTemperatura):
 
         return diferencia
 
-    def __del__(self):
-        """Limpieza al destruir el objeto"""
+    def __enter__(self):
+        """Soporte para uso como context manager."""
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """Cierra el socket al salir del contexto."""
         if self._conexion:
             self._conexion.close()
+            self._conexion = None
         if self._servidor:
             self._servidor.close()
+            self._servidor = None
+        logger.debug("Socket de seteo cerrado por context manager")
+        return False

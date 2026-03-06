@@ -1,0 +1,35 @@
+{
+  "reporte": "codeguard — TKT-07",
+  "fecha": "2026-03-06",
+  "herramienta": "codeguard",
+  "version": "0.2.0",
+  "ticket": "TKT-07",
+  "modulo": "agentes_sensores",
+  "archivos_analizados": 5,
+  "checks_ejecutados": 6,
+  "resumen": {
+    "errores": 0,
+    "advertencias": 2,
+    "informativos": 13,
+    "bloquea_pr": false
+  },
+  "advertencias": [
+    {
+      "check": "PEP8",
+      "archivo": "agentes_sensores/proxy_bateria.py",
+      "mensaje": "E128 continuation line under-indented for visual indent",
+      "nota": "Pre-existente. No introducido por TKT-07."
+    },
+    {
+      "check": "PEP8",
+      "archivo": "agentes_sensores/proxy_sensor_temperatura.py",
+      "mensaje": "E128 continuation line under-indented for visual indent",
+      "nota": "Pre-existente. No introducido por TKT-07."
+    }
+  ],
+  "archivos_modificados": [
+    "agentes_sensores/proxy_seteo_temperatura.py",
+    "agentes_sensores/proxy_selector_temperatura.py"
+  ],
+  "nota": "TKT-07: Reemplazado __del__ por __enter__/__exit__ en SeteoTemperaturaSocket y SelectorTemperaturaSocket. Cierre determinista de recursos via context manager. 0 errores codeguard."
+}
