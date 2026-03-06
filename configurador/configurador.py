@@ -68,7 +68,7 @@ class Configurador:
 
         if config_file is None:
             raise FileNotFoundError(
-                f"ERROR: No se encontro termostato.json en: {config_paths}"
+                "ERROR: No se encontro termostato.json en: {0}".format(config_paths)
             )
 
         try:
@@ -76,7 +76,7 @@ class Configurador:
                 Configurador.configuracion_termostato = json.load(termostato_config)
         except json.JSONDecodeError as e:
             raise json.JSONDecodeError(
-                f"ERROR: termostato.json tiene formato invalido: {e}",
+                "ERROR: termostato.json tiene formato invalido: {0}".format(e),
                 e.doc,
                 e.pos
             ) from e
@@ -230,7 +230,7 @@ class Configurador:
 
         for clave in claves_requeridas:
             if clave not in config:
-                raise KeyError(f"ERROR: Falta la clave '{clave}' en termostato.json")
+                raise KeyError("ERROR: Falta la clave '{0}' en termostato.json".format(clave))
 
         if "red" in config:
             red = config["red"]
