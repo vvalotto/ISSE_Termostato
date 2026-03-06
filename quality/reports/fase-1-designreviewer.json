@@ -1,0 +1,234 @@
+{
+  "reporte": "designreviewer — Fase 1 (TKT-01 + TKT-02)",
+  "fecha": "2026-03-06",
+  "herramienta": "designreviewer",
+  "version": "0.2.0",
+  "fase": 1,
+  "tickets": ["TKT-01", "TKT-02"],
+  "modulos_analizados": ["entidades", "agentes_sensores", "configurador", "servicios_aplicacion"],
+  "resumen": {
+    "criticos_total": 3,
+    "warnings_total": 22,
+    "deuda_horas_total": 24.2,
+    "bloquea_pr": true,
+    "nota": "Los 3 issues críticos son pre-existentes a Fase 1. Ninguno fue introducido por TKT-01 ni TKT-02. Están trackeados en tickets de fases posteriores."
+  },
+  "modulos": {
+    "entidades": {
+      "archivos": 12,
+      "criticos": 0,
+      "warnings": 8,
+      "deuda_horas": 4.2,
+      "bloquea": false,
+      "hallazgos": [
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "Ambiente",
+          "mensaje": "Ambiente.__repr__ tiene 21 líneas (umbral: 20)",
+          "archivo": "entidades/ambiente.py"
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LCOMAnalyzer",
+          "clase": "Climatizador",
+          "mensaje": "LCOM=2: 2 grupos de métodos sin atributos compartidos",
+          "archivo": "entidades/climatizador.py"
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LCOMAnalyzer",
+          "clase": "Calefactor",
+          "mensaje": "LCOM=2: 2 grupos de métodos sin atributos compartidos",
+          "archivo": "entidades/climatizador.py"
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "AbsClimatizador",
+          "mensaje": "proximo_estado tiene 26 líneas (umbral: 20)",
+          "archivo": "entidades/climatizador.py"
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "AbsClimatizador",
+          "mensaje": "evaluar_accion tiene 25 líneas (umbral: 20)",
+          "archivo": "entidades/climatizador.py"
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "AbsProxyActuadorClimatizador",
+          "mensaje": "accionar_climatizador tiene 27 líneas (umbral: 20)",
+          "archivo": "entidades/abs_actuador_climatizador.py"
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "Bateria",
+          "mensaje": "__init__ tiene 25 líneas (umbral: 20)",
+          "archivo": "entidades/bateria.py"
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "AbsProxySensorTemperatura",
+          "mensaje": "leer_temperatura tiene 22 líneas (umbral: 20)",
+          "archivo": "entidades/abs_sensor_temperatura.py"
+        }
+      ]
+    },
+    "agentes_sensores": {
+      "archivos": 5,
+      "criticos": 1,
+      "warnings": 4,
+      "deuda_horas": 4.7,
+      "bloquea": true,
+      "hallazgos": [
+        {
+          "severidad": "critical",
+          "analyzer": "NOPAnalyzer",
+          "clase": "SelectorTemperaturaArchivo",
+          "mensaje": "Hereda de 2 clases directas (umbral: 1): AbsSelectorTemperatura, AbsRegistrador",
+          "archivo": "agentes_sensores/proxy_selector_temperatura.py",
+          "ticket_asociado": "TKT-16",
+          "nota": "Pre-existente. Trackeado en TKT-16 (Fase 6)"
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "ProxyBateriaSocket",
+          "mensaje": "leer_carga tiene 34 líneas (umbral: 20)",
+          "archivo": "agentes_sensores/proxy_bateria.py"
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "SeteoTemperaturaSocket",
+          "mensaje": "obtener_seteo tiene 44 líneas (umbral: 20)",
+          "archivo": "agentes_sensores/proxy_seteo_temperatura.py"
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "SelectorTemperaturaSocket",
+          "mensaje": "obtener_selector tiene 42 líneas (umbral: 20)",
+          "archivo": "agentes_sensores/proxy_selector_temperatura.py"
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "ProxySensorTemperaturaSocket",
+          "mensaje": "leer_temperatura tiene 34 líneas (umbral: 20)",
+          "archivo": "agentes_sensores/proxy_sensor_temperatura.py"
+        }
+      ]
+    },
+    "configurador": {
+      "archivos": 11,
+      "criticos": 1,
+      "warnings": 2,
+      "deuda_horas": 6.4,
+      "bloquea": true,
+      "hallazgos": [
+        {
+          "severidad": "critical",
+          "analyzer": "WMCAnalyzer",
+          "clase": "Configurador",
+          "mensaje": "WMC=36 (umbral: 20): complejidad total de métodos excesiva",
+          "archivo": "configurador/configurador.py",
+          "ticket_asociado": "TKT-03",
+          "nota": "Pre-existente. Relacionado con TKT-03 (Fase 2)"
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "Configurador",
+          "mensaje": "cargar_configuracion tiene 40 líneas (umbral: 20)",
+          "archivo": "configurador/configurador.py"
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "Configurador",
+          "mensaje": "_validar_configuracion tiene 32 líneas (umbral: 20)",
+          "archivo": "configurador/configurador.py"
+        }
+      ]
+    },
+    "servicios_aplicacion": {
+      "archivos": 7,
+      "criticos": 1,
+      "warnings": 8,
+      "deuda_horas": 8.9,
+      "bloquea": true,
+      "hallazgos": [
+        {
+          "severidad": "critical",
+          "analyzer": "CBOAnalyzer",
+          "clase": "Lanzador",
+          "mensaje": "CBO=9 (umbral: 5): acoplado a Ambiente, Bateria, Configurador, GestorAmbiente, GestorBateria, GestorClimatizador, OperadorParalelo, Presentador, VisualizadorEstadoConsolidadoSocket",
+          "archivo": "servicios_aplicacion/lanzador.py",
+          "nota": "Pre-existente. Lanzador es el Composition Root — alto acoplamiento es estructural y esperado. Evaluar si aplica exención."
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "FeatureEnvyAnalyzer",
+          "clase": "Inicializador",
+          "mensaje": "iniciar accede 3 veces a gestor_ambiente vs 0 a self. Posible Feature Envy.",
+          "archivo": "servicios_aplicacion/inicializador.py"
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "Inicializador",
+          "mensaje": "iniciar tiene 30 líneas (umbral: 20)",
+          "archivo": "servicios_aplicacion/inicializador.py"
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LCOMAnalyzer",
+          "clase": "OperadorParalelo",
+          "mensaje": "LCOM=2: 2 grupos de métodos sin atributos compartidos",
+          "archivo": "servicios_aplicacion/operador_paralelo.py"
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "OperadorParalelo",
+          "mensaje": "__init__ tiene 26 líneas (umbral: 20)",
+          "archivo": "servicios_aplicacion/operador_paralelo.py"
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "OperadorSecuencial",
+          "mensaje": "ejecutar tiene 34 líneas (umbral: 20)",
+          "archivo": "servicios_aplicacion/operador_secuencial.py"
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "Presentador",
+          "mensaje": "__init__ tiene 21 líneas (umbral: 20)",
+          "archivo": "servicios_aplicacion/presentador.py"
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "Presentador",
+          "mensaje": "ejecutar tiene 23 líneas (umbral: 20)",
+          "archivo": "servicios_aplicacion/presentador.py"
+        },
+        {
+          "severidad": "warning",
+          "analyzer": "LongMethodAnalyzer",
+          "clase": "Lanzador",
+          "mensaje": "__init__ tiene 65 líneas (umbral: 20)",
+          "archivo": "servicios_aplicacion/lanzador.py"
+        }
+      ]
+    }
+  }
+}
