@@ -18,7 +18,7 @@ def main():
     logger = logging.getLogger(__name__)
     logger.info("=== Iniciando sistema de termostato ===")
 
-    Configurador().cargar_configuracion()
+    Configurador.cargar_configuracion()
     Lanzador().ejecutar()
 
 if __name__ == "__main__":
