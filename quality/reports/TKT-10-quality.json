@@ -1,0 +1,15 @@
+{
+  "reporte": "codeguard — TKT-10",
+  "fecha": "2026-03-06",
+  "herramienta": "codeguard",
+  "version": "0.2.0",
+  "ticket": "TKT-10",
+  "modulo": "servicios_dominio",
+  "resumen": {
+    "errores": 0,
+    "advertencias": 0,
+    "bloquea_pr": false
+  },
+  "archivos_modificados": ["servicios_dominio/controlador_climatizador.py"],
+  "nota": "TKT-10: Se mantiene ControladorTemperatura como clase (patrón Service). Justificación documentada en el docstring del módulo: el nombre actúa como namespace semántico y permite futura extensión. DoD cumplido (opción B: clase con justificación documentada)."
+}

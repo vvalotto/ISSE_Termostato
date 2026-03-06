@@ -12,9 +12,13 @@ Responsabilidades:
     - Gestionar que temperatura mostrar en UI (ambiente o deseada)
 
 Invariantes:
-    - temperatura_a_mostrar debe ser "ambiente" o "deseada"
+    - temperatura_a_mostrar debe ser TEMP_AMBIENTE o TEMP_DESEADA
     - temperatura_deseada tiene valor por defecto de 22C si no se especifica
 """
+
+# Constantes para el modo de visualizacion de temperatura
+TEMP_AMBIENTE = "ambiente"
+TEMP_DESEADA = "deseada"
 
 
 class Ambiente:
@@ -108,7 +112,7 @@ class Ambiente:
             self.__temperatura_deseada = temperatura_deseada_inicial
         else:
             self.__temperatura_deseada = 22
-        self.__temperatura_a_mostrar = "ambiente"
+        self.__temperatura_a_mostrar = TEMP_AMBIENTE
 
     def __repr__(self):
         """

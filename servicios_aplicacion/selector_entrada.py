@@ -8,6 +8,7 @@ Patron de Diseno:
     - Controller (GRASP): Coordina la interaccion de seteo de temperatura
 """
 from configurador.configurador import Configurador
+from entidades.ambiente import TEMP_AMBIENTE, TEMP_DESEADA
 
 
 # pylint: disable=too-few-public-methods
@@ -42,14 +43,14 @@ class SelectorEntradaTemperatura:
         Mientras el selector este en modo "deseada", muestra la temperatura
         deseada y procesa los comandos del usuario para ajustarla.
         """
-        while self._selector_temperatura.obtener_selector() == "deseada":
+        while self._selector_temperatura.obtener_selector() == TEMP_DESEADA:
             self._mostrar_temperatura_deseada()
             self._obtener_seteo_temperatura_deseada()
-        self._gestor_ambiente.indicar_temperatura_a_mostrar("ambiente")
+        self._gestor_ambiente.indicar_temperatura_a_mostrar(TEMP_AMBIENTE)
 
     def _mostrar_temperatura_deseada(self):
         """Muestra la temperatura deseada en el visualizador."""
-        self._gestor_ambiente.indicar_temperatura_a_mostrar("deseada")
+        self._gestor_ambiente.indicar_temperatura_a_mostrar(TEMP_DESEADA)
         self._gestor_ambiente.mostrar_temperatura()
 
     def _obtener_seteo_temperatura_deseada(self):

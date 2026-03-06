@@ -9,7 +9,7 @@ Casos de prueba del Plan de Pruebas:
 - AMB-005: Temperatura negativa -> temperatura_ambiente=-5.0
 """
 import pytest
-from entidades.ambiente import Ambiente
+from entidades.ambiente import Ambiente, TEMP_AMBIENTE, TEMP_DESEADA
 
 
 class TestAmbiente:
@@ -20,7 +20,7 @@ class TestAmbiente:
         """Al crear un Ambiente, los valores deben ser los por defecto"""
         assert ambiente_default.temperatura_ambiente is None  # Aún no leída del sensor
         assert ambiente_default.temperatura_deseada == 22  # Valor por defecto
-        assert ambiente_default.temperatura_a_mostrar == "ambiente"
+        assert ambiente_default.temperatura_a_mostrar == TEMP_AMBIENTE
 
     # AMB-002: Setear temperatura ambiente
     def test_setear_temperatura_ambiente(self, ambiente_default):
@@ -37,8 +37,8 @@ class TestAmbiente:
     # AMB-004: Cambiar temperatura a mostrar
     def test_cambiar_temperatura_a_mostrar(self, ambiente_default):
         """Se debe poder cambiar la temperatura a mostrar"""
-        ambiente_default.temperatura_a_mostrar = "deseada"
-        assert ambiente_default.temperatura_a_mostrar == "deseada"
+        ambiente_default.temperatura_a_mostrar = TEMP_DESEADA
+        assert ambiente_default.temperatura_a_mostrar == TEMP_DESEADA
 
     # AMB-005: Temperatura negativa
     def test_temperatura_negativa(self, ambiente_default):
@@ -76,8 +76,8 @@ class TestAmbienteParametrizado:
         assert ambiente_default.temperatura_deseada == temperatura
 
     @pytest.mark.parametrize("modo", [
-        "ambiente",
-        "deseada",
+        TEMP_AMBIENTE,
+        TEMP_DESEADA,
     ])
     def test_temperatura_a_mostrar_acepta_modos_validos(self, ambiente_default, modo):
         """La temperatura a mostrar debe aceptar los modos validos"""
@@ -92,10 +92,10 @@ class TestAmbienteRepr:
         """El __repr__ debe mostrar el formato correcto"""
         ambiente_default.temperatura_ambiente = 25
         ambiente_default.temperatura_deseada = 22
-        ambiente_default.temperatura_a_mostrar = "ambiente"
+        ambiente_default.temperatura_a_mostrar = TEMP_AMBIENTE
 
         repr_str = repr(ambiente_default)
 
         assert "temperatura_ambiente=25" in repr_str
         assert "temperatura_deseada=22" in repr_str
-        assert "temperatura_a_mostrar='ambiente'" in repr_str
+        assert "temperatura_a_mostrar='{}'".format(TEMP_AMBIENTE) in repr_str

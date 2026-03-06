@@ -1,0 +1,22 @@
+{
+  "reporte": "codeguard — TKT-11",
+  "fecha": "2026-03-06",
+  "herramienta": "codeguard",
+  "version": "0.2.0",
+  "ticket": "TKT-11",
+  "modulos": ["entidades", "gestores_entidades", "servicios_aplicacion", "agentes_sensores"],
+  "resumen": {
+    "errores": 0,
+    "advertencias": 0,
+    "bloquea_pr": false
+  },
+  "archivos_modificados": [
+    "entidades/ambiente.py",
+    "gestores_entidades/gestor_ambiente.py",
+    "servicios_aplicacion/selector_entrada.py",
+    "agentes_sensores/proxy_selector_temperatura.py",
+    "Test/unit/entidades/test_ambiente.py",
+    "Test/integration/gestores/test_gestor_ambiente.py"
+  ],
+  "nota": "TKT-11: Constantes TEMP_AMBIENTE='ambiente' y TEMP_DESEADA='deseada' definidas en entidades/ambiente.py. Todos los call sites de producción y tests actualizados para usar las constantes. No quedan string literals fuera de la definición."
+}

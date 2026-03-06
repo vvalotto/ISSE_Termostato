@@ -1,0 +1,13 @@
+{
+  "reporte": "codeguard — TKT-14",
+  "fecha": "2026-03-06",
+  "ticket": "TKT-14",
+  "tipo": "corrección menor",
+  "resumen": {
+    "errores": 0,
+    "advertencias": 0,
+    "bloquea_pr": false
+  },
+  "archivos_modificados": ["ejecutar.py"],
+  "nota": "TKT-14: Agregado newline final en ejecutar.py. Corrige pylint C0304 (missing-final-newline). Convención POSIX y PEP 8."
+}

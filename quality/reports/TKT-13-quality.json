@@ -1,0 +1,13 @@
+{
+  "reporte": "limpieza — TKT-13",
+  "fecha": "2026-03-06",
+  "ticket": "TKT-13",
+  "tipo": "limpieza estructural",
+  "resumen": {
+    "errores": 0,
+    "advertencias": 0,
+    "bloquea_pr": false
+  },
+  "archivos_eliminados": ["Test/hal/test_hal_adc.py", "Test/hal/__init__.py"],
+  "nota": "TKT-13: Eliminado Test/hal/ porque el módulo hal/ no existe en producción. El test referenciaba HAL_ADC_Simulado y HAL_ADC_Mock de un módulo que no existe. Decisión: eliminar el test huérfano."
+}
