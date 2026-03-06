@@ -146,6 +146,25 @@ codeguard <modulo>          # ej: codeguard configurador
 codeguard <modulo> --fix    # con corrección automática
 ```
 
+**Reporte obligatorio:** el resultado de cada ejecución de quality gates debe persistirse en disco, independientemente de la herramienta usada. Guardar en `quality/reports/TKT-XX-quality.json` con el siguiente formato mínimo:
+
+```json
+{
+  "us_id": "TKT-01",
+  "fecha": "YYYY-MM-DD",
+  "herramienta": "codeguard",
+  "modulos": ["configurador"],
+  "errores": 0,
+  "advertencias": 0,
+  "informativos": 33,
+  "hallazgos": []
+}
+```
+
+Si la herramienta soporta salida JSON (`codeguard --format json`), usarla. Si no, generar el archivo manualmente con los datos del output. Crear el directorio `quality/reports/` si no existe.
+
+Ref: vvalotto/claude-dev-kit#36
+
 ### designreviewer — por PR de fase
 Gate obligatorio antes de crear el PR de cierre de cada fase de mejoras.
 Analiza las capas afectadas por los tickets de esa fase.
@@ -155,6 +174,19 @@ designreviewer <modulo>     # ej: designreviewer entidades agentes_sensores
 ```
 
 El PR **no se crea** hasta que designreviewer no reporte 0 issues críticos.
+
+## Gestión de Tickets de Mejora
+
+Los tickets del plan de mejoras tienen correspondencia directa con **GitHub Issues**:
+
+- `docs/Plan/MEJORAS.md` — descripción detallada de cada ticket
+- `docs/Plan/BITACORA.md` — estado actual de cada ticket (columna `#Issue` con el número de issue)
+- GitHub Issues `#17`–`#35` — fuente oficial de estado; cerrar el issue al completar cada ticket
+
+**Al completar un ticket:**
+1. Actualizar `BITACORA.md`: estado → `Hecho`
+2. Cerrar el GitHub Issue con `gh issue close <N> --comment "<resumen>"`
+3. Hacer commit referenciando el issue (`Closes #N`)
 
 ## Workflow de PR por Fase de Mejoras
 
