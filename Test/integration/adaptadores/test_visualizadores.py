@@ -53,7 +53,7 @@ class TestVisualizadorTemperaturaSocket:
     def test_mostrar_temperatura_ambiente_envia_a_socket(self):
         """Debe enviar datos al socket"""
         mock_socket = Mock()
-        visualizador = VisualizadorTemperaturaSocket()
+        visualizador = VisualizadorTemperaturaSocket("localhost", 14001)
 
         with patch('socket.socket', return_value=mock_socket):
             visualizador.mostrar_temperatura_ambiente(25)
@@ -65,7 +65,7 @@ class TestVisualizadorTemperaturaSocket:
     def test_mostrar_temperatura_deseada_envia_a_socket(self):
         """Debe enviar datos al socket"""
         mock_socket = Mock()
-        visualizador = VisualizadorTemperaturaSocket()
+        visualizador = VisualizadorTemperaturaSocket("localhost", 14001)
 
         with patch('socket.socket', return_value=mock_socket):
             visualizador.mostrar_temperatura_deseada(22)
@@ -77,7 +77,7 @@ class TestVisualizadorTemperaturaSocket:
     def test_formato_mensaje_ambiente(self):
         """El mensaje debe tener el formato correcto"""
         mock_socket = Mock()
-        visualizador = VisualizadorTemperaturaSocket()
+        visualizador = VisualizadorTemperaturaSocket("localhost", 14001)
 
         with patch('socket.socket', return_value=mock_socket):
             visualizador.mostrar_temperatura_ambiente(25)
@@ -89,7 +89,7 @@ class TestVisualizadorTemperaturaSocket:
     def test_formato_mensaje_deseada(self):
         """El mensaje debe tener el formato correcto"""
         mock_socket = Mock()
-        visualizador = VisualizadorTemperaturaSocket()
+        visualizador = VisualizadorTemperaturaSocket("localhost", 14001)
 
         with patch('socket.socket', return_value=mock_socket):
             visualizador.mostrar_temperatura_deseada(22)
@@ -102,7 +102,7 @@ class TestVisualizadorTemperaturaSocket:
         """Cuando el socket no esta disponible, debe manejar el error"""
         mock_socket = Mock()
         mock_socket.connect.side_effect = ConnectionError("Connection refused")
-        visualizador = VisualizadorTemperaturaSocket()
+        visualizador = VisualizadorTemperaturaSocket("localhost", 14001)
 
         with patch('socket.socket', return_value=mock_socket):
             # No debe lanzar excepcion
@@ -182,7 +182,7 @@ class TestVisualizadoresIntegracion:
 
         # Socket (mock)
         mock_socket = Mock()
-        vis_socket = VisualizadorTemperaturaSocket()
+        vis_socket = VisualizadorTemperaturaSocket("localhost", 14001)
         with patch('socket.socket', return_value=mock_socket):
             vis_socket.mostrar_temperatura_ambiente(25)
             mock_socket.send.assert_called()
@@ -203,7 +203,7 @@ class TestVisualizadoresIntegracion:
 
         # Socket (mock)
         mock_socket = Mock()
-        vis_socket = VisualizadorTemperaturaSocket()
+        vis_socket = VisualizadorTemperaturaSocket("localhost", 14001)
         with patch('socket.socket', return_value=mock_socket):
             vis_socket.mostrar_temperatura_ambiente(25.5)
             mock_socket.send.assert_called()

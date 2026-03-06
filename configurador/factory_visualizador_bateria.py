@@ -3,6 +3,7 @@ Factory para crear visualizadores de nivel de bateria.
 
 Patron de Diseno:
     - Factory Method: Crea objetos sin especificar la clase exacta
+    - Registry: Permite registrar nuevas implementaciones sin modificar este archivo
 """
 from agentes_actuadores.visualizador_bateria import (
     AbsVisualizadorBateria,
@@ -10,28 +11,22 @@ from agentes_actuadores.visualizador_bateria import (
     VisualizadorBateriaSocket,
     VisualizadorBateriaApi
 )
+from configurador.registry_factory import RegistryFactory
 
 
 # pylint: disable=too-few-public-methods
-class FactoryVisualizadorBateria:
+class FactoryVisualizadorBateria(RegistryFactory):
     """Factory para crear instancias de visualizador de bateria."""
 
-    @staticmethod
-    def crear(tipo: str, api_url: str = None) -> AbsVisualizadorBateria:
-        """
-        Crea un visualizador de bateria segun el tipo especificado.
+    _registry = {}
 
-        Args:
-            tipo (str): Tipo de visualizador ("archivo", "socket" o "api").
-            api_url (str): URL de la API REST (requerido si tipo es "api").
 
-        Returns:
-            AbsVisualizadorBateria: Instancia del visualizador o None si tipo invalido.
-        """
-        if tipo == "archivo":
-            return VisualizadorBateria()
-        if tipo == "socket":
-            return VisualizadorBateriaSocket()
-        if tipo == "api":
-            return VisualizadorBateriaApi(api_url)
-        return None
+FactoryVisualizadorBateria.registrar("archivo", lambda **kw: VisualizadorBateria())
+FactoryVisualizadorBateria.registrar(
+    "socket",
+    lambda host=None, puerto=None, **kw: VisualizadorBateriaSocket(host, puerto)
+)
+FactoryVisualizadorBateria.registrar(
+    "api",
+    lambda api_url=None, **kw: VisualizadorBateriaApi(api_url)
+)

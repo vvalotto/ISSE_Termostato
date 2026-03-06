@@ -3,33 +3,25 @@ Factory para crear componentes de seteo de temperatura.
 
 Patron de Diseno:
     - Factory Method: Crea objetos sin especificar la clase exacta
+    - Registry: Permite registrar nuevas implementaciones sin modificar este archivo
 """
 from agentes_sensores.proxy_seteo_temperatura import (
     AbsSeteoTemperatura,
     SeteoTemperatura,
     SeteoTemperaturaSocket
 )
+from configurador.registry_factory import RegistryFactory
 
 
 # pylint: disable=too-few-public-methods
-class FactorySeteoTemperatura:
+class FactorySeteoTemperatura(RegistryFactory):
     """Factory para crear instancias de seteo de temperatura."""
 
-    @staticmethod
-    def crear(tipo: str, host: str = None, puerto: int = None) -> AbsSeteoTemperatura:
-        """
-        Crea un componente de seteo de temperatura segun el tipo especificado.
+    _registry = {}
 
-        Args:
-            tipo (str): Tipo de seteo ("consola" o "socket").
-            host (str): Direccion IP (requerido si tipo es "socket").
-            puerto (int): Puerto TCP (requerido si tipo es "socket").
 
-        Returns:
-            AbsSeteoTemperatura: Instancia del componente o None si tipo invalido.
-        """
-        if tipo == "consola":
-            return SeteoTemperatura()
-        if tipo == "socket":
-            return SeteoTemperaturaSocket(host, puerto)
-        return None
+FactorySeteoTemperatura.registrar("consola", lambda **kw: SeteoTemperatura())
+FactorySeteoTemperatura.registrar(
+    "socket",
+    lambda host=None, puerto=None, **kw: SeteoTemperaturaSocket(host, puerto)
+)

@@ -51,7 +51,23 @@ class VisualizadorBateriaSocket(AbsVisualizadorBateria):
 
     Patron de Diseno:
         - Proxy: Envia datos a visualizador remoto
+        - DIP: Recibe host y puerto via inyeccion de dependencias
+
+    Args:
+        host: Direccion IP del servidor de visualizacion.
+        puerto: Puerto TCP del servidor de visualizacion.
     """
+
+    def __init__(self, host, puerto):
+        """
+        Inicializa el visualizador con la configuracion de red.
+
+        Args:
+            host: Direccion IP del servidor de visualizacion.
+            puerto: Puerto TCP del servidor de visualizacion.
+        """
+        self._host = host
+        self._puerto = puerto
 
     def mostrar_tension(self, tension_bateria):
         """
@@ -62,9 +78,7 @@ class VisualizadorBateriaSocket(AbsVisualizadorBateria):
         """
         try:
             cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            direccion_servidor = ("localhost", 14000)
-            cliente.connect(direccion_servidor)
-
+            cliente.connect((self._host, self._puerto))
             cliente.send(bytes(str(tension_bateria).encode()))
             cliente.close()
         except ConnectionError:
@@ -79,9 +93,7 @@ class VisualizadorBateriaSocket(AbsVisualizadorBateria):
         """
         try:
             cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            direccion_servidor = ("localhost", 13005)
-            cliente.connect(direccion_servidor)
-
+            cliente.connect((self._host, self._puerto))
             cliente.send(bytes(str(indicador_bateria).encode()))
             cliente.close()
         except ConnectionError:

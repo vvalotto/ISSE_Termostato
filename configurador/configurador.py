@@ -24,6 +24,90 @@ from configurador.factory_seteo_temperatura import FactorySeteoTemperatura
 
 logger = logging.getLogger(__name__)
 
+_CLAVES_REQUERIDAS = [
+    "proxy_bateria", "proxy_sensor_temperatura", "climatizador",
+    "actuador_climatizador", "selector_temperatura", "seteo_temperatura",
+    "visualizador_bateria", "visualizador_temperatura",
+    "visualizador_climatizador"
+]
+
+_PUERTOS_DEFAULT = {
+    "bateria": 11000,
+    "temperatura": 12000,
+    "seteo_temperatura": 13000,
+    "visualizador_bateria": 14000,
+    "visualizador_temperatura": 14001,
+    "visualizador_climatizador": 14002
+}
+
+
+def _buscar_config(paths):
+    """Busca termostato.json en las rutas dadas. Lanza FileNotFoundError si no lo encuentra."""
+    for path in paths:
+        if os.path.exists(path):
+            return path
+    raise FileNotFoundError("ERROR: No se encontro termostato.json en: {0}".format(paths))
+
+
+def _cargar_json(config_file):
+    """Carga y parsea un archivo JSON. Lanza JSONDecodeError si el formato es invalido."""
+    try:
+        with open(config_file, "r", encoding="utf-8") as archivo:
+            return json.load(archivo)
+    except json.JSONDecodeError as e:
+        raise json.JSONDecodeError(
+            "ERROR: termostato.json tiene formato invalido: {0}".format(e),
+            e.doc,
+            e.pos
+        ) from e
+
+
+def _verificar_claves_requeridas(config):
+    """Verifica que el diccionario de config tenga todas las claves requeridas."""
+    for clave in _CLAVES_REQUERIDAS:
+        if clave not in config:
+            raise KeyError("ERROR: Falta la clave '{0}' en termostato.json".format(clave))
+
+
+def _verificar_configuracion_red(red):
+    """Valida la seccion 'red' de la configuracion y emite advertencias si faltan claves."""
+    if red is None:
+        logger.warning(
+            "No hay seccion 'red' en termostato.json. "
+            "Proxies socket usaran 'localhost' y puertos default. "
+            "Visualizadores API usaran 'http://localhost:5050'"
+        )
+        return
+    if "host_escucha" not in red:
+        logger.warning("Falta 'host_escucha' en configuracion, usando 'localhost'")
+    if "puertos" not in red:
+        logger.warning("Falta 'puertos' en configuracion, usando valores por defecto")
+    if "api_url" not in red:
+        logger.warning("Falta 'api_url' en configuracion, usando default")
+
+
+def _crear_componente_socket(factory, tipo, nombre_puerto):
+    """Crea un componente inyectando host/puerto si el tipo es 'socket'."""
+    if tipo == "socket":
+        return factory.crear(
+            tipo,
+            host=Configurador.obtener_host_escucha(),
+            puerto=Configurador.obtener_puerto(nombre_puerto)
+        )
+    return factory.crear(tipo)
+
+
+def _crear_visualizador(factory, tipo, nombre_puerto):
+    """Crea un visualizador con soporte para tipos 'socket', 'api' y 'archivo'."""
+    if tipo == "socket":
+        return factory.crear(
+            tipo,
+            host=Configurador.obtener_host_escucha(),
+            puerto=Configurador.obtener_puerto(nombre_puerto)
+        )
+    api_url = Configurador.obtener_api_url() if tipo == "api" else None
+    return factory.crear(tipo, api_url=api_url)
+
 
 # pylint: disable=unsubscriptable-object,unsupported-membership-test
 class Configurador:
@@ -62,49 +146,20 @@ class Configurador:
             "/etc/termostato/termostato.json",
             os.path.join(os.path.dirname(__file__), "termostato.json"),
         ]
-
-        config_file = None
-        for path in config_paths:
-            if os.path.exists(path):
-                config_file = path
-                break
-
-        if config_file is None:
-            raise FileNotFoundError(
-                "ERROR: No se encontro termostato.json en: {0}".format(config_paths)
-            )
-
-        try:
-            with open(config_file, "r", encoding="utf-8") as termostato_config:
-                Configurador.configuracion_termostato = json.load(termostato_config)
-        except json.JSONDecodeError as e:
-            raise json.JSONDecodeError(
-                "ERROR: termostato.json tiene formato invalido: {0}".format(e),
-                e.doc,
-                e.pos
-            ) from e
-
+        Configurador.configuracion_termostato = _cargar_json(_buscar_config(config_paths))
         Configurador._validar_configuracion()
 
     @staticmethod
     def configurar_proxy_bateria():
         """Crea y retorna el proxy de bateria segun configuracion."""
         tipo = Configurador.configuracion_termostato["proxy_bateria"]
-        if tipo == "socket":
-            host = Configurador.obtener_host_escucha()
-            puerto = Configurador.obtener_puerto("bateria")
-            return FactoryProxyBateria.crear(tipo, host, puerto)
-        return FactoryProxyBateria.crear(tipo)
+        return _crear_componente_socket(FactoryProxyBateria, tipo, "bateria")
 
     @staticmethod
     def configurar_proxy_temperatura():
         """Crea y retorna el proxy de sensor de temperatura segun configuracion."""
         tipo = Configurador.configuracion_termostato["proxy_sensor_temperatura"]
-        if tipo == "socket":
-            host = Configurador.obtener_host_escucha()
-            puerto = Configurador.obtener_puerto("temperatura")
-            return FactoryProxySensorTemperatura.crear(tipo, host, puerto)
-        return FactoryProxySensorTemperatura.crear(tipo)
+        return _crear_componente_socket(FactoryProxySensorTemperatura, tipo, "temperatura")
 
     @staticmethod
     def configurar_actuador_climatizador():
@@ -116,49 +171,37 @@ class Configurador:
     def configurar_visualizador_temperatura():
         """Crea y retorna el visualizador de temperatura segun configuracion."""
         tipo = Configurador.configuracion_termostato["visualizador_temperatura"]
-        api_url = Configurador.obtener_api_url() if tipo == "api" else None
-        return FactoryVisualizadorTemperatura.crear(tipo, api_url)
+        return _crear_visualizador(FactoryVisualizadorTemperatura, tipo, "visualizador_temperatura")
 
     @staticmethod
     def configurar_visualizador_bateria():
         """Crea y retorna el visualizador de bateria segun configuracion."""
         tipo = Configurador.configuracion_termostato["visualizador_bateria"]
-        api_url = Configurador.obtener_api_url() if tipo == "api" else None
-        return FactoryVisualizadorBateria.crear(tipo, api_url)
+        return _crear_visualizador(FactoryVisualizadorBateria, tipo, "visualizador_bateria")
 
     @staticmethod
     def configurar_visualizador_climatizador():
         """Crea y retorna el visualizador de climatizador segun configuracion."""
         tipo = Configurador.configuracion_termostato["visualizador_climatizador"]
-        api_url = Configurador.obtener_api_url() if tipo == "api" else None
-        return FactoryVisualizadorClimatizador.crear(tipo, api_url)
+        return _crear_visualizador(FactoryVisualizadorClimatizador, tipo, "visualizador_climatizador")
 
     @staticmethod
     def configurar_climatizador():
         """Crea y retorna el climatizador con histeresis segun configuracion."""
         tipo = Configurador.configuracion_termostato["climatizador"]
-        histeresis = Configurador.obtener_histeresis()
-        return FactoryClimatizador.crear(tipo, histeresis=histeresis)
+        return FactoryClimatizador.crear(tipo, histeresis=Configurador.obtener_histeresis())
 
     @staticmethod
     def configurar_selector_temperatura():
         """Crea y retorna el selector de temperatura segun configuracion."""
         tipo = Configurador.configuracion_termostato["selector_temperatura"]
-        if tipo == "socket":
-            host = Configurador.obtener_host_escucha()
-            puerto = Configurador.obtener_puerto("selector_temperatura")
-            return FactorySelectorTemperatura.crear(tipo, host, puerto)
-        return FactorySelectorTemperatura.crear(tipo)
+        return _crear_componente_socket(FactorySelectorTemperatura, tipo, "selector_temperatura")
 
     @staticmethod
     def configurar_seteo_temperatura():
         """Crea y retorna el componente de seteo de temperatura segun config."""
         tipo = Configurador.configuracion_termostato["seteo_temperatura"]
-        if tipo == "socket":
-            host = Configurador.obtener_host_escucha()
-            puerto = Configurador.obtener_puerto("seteo_temperatura")
-            return FactorySeteoTemperatura.crear(tipo, host, puerto)
-        return FactorySeteoTemperatura.crear(tipo)
+        return _crear_componente_socket(FactorySeteoTemperatura, tipo, "seteo_temperatura")
 
     @staticmethod
     def obtener_host_escucha():
@@ -169,14 +212,9 @@ class Configurador:
     @staticmethod
     def obtener_puerto(nombre_sensor):
         """Retorna el puerto para un sensor especifico."""
-        puertos_default = {
-            "bateria": 11000,
-            "temperatura": 12000,
-            "seteo_temperatura": 13000
-        }
         config = Configurador.configuracion_termostato
-        puertos = config.get("red", {}).get("puertos", puertos_default)
-        return puertos.get(nombre_sensor, puertos_default.get(nombre_sensor))
+        puertos = config.get("red", {}).get("puertos", _PUERTOS_DEFAULT)
+        return puertos.get(nombre_sensor, _PUERTOS_DEFAULT.get(nombre_sensor))
 
     @staticmethod
     def obtener_api_url():
@@ -223,29 +261,5 @@ class Configurador:
             KeyError: Si falta alguna clave requerida.
         """
         config = Configurador.configuracion_termostato
-
-        claves_requeridas = [
-            "proxy_bateria", "proxy_sensor_temperatura", "climatizador",
-            "actuador_climatizador", "selector_temperatura", "seteo_temperatura",
-            "visualizador_bateria", "visualizador_temperatura",
-            "visualizador_climatizador"
-        ]
-
-        for clave in claves_requeridas:
-            if clave not in config:
-                raise KeyError("ERROR: Falta la clave '{0}' en termostato.json".format(clave))
-
-        if "red" in config:
-            red = config["red"]
-            if "host_escucha" not in red:
-                logger.warning("Falta 'host_escucha' en configuracion, usando 'localhost'")
-            if "puertos" not in red:
-                logger.warning("Falta 'puertos' en configuracion, usando valores por defecto")
-            if "api_url" not in red:
-                logger.warning("Falta 'api_url' en configuracion, usando default")
-        else:
-            logger.warning(
-                "No hay seccion 'red' en termostato.json. "
-                "Proxies socket usaran 'localhost' y puertos default. "
-                "Visualizadores API usaran 'http://localhost:5050'"
-            )
+        _verificar_claves_requeridas(config)
+        _verificar_configuracion_red(config.get("red"))

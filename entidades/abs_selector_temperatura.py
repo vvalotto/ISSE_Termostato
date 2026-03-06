@@ -11,7 +11,6 @@ from abc import ABCMeta, abstractmethod
 class AbsSelectorTemperatura(metaclass=ABCMeta):
     """Interfaz abstracta para selector de modo de temperatura."""
 
-    @staticmethod
     @abstractmethod
-    def obtener_selector():
+    def obtener_selector(self):
         """Obtiene el modo actual: 'ambiente' o 'deseada'."""

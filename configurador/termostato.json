@@ -1,32 +1,32 @@
 {
-  "proxy_bateria" : "socket",
-  "proxy_sensor_temperatura" : "socket",
-  "climatizador" : "climatizador",
+  "proxy_bateria": "socket",
+  "proxy_sensor_temperatura": "socket",
+  "climatizador": "climatizador",
   "actuador_climatizador": "general",
   "selector_temperatura": "socket",
-  "seteo_temperatura" : "socket",
-  "visualizador_bateria" : "api",
-  "visualizador_temperatura" : "api",
-  "visualizador_climatizador" : "api",
-
+  "seteo_temperatura": "socket",
+  "visualizador_bateria": "api",
+  "visualizador_temperatura": "api",
+  "visualizador_climatizador": "api",
   "bateria": {
     "carga_maxima": 5.0,
     "umbral_carga_baja": 0.95
   },
-
   "ambiente": {
     "histeresis": 2.0,
     "temperatura_inicial": 24.0,
     "incremento_ajuste": 1.0
   },
-
   "red": {
     "host_escucha": "0.0.0.0",
     "puertos": {
       "bateria": 11000,
       "temperatura": 12000,
       "seteo_temperatura": 13000,
-      "selector_temperatura": 14000
+      "selector_temperatura": 14000,
+      "visualizador_bateria": 14000,
+      "visualizador_temperatura": 14001,
+      "visualizador_climatizador": 14002
     },
     "api_url": "https://app-termostato-1090421346746.us-central1.run.app"
   }

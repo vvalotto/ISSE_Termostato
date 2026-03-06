@@ -3,7 +3,7 @@
 Archivo de trabajo para seguimiento del progreso de mejoras.
 El sistema de tracking oficial es **GitHub Issues** (referenciado en columna `#Issue`).
 
-**Actualización:** 2026-03-05
+**Actualización:** 2026-03-06
 
 ---
 
@@ -16,7 +16,7 @@ El sistema de tracking oficial es **GitHub Issues** (referenciado en columna `#I
 | 3 | Arquitectura de sockets | TKT-06, TKT-07 | 2/2 |
 | 4 | Organización estructural | TKT-08, TKT-09 | 2/2 |
 | 5 | Refinamiento | TKT-10, TKT-11, TKT-12, TKT-13, TKT-14 | 5/5 |
-| 6 | SOLID: Cross-cutting concerns | TKT-15, TKT-16, TKT-17, TKT-18, TKT-19 | 0/5 |
+| 6 | SOLID: Cross-cutting concerns | TKT-15, TKT-16, TKT-17, TKT-18, TKT-19 | 5/5 |
 
 ---
 
@@ -38,11 +38,11 @@ El sistema de tracking oficial es **GitHub Issues** (referenciado en columna `#I
 | TKT-12 | Documentar o implementar mostrar_indicador() | 5 | 4 | Bajo | Bajo | — | #28 | Hecho |
 | TKT-13 | Resolver test HAL huérfano | 5 | 4 | Bajo | Bajo | — | #29 | Hecho |
 | TKT-14 | Newline final en ejecutar.py | 5 | 4 | Bajo | Bajo | TKT-04 | #30 | Hecho |
-| TKT-15 | Extraer Registrador/Auditor como dependencias inyectadas | 6 | 2 | Alto | Medio | — | #31 | Backlog |
-| TKT-16 | Quitar herencia de AbsRegistrador en SelectorTemperaturaArchivo | 6 | 3 | Medio | Bajo | TKT-15 | #32 | Backlog |
-| TKT-17 | Corregir @staticmethod en SelectorTemperaturaArchivo | 6 | 3 | Medio | Bajo | TKT-16 | #33 | Backlog |
-| TKT-18 | Inyectar host/puerto en visualizadores socket | 6 | 3 | Medio | Bajo | — | #34 | Backlog |
-| TKT-19 | Registry Pattern en factories (OCP) | 6 | 4 | Bajo | Alto | — | #35 | Backlog |
+| TKT-15 | Extraer Registrador/Auditor como dependencias inyectadas | 6 | 2 | Alto | Medio | — | #31 | Hecho |
+| TKT-16 | Quitar herencia de AbsRegistrador en SelectorTemperaturaArchivo | 6 | 3 | Medio | Bajo | TKT-15 | #32 | Hecho |
+| TKT-17 | Corregir @staticmethod en SelectorTemperaturaArchivo | 6 | 3 | Medio | Bajo | TKT-16 | #33 | Hecho |
+| TKT-18 | Inyectar host/puerto en visualizadores socket | 6 | 3 | Medio | Bajo | — | #34 | Hecho |
+| TKT-19 | Registry Pattern en factories (OCP) | 6 | 4 | Bajo | Alto | — | #35 | Hecho |
 
 **Estados posibles:** `Backlog` → `Listo` → `En curso` → `En revisión` → `Hecho`
 
@@ -75,3 +75,10 @@ El sistema de tracking oficial es **GitHub Issues** (referenciado en columna `#I
 - TKT-12: Documentar mostrar_indicador() — **Hecho**. DoD ya estaba cumplido: el método tenía docstring y comentario. Sin cambios adicionales.
 - TKT-13: Resolver test HAL huérfano — **Hecho**. `Test/hal/` eliminado (módulo `hal/` no existe en producción).
 - TKT-14: Newline final en ejecutar.py — **Hecho**. Newline agregado. Corrige pylint C0304.
+
+### 2026-03-06 (Fase 6)
+- TKT-15: Extraer Registrador/Auditor como dependencias inyectadas — **Hecho**. Implementadas `RegistradorArchivo` y `AuditorArchivo` en `registrador/registrador.py`. `ActuadorClimatizadorGeneral` recibe ambas vía DI; eliminadas herencias de AbsRegistrador/AbsAuditor. Factory actualizado. codeguard: 0 errores.
+- TKT-16: Quitar herencia de AbsRegistrador en SelectorTemperaturaArchivo — **Hecho**. Eliminada herencia de AbsRegistrador en SelectorTemperaturaArchivo; logging directo via logger. codeguard: 0 errores.
+- TKT-17: Corregir @staticmethod en SelectorTemperaturaArchivo — **Hecho**. `obtener_selector` convertido a método de instancia en implementaciones y en la interfaz abstracta. codeguard: 0 errores.
+- TKT-18: Inyectar host/puerto en visualizadores socket — **Hecho**. `VisualizadorBateriaSocket`, `VisualizadorTemperaturaSocket` y `VisualizadorClimatizadorSocket` reciben `host`/`puerto` vía `__init__`. Factories y `configurador.py` actualizados. Tests de integración corregidos. codeguard: 0 errores.
+- TKT-19: Registry Pattern en factories (OCP) — **Hecho**. `RegistryFactory` base en `configurador/registry_factory.py`. Las 9 factories heredan de ella; tipos registrados con `registrar()` en módulo nivel. Agregar nuevo tipo solo requiere llamar `Factory.registrar()` sin modificar archivos existentes. codeguard: 0 errores.
