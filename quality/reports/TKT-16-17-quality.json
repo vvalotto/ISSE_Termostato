@@ -1,0 +1,22 @@
+{
+  "reporte": "codeguard — TKT-16 + TKT-17",
+  "fecha": "2026-03-06",
+  "herramienta": "codeguard",
+  "version": "0.2.0",
+  "tickets": ["TKT-16", "TKT-17"],
+  "modulos": ["agentes_sensores", "entidades"],
+  "resumen": {
+    "errores": 0,
+    "advertencias": 2,
+    "bloquea_pr": false,
+    "nota": "2 warnings E128 pre-existentes en agentes_sensores. entidades: 0 warnings."
+  },
+  "archivos_modificados": [
+    "agentes_sensores/proxy_selector_temperatura.py",
+    "entidades/abs_selector_temperatura.py"
+  ],
+  "cambios": [
+    "TKT-16: SelectorTemperaturaArchivo hereda solo AbsSelectorTemperatura; eliminada herencia AbsRegistrador; registro de errores via logger",
+    "TKT-17: obtener_selector() cambiado de @staticmethod a método de instancia en SelectorTemperaturaArchivo y AbsSelectorTemperatura"
+  ]
+}

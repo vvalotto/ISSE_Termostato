@@ -11,11 +11,9 @@ Patron de Diseno:
 # pylint: disable=duplicate-code
 # El codigo de socket y registro es similar entre proxies (patron comun aceptable)
 
-import datetime
 import logging
 import socket
 
-from registrador.registrador import AbsRegistrador
 from entidades.abs_selector_temperatura import AbsSelectorTemperatura
 from entidades.ambiente import TEMP_AMBIENTE
 
@@ -23,16 +21,22 @@ from entidades.ambiente import TEMP_AMBIENTE
 logger = logging.getLogger(__name__)
 
 
-class SelectorTemperaturaArchivo(AbsSelectorTemperatura, AbsRegistrador):
+class SelectorTemperaturaArchivo(AbsSelectorTemperatura):
     """
     Selector de modo de temperatura desde archivo.
 
     Lee el modo de temperatura ('ambiente' o 'deseada') desde un archivo
-    local llamado 'tipo_temperatura'. Incluye registro de errores.
+    local llamado 'tipo_temperatura'.
+
+    TKT-16: Eliminada herencia de AbsRegistrador — el registro de errores
+    es un detalle de implementacion, no parte del contrato del selector.
+    Se usa logging directamente (ya disponible en el modulo).
+
+    TKT-17: obtener_selector() es metodo de instancia para ser intercambiable
+    con SelectorTemperaturaSocket sin que el cliente deba saber cual usa.
     """
 
-    @staticmethod
-    def obtener_selector():
+    def obtener_selector(self):
         """Obtiene el modo de temperatura desde archivo."""
         logger.debug("Intentando leer tipo de temperatura desde archivo 'tipo_temperatura'")
         try:
@@ -42,36 +46,8 @@ class SelectorTemperaturaArchivo(AbsSelectorTemperatura, AbsRegistrador):
         except IOError as exc:
             mensaje_error = "Error al leer el tipo de temperatura"
             logger.error("Error al leer archivo 'tipo_temperatura': %s", str(exc))
-            registro_error = SelectorTemperaturaArchivo._armar_registro_error(
-                SelectorTemperaturaArchivo.__name__,
-                SelectorTemperaturaArchivo.obtener_selector.__name__,
-                str(datetime.datetime.now()),
-                str(IOError),
-                mensaje_error)
-
-            SelectorTemperaturaArchivo.registrar_error(registro_error)
             raise IOError(mensaje_error) from exc
         return tipo_temperatura
-
-    @staticmethod
-    def _armar_registro_error(clase, metodo, fecha_hora, tipo_de_error, mensaje):
-        registro = ""
-        registro += "clase: " + clase + "\n"
-        registro += "metodo: " + metodo + "\n"
-        registro += "fecha_hora: " + fecha_hora + "\n"
-        registro += "tipo_de_error: " + tipo_de_error + "\n"
-        registro += "mensaje: " + mensaje + "\n"
-        registro += "-------------------------" + "\n" + "\n" + "\n"
-        return registro
-
-    @staticmethod
-    def registrar_error(registro):
-        """Registra un error en el archivo de log."""
-        try:
-            with open("registro_errores", "a", encoding="utf-8") as archivo_errores:
-                archivo_errores.write(registro)
-        except IOError as exc:
-            raise IOError("Error al escribir el archivo de errores") from exc
 
 
 class SelectorTemperaturaSocket(AbsSelectorTemperatura):
