@@ -9,6 +9,31 @@ FactoryProxyBateria:
 - FPB-003: tipo="invalido" -> None
 - FPB-004: tipo="" -> None
 
+FactoryProxySensorTemperatura:
+- FAC-001: tipo="archivo" -> ProxySensorTemperaturaArchivo
+- FAC-002: tipo="socket" -> ProxySensorTemperaturaSocket
+
+FactoryActuadorClimatizador:
+- FAC-003: tipo="general" -> ActuadorClimatizadorGeneral con registrador y auditor inyectados
+
+FactoryVisualizadorBateria:
+- FAC-004: tipo="archivo" -> VisualizadorBateria
+- FAC-005: tipo="socket" -> VisualizadorBateriaSocket
+- FAC-006: tipo="api"    -> VisualizadorBateriaApi
+
+FactoryVisualizadorClimatizador:
+- FAC-007: tipo="archivo" -> VisualizadorClimatizador
+- FAC-008: tipo="socket"  -> VisualizadorClimatizadorSocket
+- FAC-009: tipo="api"     -> VisualizadorClimatizadorApi
+
+FactorySelectorTemperatura:
+- FAC-010: tipo="archivo" -> SelectorTemperaturaArchivo
+- FAC-011: tipo="socket"  -> SelectorTemperaturaSocket
+
+FactorySeteoTemperatura:
+- FAC-012: tipo="consola" -> SeteoTemperatura
+- FAC-013: tipo="socket"  -> SeteoTemperaturaSocket
+
 FactoryClimatizador:
 - FCL-001: tipo="climatizador" -> Climatizador
 - FCL-002: tipo="calefactor" -> Calefactor
@@ -21,11 +46,38 @@ FactoryVisualizador*:
 - FVI-004: tipo="invalido" -> None
 """
 import pytest
+from unittest.mock import patch, Mock
 from configurador.factory_climatizador import FactoryClimatizador
 from configurador.factory_proxy_bateria import FactoryProxyBateria
 from configurador.factory_visualizador_temperatura import FactoryVisualizadorTemperatura
+from configurador.factory_sensor_temperatura import FactoryProxySensorTemperatura
+from configurador.factory_actuador_climatizador import FactoryActuadorClimatizador
+from configurador.factory_visualizador_bateria import FactoryVisualizadorBateria
+from configurador.factory_visualizador_climatizador import FactoryVisualizadorClimatizador
+from configurador.factory_selector_temperatura import FactorySelectorTemperatura
+from configurador.factory_seteo_temperatura import FactorySeteoTemperatura
 from entidades.climatizador import Climatizador, Calefactor
 from agentes_sensores.proxy_bateria import ProxyBateriaArchivo, ProxyBateriaSocket
+from agentes_sensores.proxy_sensor_temperatura import (
+    ProxySensorTemperaturaArchivo,
+    ProxySensorTemperaturaSocket,
+)
+from agentes_sensores.proxy_selector_temperatura import (
+    SelectorTemperaturaArchivo,
+    SelectorTemperaturaSocket,
+)
+from agentes_sensores.proxy_seteo_temperatura import SeteoTemperatura, SeteoTemperaturaSocket
+from agentes_actuadores.actuador_climatizador import ActuadorClimatizadorGeneral
+from agentes_actuadores.visualizador_bateria import (
+    VisualizadorBateria,
+    VisualizadorBateriaSocket,
+    VisualizadorBateriaApi,
+)
+from agentes_actuadores.visualizador_climatizador import (
+    VisualizadorClimatizador,
+    VisualizadorClimatizadorSocket,
+    VisualizadorClimatizadorApi,
+)
 from agentes_actuadores.visualizador_temperatura import (
     VisualizadorTemperatura,
     VisualizadorTemperaturaSocket,
@@ -159,3 +211,106 @@ class TestFactoryVisualizadorTemperatura:
         """Verifica creacion de tipos validos"""
         resultado = FactoryVisualizadorTemperatura.crear(tipo)
         assert isinstance(resultado, clase_esperada)
+
+
+class TestFactoryProxySensorTemperatura:
+
+    # FAC-001
+    def test_crear_tipo_archivo(self):
+        """tipo 'archivo' retorna ProxySensorTemperaturaArchivo"""
+        resultado = FactoryProxySensorTemperatura.crear("archivo")
+        assert isinstance(resultado, ProxySensorTemperaturaArchivo)
+
+    # FAC-002
+    def test_crear_tipo_socket(self):
+        """tipo 'socket' retorna ProxySensorTemperaturaSocket con host/puerto"""
+        resultado = FactoryProxySensorTemperatura.crear("socket", host="0.0.0.0", puerto=12000)
+        assert isinstance(resultado, ProxySensorTemperaturaSocket)
+
+
+class TestFactoryActuadorClimatizador:
+
+    # FAC-003
+    def test_crear_tipo_general_con_di(self):
+        """tipo 'general' retorna ActuadorClimatizadorGeneral con registrador y auditor inyectados"""
+        resultado = FactoryActuadorClimatizador.crear("general")
+        assert isinstance(resultado, ActuadorClimatizadorGeneral)
+        assert resultado._registrador is not None
+        assert resultado._auditor is not None
+
+
+class TestFactoryVisualizadorBateria:
+
+    # FAC-004
+    def test_crear_tipo_archivo(self):
+        """tipo 'archivo' retorna VisualizadorBateria"""
+        resultado = FactoryVisualizadorBateria.crear("archivo")
+        assert isinstance(resultado, VisualizadorBateria)
+
+    # FAC-005
+    def test_crear_tipo_socket(self):
+        """tipo 'socket' retorna VisualizadorBateriaSocket"""
+        resultado = FactoryVisualizadorBateria.crear("socket", host="0.0.0.0", puerto=11000)
+        assert isinstance(resultado, VisualizadorBateriaSocket)
+
+    # FAC-006
+    def test_crear_tipo_api(self):
+        """tipo 'api' retorna VisualizadorBateriaApi"""
+        resultado = FactoryVisualizadorBateria.crear("api", api_url="http://localhost/api")
+        assert isinstance(resultado, VisualizadorBateriaApi)
+
+
+class TestFactoryVisualizadorClimatizador:
+
+    # FAC-007
+    def test_crear_tipo_archivo(self):
+        """tipo 'archivo' retorna VisualizadorClimatizador"""
+        resultado = FactoryVisualizadorClimatizador.crear("archivo")
+        assert isinstance(resultado, VisualizadorClimatizador)
+
+    # FAC-008
+    def test_crear_tipo_socket(self):
+        """tipo 'socket' retorna VisualizadorClimatizadorSocket"""
+        resultado = FactoryVisualizadorClimatizador.crear("socket", host="0.0.0.0", puerto=14002)
+        assert isinstance(resultado, VisualizadorClimatizadorSocket)
+
+    # FAC-009
+    def test_crear_tipo_api(self):
+        """tipo 'api' retorna VisualizadorClimatizadorApi"""
+        resultado = FactoryVisualizadorClimatizador.crear("api", api_url="http://localhost/api")
+        assert isinstance(resultado, VisualizadorClimatizadorApi)
+
+
+class TestFactorySelectorTemperatura:
+
+    # FAC-010
+    def test_crear_tipo_archivo(self):
+        """tipo 'archivo' retorna SelectorTemperaturaArchivo"""
+        resultado = FactorySelectorTemperatura.crear("archivo")
+        assert isinstance(resultado, SelectorTemperaturaArchivo)
+
+    # FAC-011
+    def test_crear_tipo_socket(self):
+        """tipo 'socket' retorna SelectorTemperaturaSocket"""
+        mock_srv = Mock()
+        mock_srv.accept.side_effect = __import__("socket").timeout
+        with patch("socket.socket", return_value=mock_srv):
+            resultado = FactorySelectorTemperatura.crear("socket", host="0.0.0.0", puerto=14000)
+        assert isinstance(resultado, SelectorTemperaturaSocket)
+
+
+class TestFactorySeteoTemperatura:
+
+    # FAC-012
+    def test_crear_tipo_consola(self):
+        """tipo 'consola' retorna SeteoTemperatura"""
+        resultado = FactorySeteoTemperatura.crear("consola")
+        assert isinstance(resultado, SeteoTemperatura)
+
+    # FAC-013
+    def test_crear_tipo_socket(self):
+        """tipo 'socket' retorna SeteoTemperaturaSocket"""
+        mock_srv = Mock()
+        with patch("socket.socket", return_value=mock_srv):
+            resultado = FactorySeteoTemperatura.crear("socket", host="0.0.0.0", puerto=13000)
+        assert isinstance(resultado, SeteoTemperaturaSocket)
