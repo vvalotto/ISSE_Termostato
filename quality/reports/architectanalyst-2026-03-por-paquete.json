@@ -1,0 +1,140 @@
+{
+  "sprint_id": "2026-03-final",
+  "fecha": "2026-03-07",
+  "D_solucion": 0.439,
+  "paquetes": {
+    "entidades": {
+      "clases_totales": 13,
+      "clases_abstractas": 9,
+      "A": 0.692,
+      "Ca": 5,
+      "Ce": 1,
+      "afferent_from": [
+        "agentes_actuadores",
+        "agentes_sensores",
+        "configurador",
+        "gestores_entidades",
+        "servicios_aplicacion"
+      ],
+      "efferent_to": [
+        "servicios_dominio"
+      ],
+      "I": 0.167,
+      "D": 0.141,
+      "zona": "OK"
+    },
+    "servicios_dominio": {
+      "clases_totales": 1,
+      "clases_abstractas": 0,
+      "A": 0.0,
+      "Ca": 1,
+      "Ce": 0,
+      "afferent_from": [
+        "entidades"
+      ],
+      "efferent_to": [],
+      "I": 0.0,
+      "D": 1.0,
+      "zona": "Pain"
+    },
+    "gestores_entidades": {
+      "clases_totales": 3,
+      "clases_abstractas": 0,
+      "A": 0.0,
+      "Ca": 1,
+      "Ce": 1,
+      "afferent_from": [
+        "servicios_aplicacion"
+      ],
+      "efferent_to": [
+        "entidades"
+      ],
+      "I": 0.5,
+      "D": 0.5,
+      "zona": "OK"
+    },
+    "servicios_aplicacion": {
+      "clases_totales": 6,
+      "clases_abstractas": 0,
+      "A": 0.0,
+      "Ca": 0,
+      "Ce": 4,
+      "afferent_from": [],
+      "efferent_to": [
+        "agentes_actuadores",
+        "configurador",
+        "entidades",
+        "gestores_entidades"
+      ],
+      "I": 1.0,
+      "D": 0.0,
+      "zona": "OK"
+    },
+    "agentes_sensores": {
+      "clases_totales": 8,
+      "clases_abstractas": 0,
+      "A": 0.0,
+      "Ca": 1,
+      "Ce": 1,
+      "afferent_from": [
+        "configurador"
+      ],
+      "efferent_to": [
+        "entidades"
+      ],
+      "I": 0.5,
+      "D": 0.5,
+      "zona": "OK"
+    },
+    "agentes_actuadores": {
+      "clases_totales": 11,
+      "clases_abstractas": 0,
+      "A": 0.0,
+      "Ca": 2,
+      "Ce": 1,
+      "afferent_from": [
+        "configurador",
+        "servicios_aplicacion"
+      ],
+      "efferent_to": [
+        "entidades"
+      ],
+      "I": 0.333,
+      "D": 0.667,
+      "zona": "Pain"
+    },
+    "configurador": {
+      "clases_totales": 11,
+      "clases_abstractas": 0,
+      "A": 0.0,
+      "Ca": 1,
+      "Ce": 4,
+      "afferent_from": [
+        "servicios_aplicacion"
+      ],
+      "efferent_to": [
+        "agentes_actuadores",
+        "agentes_sensores",
+        "entidades",
+        "registrador"
+      ],
+      "I": 0.8,
+      "D": 0.2,
+      "zona": "OK"
+    },
+    "registrador": {
+      "clases_totales": 4,
+      "clases_abstractas": 2,
+      "A": 0.5,
+      "Ca": 1,
+      "Ce": 0,
+      "afferent_from": [
+        "configurador"
+      ],
+      "efferent_to": [],
+      "I": 0.0,
+      "D": 0.5,
+      "zona": "OK"
+    }
+  }
+}

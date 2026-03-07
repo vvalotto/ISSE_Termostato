@@ -89,7 +89,14 @@ exclude_patterns = [
 ]
 
 [tool.architectanalyst.layers]
-domain = ["entidades", "servicios_dominio"]
-application = ["gestores_entidades", "servicios_aplicacion"]
-adapters = ["agentes_sensores", "agentes_actuadores", "configurador", "registrador"]
-infrastructure = ["actores_externos"]
+# L0 - Entities: dependencia horizontal entre si permitida
+entidades = ["servicios_dominio"]
+servicios_dominio = []
+# L1 - Use Cases: solo dependen de L0
+gestores_entidades = ["entidades", "servicios_dominio"]
+servicios_aplicacion = ["entidades", "servicios_dominio", "gestores_entidades"]
+# L2 - Adapters: dependen de L0 y L1, y entre si (horizontal)
+agentes_sensores = ["entidades", "servicios_dominio"]
+agentes_actuadores = ["entidades", "servicios_dominio"]
+configurador = ["entidades", "servicios_dominio", "agentes_sensores", "agentes_actuadores", "registrador"]
+registrador = []
