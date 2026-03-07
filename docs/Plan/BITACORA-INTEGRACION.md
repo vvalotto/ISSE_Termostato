@@ -25,10 +25,10 @@ Quedan sin tests de integración los módulos de orquestación de `servicios_apl
 
 | ID | Descripción | Tests | Estado |
 |----|-------------|-------|--------|
-| INT-1 | `OperadorSecuencial.ejecutar()` — ciclo principal con mocks | 5 | Pendiente |
-| INT-2 | `OperadorParalelo` — constructor, threads y métodos individuales | 8 | Pendiente |
-| INT-3 | `Lanzador` — Composition Root con `Configurador` mockeado | 4 | Pendiente |
-| INT-4 | `Registrador` + `ActuadorClimatizador` — integración cruzada | 3 | Pendiente |
+| INT-1 | `OperadorSecuencial.ejecutar()` — ciclo principal con mocks | 5 | Hecho |
+| INT-2 | `OperadorParalelo` — constructor, threads y métodos individuales | 8 | Hecho |
+| INT-3 | `Lanzador` — Composition Root con `Configurador` mockeado | 4 | Hecho |
+| INT-4 | `Registrador` + `ActuadorClimatizador` — integración cruzada | 3 | Hecho |
 
 **Total:** 20 tests nuevos
 
@@ -189,3 +189,9 @@ INT-1 → INT-2 → INT-4 → INT-3
 
 ### 2026-03-07
 - Creación de la bitácora. 4 tareas, 20 tests en estado `Pendiente`.
+- Implementación completa de las 4 tareas en branch `testing/integracion-servicios`.
+  - INT-1: 5 tests OPS-INT-001..005 — OperadorSecuencial.ejecutar()
+  - INT-2: 8 tests OPP-INT-001..008 — OperadorParalelo completo
+  - INT-3: 4 tests LNZ-INT-001..004 — Lanzador (Composition Root)
+  - INT-4: 3 tests REG-ACT-001..003 — Registrador + ActuadorClimatizador
+- Resultado: 298 tests pasando (20 nuevos tests de integración).
