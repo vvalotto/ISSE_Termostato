@@ -9,11 +9,22 @@ Casos de prueba del Plan de Pruebas:
 - VIS-005: API no disponible -> RequestException manejado
 """
 import pytest
+import requests
 from unittest.mock import Mock, patch, MagicMock
 from agentes_actuadores.visualizador_temperatura import (
     VisualizadorTemperatura,
     VisualizadorTemperaturaSocket,
     VisualizadorTemperaturaApi
+)
+from agentes_actuadores.visualizador_bateria import (
+    VisualizadorBateria,
+    VisualizadorBateriaSocket,
+    VisualizadorBateriaApi,
+)
+from agentes_actuadores.visualizador_climatizador import (
+    VisualizadorClimatizador,
+    VisualizadorClimatizadorSocket,
+    VisualizadorClimatizadorApi,
 )
 
 
@@ -213,3 +224,136 @@ class TestVisualizadoresIntegracion:
         with patch('requests.post') as mock_post:
             vis_api.mostrar_temperatura_ambiente(25.5)
             mock_post.assert_called()
+
+
+class TestVisualizadorBateriaConsola:
+
+    # VIS-B-001
+    def test_mostrar_tension_imprime_en_consola(self, capsys):
+        """mostrar_tension imprime el valor en consola"""
+        vis = VisualizadorBateria()
+        vis.mostrar_tension(4.2)
+        assert "4.2" in capsys.readouterr().out
+
+    # VIS-B-002
+    def test_mostrar_indicador_imprime_en_consola(self, capsys):
+        """mostrar_indicador imprime el valor en consola"""
+        vis = VisualizadorBateria()
+        vis.mostrar_indicador("NORMAL")
+        assert "NORMAL" in capsys.readouterr().out
+
+
+class TestVisualizadorBateriaSocket:
+
+    # VIS-B-003
+    def test_mostrar_tension_envia_al_socket(self):
+        """mostrar_tension envía los datos al socket"""
+        mock_socket = Mock()
+        vis = VisualizadorBateriaSocket("localhost", 11000)
+        with patch("socket.socket", return_value=mock_socket):
+            vis.mostrar_tension(4.2)
+        mock_socket.connect.assert_called_once_with(("localhost", 11000))
+        mock_socket.send.assert_called_once()
+        mock_socket.close.assert_called_once()
+
+    # VIS-B-004
+    def test_mostrar_indicador_envia_al_socket(self):
+        """mostrar_indicador envía los datos al socket"""
+        mock_socket = Mock()
+        vis = VisualizadorBateriaSocket("localhost", 11000)
+        with patch("socket.socket", return_value=mock_socket):
+            vis.mostrar_indicador("BAJA")
+        mock_socket.connect.assert_called_once_with(("localhost", 11000))
+        mock_socket.send.assert_called_once()
+
+    # VIS-C-004
+    def test_connection_error_no_propaga_excepcion(self):
+        """Cuando el socket falla, no propaga la excepcion"""
+        mock_socket = Mock()
+        mock_socket.connect.side_effect = ConnectionError("refused")
+        vis = VisualizadorBateriaSocket("localhost", 11000)
+        with patch("socket.socket", return_value=mock_socket):
+            vis.mostrar_tension(4.2)  # No debe lanzar excepcion
+
+
+class TestVisualizadorBateriaApi:
+
+    # VIS-B-005
+    def test_mostrar_tension_hace_post_a_api(self):
+        """mostrar_tension hace POST al endpoint correcto"""
+        vis = VisualizadorBateriaApi("http://localhost:5050")
+        with patch("requests.post") as mock_post:
+            vis.mostrar_tension(4.2)
+        mock_post.assert_called_once_with(
+            "http://localhost:5050/termostato/bateria/",
+            json={"bateria": 4.2},
+            timeout=5
+        )
+
+    # VIS-B-006
+    def test_mostrar_indicador_no_hace_post(self):
+        """mostrar_indicador es no-op en la implementacion API"""
+        vis = VisualizadorBateriaApi("http://localhost:5050")
+        with patch("requests.post") as mock_post:
+            vis.mostrar_indicador("NORMAL")
+        mock_post.assert_not_called()
+
+    # VIS-C-005
+    def test_request_exception_no_propaga_excepcion(self):
+        """Cuando la API falla, no propaga la excepcion"""
+        vis = VisualizadorBateriaApi("http://localhost:5050")
+        with patch("requests.post", side_effect=requests.RequestException("timeout")):
+            vis.mostrar_tension(4.2)  # No debe lanzar excepcion
+
+
+class TestVisualizadorClimatizadorConsola:
+
+    # VIS-C-001
+    def test_mostrar_estado_imprime_en_consola(self, capsys):
+        """mostrar_estado_climatizador imprime el estado en consola"""
+        vis = VisualizadorClimatizador()
+        vis.mostrar_estado_climatizador("calentando")
+        assert "calentando" in capsys.readouterr().out
+
+
+class TestVisualizadorClimatizadorSocket:
+
+    # VIS-C-002
+    def test_mostrar_estado_envia_al_socket(self):
+        """mostrar_estado_climatizador envía el estado al socket"""
+        mock_socket = Mock()
+        vis = VisualizadorClimatizadorSocket("localhost", 14002)
+        with patch("socket.socket", return_value=mock_socket):
+            vis.mostrar_estado_climatizador("apagado")
+        mock_socket.connect.assert_called_once_with(("localhost", 14002))
+        mock_socket.send.assert_called_once()
+        mock_socket.close.assert_called_once()
+
+    def test_connection_error_no_propaga_excepcion(self):
+        """Cuando el socket falla, no propaga la excepcion"""
+        mock_socket = Mock()
+        mock_socket.connect.side_effect = ConnectionError("refused")
+        vis = VisualizadorClimatizadorSocket("localhost", 14002)
+        with patch("socket.socket", return_value=mock_socket):
+            vis.mostrar_estado_climatizador("apagado")  # No debe lanzar excepcion
+
+
+class TestVisualizadorClimatizadorApi:
+
+    # VIS-C-003
+    def test_mostrar_estado_hace_post_a_api(self):
+        """mostrar_estado_climatizador hace POST al endpoint correcto"""
+        vis = VisualizadorClimatizadorApi("http://localhost:5050")
+        with patch("requests.post") as mock_post:
+            vis.mostrar_estado_climatizador("enfriando")
+        mock_post.assert_called_once_with(
+            "http://localhost:5050/termostato/estado_climatizador/",
+            json={"climatizador": "enfriando"},
+            timeout=5
+        )
+
+    def test_request_exception_no_propaga_excepcion(self):
+        """Cuando la API falla, no propaga la excepcion"""
+        vis = VisualizadorClimatizadorApi("http://localhost:5050")
+        with patch("requests.post", side_effect=requests.RequestException("timeout")):
+            vis.mostrar_estado_climatizador("apagado")  # No debe lanzar excepcion
