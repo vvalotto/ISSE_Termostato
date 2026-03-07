@@ -9,8 +9,15 @@ Casos de prueba del Plan de Pruebas:
 """
 import pytest
 import json
+import logging
 from unittest.mock import patch, mock_open
-from configurador.configurador import Configurador
+from configurador.configurador import (
+    Configurador,
+    _buscar_config,
+    _cargar_json,
+    _verificar_claves_requeridas,
+    _verificar_configuracion_red,
+)
 
 
 class TestConfiguradorCargarConfiguracion:
@@ -297,3 +304,100 @@ class TestConfiguradorMetodosRed:
 
         # Cleanup
         Configurador.configuracion_termostato = None
+
+
+class TestHelpersDeModulo:
+    """Tests para las funciones helper de modulo (CFG-001..005)"""
+
+    # CFG-001
+    def test_buscar_config_retorna_primera_ruta_existente(self):
+        """_buscar_config retorna la primera ruta donde os.path.exists es True"""
+        rutas = ["/no/existe", "/si/existe", "/tambien/existe"]
+        with patch("os.path.exists", side_effect=lambda p: p == "/si/existe"):
+            resultado = _buscar_config(rutas)
+        assert resultado == "/si/existe"
+
+    # CFG-002
+    def test_buscar_config_lanza_filenotfounderror_si_no_hay_ninguna(self):
+        """_buscar_config lanza FileNotFoundError si ninguna ruta existe"""
+        with patch("os.path.exists", return_value=False):
+            with pytest.raises(FileNotFoundError):
+                _buscar_config(["/a", "/b", "/c"])
+
+    # CFG-003
+    def test_cargar_json_invalido_lanza_jsondecodeerror(self):
+        """_cargar_json con JSON invalido lanza JSONDecodeError"""
+        with patch("builtins.open", mock_open(read_data="{ invalido }")):
+            with pytest.raises(json.JSONDecodeError):
+                _cargar_json("cualquier.json")
+
+    # CFG-004
+    def test_verificar_claves_requeridas_clave_faltante_lanza_keyerror(self):
+        """_verificar_claves_requeridas lanza KeyError si falta una clave"""
+        config_incompleta = {"proxy_bateria": "archivo"}
+        with pytest.raises(KeyError):
+            _verificar_claves_requeridas(config_incompleta)
+
+    # CFG-005
+    def test_verificar_configuracion_red_none_emite_warning(self, caplog):
+        """_verificar_configuracion_red con red=None emite logger.warning"""
+        with caplog.at_level(logging.WARNING, logger="configurador.configurador"):
+            _verificar_configuracion_red(None)
+        assert len(caplog.records) > 0
+        assert caplog.records[0].levelno == logging.WARNING
+
+
+class TestConfiguradorFactoriesFaltantes:
+    """Tests para los metodos factory no cubiertos previamente (CFG-006..010)"""
+
+    @pytest.fixture(autouse=True)
+    def setup_config_archivo(self):
+        """Setup: configuracion con tipo 'archivo'/'consola' para todos los componentes"""
+        Configurador.configuracion_termostato = {
+            "proxy_bateria": "archivo",
+            "proxy_sensor_temperatura": "archivo",
+            "actuador_climatizador": "general",
+            "visualizador_temperatura": "archivo",
+            "visualizador_bateria": "archivo",
+            "visualizador_climatizador": "archivo",
+            "climatizador": "climatizador",
+            "selector_temperatura": "archivo",
+            "seteo_temperatura": "consola",
+        }
+        yield
+        Configurador.configuracion_termostato = None
+
+    # CFG-006
+    def test_configurar_proxy_temperatura_retorna_proxy_correcto(self):
+        """configurar_proxy_temperatura retorna ProxySensorTemperaturaArchivo"""
+        from agentes_sensores.proxy_sensor_temperatura import ProxySensorTemperaturaArchivo
+        resultado = Configurador.configurar_proxy_temperatura()
+        assert isinstance(resultado, ProxySensorTemperaturaArchivo)
+
+    # CFG-007
+    def test_configurar_actuador_climatizador_retorna_actuador(self):
+        """configurar_actuador_climatizador retorna ActuadorClimatizadorGeneral con DI"""
+        from agentes_actuadores.actuador_climatizador import ActuadorClimatizadorGeneral
+        resultado = Configurador.configurar_actuador_climatizador()
+        assert isinstance(resultado, ActuadorClimatizadorGeneral)
+
+    # CFG-008
+    def test_configurar_visualizador_bateria_tipo_archivo(self):
+        """configurar_visualizador_bateria tipo 'archivo' retorna VisualizadorBateria"""
+        from agentes_actuadores.visualizador_bateria import VisualizadorBateria
+        resultado = Configurador.configurar_visualizador_bateria()
+        assert isinstance(resultado, VisualizadorBateria)
+
+    # CFG-009
+    def test_configurar_selector_temperatura_tipo_archivo(self):
+        """configurar_selector_temperatura tipo 'archivo' retorna SelectorTemperaturaArchivo"""
+        from agentes_sensores.proxy_selector_temperatura import SelectorTemperaturaArchivo
+        resultado = Configurador.configurar_selector_temperatura()
+        assert isinstance(resultado, SelectorTemperaturaArchivo)
+
+    # CFG-010
+    def test_configurar_seteo_temperatura_tipo_consola(self):
+        """configurar_seteo_temperatura tipo 'consola' retorna SeteoTemperatura"""
+        from agentes_sensores.proxy_seteo_temperatura import SeteoTemperatura
+        resultado = Configurador.configurar_seteo_temperatura()
+        assert isinstance(resultado, SeteoTemperatura)
