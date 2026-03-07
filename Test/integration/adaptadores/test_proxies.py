@@ -71,7 +71,7 @@ class TestProxyBateriaSocket:
         mock_socket.accept.return_value = (mock_conn, ('localhost', 12345))
 
         with patch('socket.socket', return_value=mock_socket):
-            proxy = ProxyBateriaSocket()
+            proxy = ProxyBateriaSocket("0.0.0.0", 11000)
             carga = proxy.leer_carga()
             assert carga == 4.5
 
@@ -82,7 +82,7 @@ class TestProxyBateriaSocket:
         mock_socket.bind.side_effect = OSError("Address already in use")
 
         with patch('socket.socket', return_value=mock_socket):
-            proxy = ProxyBateriaSocket()
+            proxy = ProxyBateriaSocket("0.0.0.0", 11000)
             with pytest.raises(OSError):
                 proxy.leer_carga()
 
