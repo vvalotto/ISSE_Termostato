@@ -124,16 +124,12 @@ class ProxySensorTemperatura:
 
 #### Diagrama de Flujo:
 
-```
-Proceso Orquestador (Actor Primario)
-        ↓ invoca
-GestorAmbiente (CONTROLLER) ← punto de entrada HU-014
-        ↓ delega a
-ProxySensorTemperatura
-        ↓ delega a
-HAL_ADC_Simulado
-        ↓ consulta
-Sensor Físico (Actor Secundario)
+```mermaid
+flowchart TB
+    A["Proceso Orquestador<br/>(Actor Primario)"] -->|invoca| G["<b>GestorAmbiente</b><br/>CONTROLLER — punto de entrada HU-014"]
+    G -->|delega a| P[ProxySensorTemperatura]
+    P -->|delega a| H[HAL_ADC_Simulado]
+    H -->|consulta| S["Sensor Físico<br/>(Actor Secundario)"]
 ```
 
 #### Código de Ejemplo:
@@ -396,16 +392,12 @@ class ProxySensorTemperatura:
 
 #### Cadena de Indirecciones:
 
-```
-GestorAmbiente
-    ↓ (indirección 1)
-ProxySensorTemperatura ← Intermediario 1
-    ↓ (indirección 2)
-HAL_ADC ← Intermediario 2 (interfaz)
-    ↓
-HAL_ADC_Simulado
-    ↓
-Sensor Físico (hardware)
+```mermaid
+flowchart TB
+    G[GestorAmbiente] -->|indirección 1| P["ProxySensorTemperatura<br/><i>Intermediario 1</i>"]
+    P -->|indirección 2| H["HAL_ADC<br/><i>Intermediario 2 (interfaz)</i>"]
+    H --> HS[HAL_ADC_Simulado]
+    HS --> S["Sensor Físico (hardware)"]
 ```
 
 #### Indirección 1: ProxySensorTemperatura
@@ -578,12 +570,10 @@ class GestorAmbiente:
 
 #### Diagrama:
 
-```
-Cliente (GestorAmbiente)
-    ↓ usa
-Proxy (ProxySensorTemperatura) ← Controla acceso
-    ↓ delega a
-Sujeto Real (HAL_ADC → Sensor Físico)
+```mermaid
+flowchart TB
+    C[Cliente: GestorAmbiente] -->|usa| P["Proxy: ProxySensorTemperatura<br/><i>controla acceso</i>"]
+    P -->|delega a| R["Sujeto Real: HAL_ADC → Sensor Físico"]
 ```
 
 #### Código:
@@ -676,14 +666,12 @@ proxy = ProxySensorTemperatura(hal)
 
 #### Contexto y Estrategias:
 
-```
-Contexto: GestorAmbiente
-    ↓ usa
-Estrategia (HAL_ADC)
-    ↓ implementaciones
-Estrategia Concreta A: HAL_ADC_Simulado (simulación)
-Estrategia Concreta B: HAL_ADC_Mock (testing)
-Estrategia Concreta C: HAL_ADC_GPIO (producción)
+```mermaid
+flowchart TB
+    C["Contexto: GestorAmbiente"] -->|usa| E["Estrategia: HAL_ADC"]
+    E -.-> A["Estrategia Concreta A:<br/>HAL_ADC_Simulado (simulación)"]
+    E -.-> B["Estrategia Concreta B:<br/>HAL_ADC_Mock (testing)"]
+    E -.-> D["Estrategia Concreta C:<br/>HAL_ADC_GPIO (producción)"]
 ```
 
 #### Código:
@@ -923,27 +911,15 @@ class ProxySensorTemperatura:
 
 #### Jerarquía de Dependencias (Inversión):
 
-```
-┌─────────────────────────────────────┐
-│  GestorAmbiente (alto nivel)        │
-│  NO depende de HAL_ADC_Simulado     │
-└──────────────┬──────────────────────┘
-               │ depende de
-               ▼
-┌─────────────────────────────────────┐
-│  ProxySensorTemperatura (nivel medio)│
-│  NO depende de HAL_ADC_Simulado     │
-└──────────────┬──────────────────────┘
-               │ depende de
-               ▼
-┌─────────────────────────────────────┐
-│  HAL_ADC (abstracción) ← INVERSIÓN  │ ◄─┐
-└──────────────┬──────────────────────┘   │
-               │                            │
-               ▼ implementada por          │ Bajo nivel
-┌─────────────────────────────────────┐   │ depende de
-│  HAL_ADC_Simulado (bajo nivel)      │───┘ abstracción
-└─────────────────────────────────────┘
+```mermaid
+flowchart TB
+    G["<b>GestorAmbiente</b> (alto nivel)<br/>NO depende de HAL_ADC_Simulado"]
+    P["<b>ProxySensorTemperatura</b> (nivel medio)<br/>NO depende de HAL_ADC_Simulado"]
+    A["<b>HAL_ADC</b> (abstracción)<br/>← INVERSIÓN"]
+    B["<b>HAL_ADC_Simulado</b> (bajo nivel)"]
+    G -->|depende de| P
+    P -->|depende de| A
+    B -.->|implementa: bajo nivel depende de la abstracción| A
 ```
 
 #### Código:
@@ -1019,36 +995,14 @@ Aplicar modelo de 5 capas (Presentación, Aplicación, Dominio, Infraestructura,
 
 #### Diagrama:
 
-```
-┌─────────────────────────────────────────┐
-│         PRESENTACIÓN                     │  ← HU-008 (no involucrada en HU-014)
-│    agentes_actuadores/                   │
-│    VisualizadorTemperaturas              │
-└────────────────┬────────────────────────┘
-                 │
-┌────────────────▼────────────────────────┐
-│         APLICACIÓN                       │  ← Coordina caso de uso
-│    gestores_entidades/                   │
-│    GestorAmbiente                        │
-└────────────────┬────────────────────────┘
-                 │
-┌────────────────▼────────────────────────┐
-│         DOMINIO                          │  ← Lógica de negocio pura
-│    entidades/                            │
-│    Ambiente, Bateria                     │
-└────────────────┬────────────────────────┘
-                 │
-┌────────────────▼────────────────────────┐
-│         INFRAESTRUCTURA                  │  ← Conversión técnica
-│    agentes_sensores/                     │
-│    ProxySensorTemperatura                │
-└────────────────┬────────────────────────┘
-                 │
-┌────────────────▼────────────────────────┐
-│         DISPOSITIVOS (HAL)               │  ← Acceso a hardware
-│    hal/                                  │
-│    HAL_ADC, HAL_ADC_Simulado             │
-└─────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    PR["<b>PRESENTACIÓN</b><br/>agentes_actuadores/<br/>VisualizadorTemperaturas<br/><i>HU-008 (no involucrada en HU-014)</i>"]
+    AP["<b>APLICACIÓN</b><br/>gestores_entidades/<br/>GestorAmbiente<br/><i>Coordina caso de uso</i>"]
+    DO["<b>DOMINIO</b><br/>entidades/<br/>Ambiente, Bateria<br/><i>Lógica de negocio pura</i>"]
+    IN["<b>INFRAESTRUCTURA</b><br/>agentes_sensores/<br/>ProxySensorTemperatura<br/><i>Conversión técnica</i>"]
+    DI["<b>DISPOSITIVOS (HAL)</b><br/>hal/<br/>HAL_ADC, HAL_ADC_Simulado<br/><i>Acceso a hardware</i>"]
+    PR --> AP --> DO --> IN --> DI
 ```
 
 #### Alternativas Consideradas:
@@ -1144,14 +1098,18 @@ class ControladorCiclo:
 
 #### Flujo de Actores:
 
-```
-Actor Primario (Proceso Orquestador)
-    ↓ inicia caso de uso
-GestorAmbiente
-    ↓ ejecuta
-ProxySensorTemperatura → HAL_ADC
-    ↓ consulta
-Actor Secundario (Sensor Físico)
+```mermaid
+sequenceDiagram
+    participant AP as Actor Primario<br/>(Proceso Orquestador)
+    participant GA as GestorAmbiente
+    participant PS as ProxySensorTemperatura
+    participant HAL as HAL_ADC
+    participant AS as Actor Secundario<br/>(Sensor Físico)
+
+    AP->>GA: inicia caso de uso
+    GA->>PS: ejecuta
+    PS->>HAL: lee
+    HAL->>AS: consulta
 ```
 
 **Nota:** El Presentador pertenece a HU-008 (visualización), no a HU-014 (lectura).

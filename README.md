@@ -123,42 +123,27 @@ Ver `docs/Plan/BITACORA.md` para el detalle completo de tickets.
 
 El sistema implementa **Clean Architecture** (Arquitectura Limpia) de Robert C. Martin, donde las dependencias apuntan hacia el centro:
 
-```
-+===========================================================================+
-|                        FRAMEWORKS & DRIVERS                               |
-|  actores_externos/                                                        |
-|  sensor_temperatura.py, bateria.py, cartel_*.py                          |
-|                                                                           |
-|  +=====================================================================+  |
-|  |                    INTERFACE ADAPTERS                               |  |
-|  |  agentes_sensores/              agentes_actuadores/                 |  |
-|  |  - ProxySensorTemperatura       - VisualizadorTemperatura           |  |
-|  |  - ProxyBateria                 - VisualizadorBateria               |  |
-|  |  - ProxySelectorTemperatura     - VisualizadorClimatizador          |  |
-|  |                                 - ActuadorClimatizador              |  |
-|  |                                                                     |  |
-|  |  +===============================================================+  |  |
-|  |  |                    USE CASES (Application)                    |  |  |
-|  |  |  gestores_entidades/           servicios_aplicacion/          |  |  |
-|  |  |  - GestorAmbiente              - Presentador                  |  |  |
-|  |  |  - GestorBateria               - OperadorParalelo             |  |  |
-|  |  |  - GestorClimatizador          - Inicializador                |  |  |
-|  |  |                                                               |  |  |
-|  |  |  +=========================================================+  |  |  |
-|  |  |  |                    ENTITIES (Domain)                    |  |  |  |
-|  |  |  |  entidades/                 servicios_dominio/          |  |  |  |
-|  |  |  |  - Ambiente                 - ControladorTemperatura    |  |  |  |
-|  |  |  |  - Bateria                                              |  |  |  |
-|  |  |  |  - Climatizador                                         |  |  |  |
-|  |  |  |  - Interfaces abstractas (abs_*.py)                     |  |  |  |
-|  |  |  +=========================================================+  |  |  |
-|  |  |                             ^                                 |  |  |
-|  |  +===============================================================+  |  |
-|  |                                ^                                    |  |
-|  +=====================================================================+  |
-|                                   ^                                       |
-+===========================================================================+
-                    (las dependencias apuntan hacia el centro)
+```mermaid
+flowchart TB
+    subgraph FD["FRAMEWORKS & DRIVERS — actores_externos/"]
+        FD1["sensor_temperatura.py, bateria.py, cartel_*.py"]
+        subgraph IA["INTERFACE ADAPTERS"]
+            IA1["<b>agentes_sensores/</b><br/>- ProxySensorTemperatura<br/>- ProxyBateria<br/>- ProxySelectorTemperatura"]
+            IA2["<b>agentes_actuadores/</b><br/>- VisualizadorTemperatura<br/>- VisualizadorBateria<br/>- VisualizadorClimatizador<br/>- ActuadorClimatizador"]
+            subgraph UC["USE CASES (Application)"]
+                UC1["<b>gestores_entidades/</b><br/>- GestorAmbiente<br/>- GestorBateria<br/>- GestorClimatizador"]
+                UC2["<b>servicios_aplicacion/</b><br/>- Presentador<br/>- OperadorParalelo<br/>- Inicializador"]
+                subgraph EN["ENTITIES (Domain)"]
+                    EN1["<b>entidades/</b><br/>- Ambiente<br/>- Bateria<br/>- Climatizador<br/>- Interfaces abstractas (abs_*.py)"]
+                    EN2["<b>servicios_dominio/</b><br/>- ControladorTemperatura"]
+                end
+            end
+        end
+    end
+
+    FD -.->|las dependencias apuntan hacia el centro| IA
+    IA -.-> UC
+    UC -.-> EN
 ```
 
 ### Regla de Dependencia
@@ -350,29 +335,60 @@ Cada visualizador tiene 3 implementaciones intercambiables:
 ## Flujos de Datos
 
 ### Lectura de Temperatura
-```
-Operador -> GestorAmbiente.leer_temperatura_ambiente()
-         -> ProxySensorTemperatura.leer_temperatura()
-         -> Archivo/Socket
-         -> Ambiente.temperatura_ambiente (setter)
+
+```mermaid
+sequenceDiagram
+    participant Op as Operador
+    participant GA as GestorAmbiente
+    participant PS as ProxySensorTemperatura
+    participant Src as Archivo/Socket
+    participant Amb as Ambiente
+
+    Op->>GA: leer_temperatura_ambiente()
+    GA->>PS: leer_temperatura()
+    PS->>Src: lee temperatura
+    Src-->>PS: valor
+    PS-->>GA: temperatura
+    GA->>Amb: temperatura_ambiente (setter)
 ```
 
 ### Control de Climatizacion
-```
-Operador -> GestorClimatizador.accionar_climatizador(ambiente)
-         -> Climatizador.evaluar_accion()
-         -> ControladorTemperatura.comparar_temperatura()
-         -> ActuadorClimatizador.accionar_climatizador(accion)
-         -> Archivo "climatizador"
+
+```mermaid
+sequenceDiagram
+    participant Op as Operador
+    participant GC as GestorClimatizador
+    participant Cl as Climatizador
+    participant CT as ControladorTemperatura
+    participant Ac as ActuadorClimatizador
+    participant Arch as Archivo "climatizador"
+
+    Op->>GC: accionar_climatizador(ambiente)
+    GC->>Cl: evaluar_accion()
+    Cl->>CT: comparar_temperatura()
+    CT-->>Cl: accion
+    Cl-->>GC: accion
+    GC->>Ac: accionar_climatizador(accion)
+    Ac->>Arch: escribe estado
 ```
 
 ### Verificacion de Bateria
-```
-Operador -> GestorBateria.verificar_nivel_de_carga()
-         -> ProxyBateria.leer_carga()
-         -> Archivo/Socket
-         -> Bateria.nivel_de_carga (setter)
-         -> Bateria.indicador (NORMAL/BAJA)
+
+```mermaid
+sequenceDiagram
+    participant Op as Operador
+    participant GB as GestorBateria
+    participant PB as ProxyBateria
+    participant Src as Archivo/Socket
+    participant Bat as Bateria
+
+    Op->>GB: verificar_nivel_de_carga()
+    GB->>PB: leer_carga()
+    PB->>Src: lee carga
+    Src-->>PB: valor
+    PB-->>GB: carga
+    GB->>Bat: nivel_de_carga (setter)
+    Note over Bat: indicador = NORMAL / BAJA
 ```
 
 ## Actores Externos
@@ -402,31 +418,35 @@ Reciben datos del sistema para visualizacion:
 
 ### Diagrama de Comunicacion
 
-```
-SIMULADORES (Clientes)                 SISTEMA                    DISPLAYS (Servidores)
-                                    TERMOSTATO
-+-------------------+                                          +---------------------+
-| sensor_temperatura|---[12000]-->| ProxySensor   |            |                     |
-+-------------------+             | Temperatura   |            |                     |
-                                  +---------------+            |                     |
-+-------------------+                                          |                     |
-| bateria           |---[11000]-->| ProxyBateria  |            |                     |
-+-------------------+             +---------------+            |                     |
-                                                               |                     |
-+-------------------+             +---------------+            |                     |
-| seteo_temperatura |---[13000]-->| ProxySelector |            |                     |
-+-------------------+             +---------------+            |                     |
-                                                               |                     |
-                                  +---------------+--[14001]-->| cartel_temperatura  |
-                                  | Visualizador  |            +---------------------+
-                                  | Temperatura   |
-                                  +---------------+--[14000]-->| cartel_bateria      |
-                                  | Visualizador  |            +---------------------+
-                                  | Bateria       |
-                                  +---------------+--[14002]-->| cartel_climatizador |
-                                  | Visualizador  |            +---------------------+
-                                  | Climatizador  |
-                                  +---------------+
+```mermaid
+flowchart LR
+    subgraph SIM["SIMULADORES (Clientes)"]
+        S1["sensor_temperatura"]
+        S2["bateria"]
+        S3["seteo_temperatura"]
+    end
+
+    subgraph SIS["SISTEMA TERMOSTATO"]
+        P1["ProxySensorTemperatura"]
+        P2["ProxyBateria"]
+        P3["ProxySelector"]
+        V1["VisualizadorTemperatura"]
+        V2["VisualizadorBateria"]
+        V3["VisualizadorClimatizador"]
+    end
+
+    subgraph DIS["DISPLAYS (Servidores)"]
+        D1["cartel_temperatura"]
+        D2["cartel_bateria"]
+        D3["cartel_climatizador"]
+    end
+
+    S1 -->|12000| P1
+    S2 -->|11000| P2
+    S3 -->|13000| P3
+    V1 -->|14001| D1
+    V2 -->|14000| D2
+    V3 -->|14002| D3
 ```
 
 ## Simulacion Distribuida
@@ -716,41 +736,19 @@ cd actores_externos
 
 ## Arquitectura de Despliegue
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                          INTERNET                                │
-│                                                                  │
-│  ┌────────────────────────────────────────────────────────┐     │
-│  │  Servidor API REST (Google Cloud Run)                  │     │
-│  │  https://app-termostato-1090421346746.us-central1.run.app│    │
-│  │  - Endpoints REST                                      │     │
-│  │  - Almacenamiento de metricas                          │     │
-│  └────────────────────────────────────────────────────────┘     │
-│                            ▲                                     │
-└────────────────────────────┼─────────────────────────────────────┘
-                             │ HTTPS POST
-                             │
-┌────────────────────────────┼─────────────────────────────────────┐
-│                      RED LOCAL (LAN)                             │
-│                            │                                     │
-│  ┌─────────────────────────┴──────────────────────────────┐     │
-│  │  RASPBERRY PI (Sistema Principal)                      │     │
-│  │  - Python 3.5+                                         │     │
-│  │  - Termostato (ejecutar.py)                            │     │
-│  │  - Escucha en 0.0.0.0:11000-14000                      │     │
-│  │  - VisualizadoresApi -> Envia a Cloud Run              │     │
-│  └────────────────────────────────────────────────────────┘     │
-│                            ▲                                     │
-│                            │ Socket TCP                          │
-│                            │                                     │
-│  ┌─────────────────────────┴──────────────────────────────┐     │
-│  │  MACBOOK (Simuladores)                                 │     │
-│  │  - Python 3.8+                                         │     │
-│  │  - 4 simuladores (bateria, temp, seteo, selector)     │     │
-│  │  - Conectan a IP Raspberry via TCP                     │     │
-│  │  - Script lanzar_simuladores.sh                        │     │
-│  └────────────────────────────────────────────────────────┘     │
-└──────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph INTERNET["INTERNET"]
+        API["<b>Servidor API REST (Google Cloud Run)</b><br/>https://app-termostato-1090421346746.us-central1.run.app<br/>- Endpoints REST<br/>- Almacenamiento de métricas"]
+    end
+
+    subgraph LAN["RED LOCAL (LAN)"]
+        RPI["<b>RASPBERRY PI (Sistema Principal)</b><br/>- Python 3.5+<br/>- Termostato (ejecutar.py)<br/>- Escucha en 0.0.0.0:11000-14000<br/>- VisualizadoresApi → envía a Cloud Run"]
+        MAC["<b>MACBOOK (Simuladores)</b><br/>- Python 3.8+<br/>- 4 simuladores (batería, temp, seteo, selector)<br/>- Conectan a IP Raspberry vía TCP<br/>- Script lanzar_simuladores.sh"]
+    end
+
+    MAC -->|Socket TCP| RPI
+    RPI -->|HTTPS POST| API
 ```
 
 **Componentes:**

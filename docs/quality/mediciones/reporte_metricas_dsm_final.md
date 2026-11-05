@@ -217,49 +217,41 @@ Si un paquete cambia, ¿cuántos paquetes se ven afectados directamente?
 
 ### 4.1 Grafo de Dependencias por Capas
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                           CAPA 4 - EXTERNAL                                  │
-│  ┌─────────────────┐                                                        │
-│  │ actores_externos│  (Aislado - scripts de simulación)                     │
-│  └─────────────────┘                                                        │
-└─────────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph C4["CAPA 4 - EXTERNAL"]
+        AE["actores_externos<br/>(Aislado - scripts de simulación)"]
+    end
 
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                           CAPA 3 - ADAPTERS                                  │
-│                                                                             │
-│  ┌────────────┐    ┌─────────────────┐    ┌─────────────────┐              │
-│  │registrador │◄───┤ agentes_sensores│◄───┤  configurador   │              │
-│  └────────────┘    └────────┬────────┘    └────────┬────────┘              │
-│        ▲                    │                      │                        │
-│        │           ┌────────┴────────┐             │                        │
-│        └───────────┤agentes_actuadores│◄───────────┘                        │
-│                    └─────────────────┘                                      │
-└─────────────────────────────────────────────────────────────────────────────┘
-                         │           │
-                         ▼           │
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                        CAPA 2 - APPLICATION                                  │
-│                                                                             │
-│  ┌─────────────────────┐         ┌───────────────────┐                     │
-│  │servicios_aplicacion │─────────┤gestores_entidades │                     │
-│  └──────────┬──────────┘         └───────────────────┘                     │
-│             │                                                               │
-│             └────────────────────► configurador (⚠️ VIOLACIÓN)             │
-└─────────────────────────────────────────────────────────────────────────────┘
-                         │
-                         ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                          CAPA 1 - DOMAIN                                     │
-│                                                                             │
-│  ┌─────────────────┐         ┌───────────────┐                             │
-│  │servicios_dominio│◄────────┤   entidades   │  (⚠️ dep. invertida)        │
-│  └─────────────────┘         └───────────────┘                             │
-│                                     ▲                                       │
-│                                     │                                       │
-│                    (Todos dependen de entidades)                            │
-└─────────────────────────────────────────────────────────────────────────────┘
+    subgraph C3["CAPA 3 - ADAPTERS"]
+        REG[registrador]
+        AS[agentes_sensores]
+        CFG[configurador]
+        AA[agentes_actuadores]
+    end
+
+    subgraph C2["CAPA 2 - APPLICATION"]
+        SA[servicios_aplicacion]
+        GE[gestores_entidades]
+    end
+
+    subgraph C1["CAPA 1 - DOMAIN"]
+        SD[servicios_dominio]
+        EN[entidades]
+    end
+
+    CFG --> AS
+    AS --> REG
+    CFG --> AA
+    AA --> REG
+    SA --- GE
+    SA -->|"⚠️ VIOLACIÓN"| CFG
+    EN -->|"⚠️ dep. invertida"| SD
+    C3 --> C2
+    C2 --> C1
 ```
+
+> Todos los paquetes dependen de `entidades`.
 
 ### 4.2 Matriz de Alcanzabilidad
 
@@ -287,14 +279,11 @@ actores_externos    (aislado)
 
 El ciclo principal involucra 3 paquetes:
 
-```
-┌─────────────────────────────────────────┐
-│                                         │
-▼                                         │
-configurador ───► agentes_sensores ───► servicios_aplicacion
-                                         │
-                                         │
-◄────────────────────────────────────────┘
+```mermaid
+flowchart LR
+    CFG[configurador] --> AS[agentes_sensores]
+    AS --> SA[servicios_aplicacion]
+    SA --> CFG
 ```
 
 ### 5.2 Impacto del Ciclo en DSM

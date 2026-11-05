@@ -330,27 +330,20 @@ sudo userdel termostato
 
 ## Arquitectura de Despliegue
 
-```
-MacBook/PC                     Raspberry Pi
-┌──────────────────┐          ┌──────────────────┐
-│  Simuladores     │  Socket  │  termostato-core │
-│  (desarrollo)    │ ←──────→ │  (producción)    │
-│                  │          │                  │
-│  - simulador_*   │          │  - entidades/    │
-│  - cartel_*      │          │  - servicios_*/  │
-│  - Test/         │          │  - gestores_*/   │
-│  - docs/         │          │  - agentes_*/    │
-└──────────────────┘          │  - configurador/ │
-                              │  - registrador/  │
-                              └──────────────────┘
-                                      ↓
-                              ┌──────────────────┐
-                              │  Hardware        │
-                              │  - Sensores      │
-                              │  - Relays        │
-                              │  - LEDs          │
-                              │  - Botones       │
-                              └──────────────────┘
+```mermaid
+flowchart TB
+    subgraph PC["MacBook/PC"]
+        SIM["<b>Simuladores (desarrollo)</b><br/>- simulador_*<br/>- cartel_*<br/>- Test/<br/>- docs/"]
+    end
+
+    subgraph RPI["Raspberry Pi"]
+        CORE["<b>termostato-core (producción)</b><br/>- entidades/<br/>- servicios_*/<br/>- gestores_*/<br/>- agentes_*/<br/>- configurador/<br/>- registrador/"]
+    end
+
+    HW["<b>Hardware</b><br/>- Sensores<br/>- Relays<br/>- LEDs<br/>- Botones"]
+
+    SIM <-->|Socket| CORE
+    CORE --> HW
 ```
 
 ---
