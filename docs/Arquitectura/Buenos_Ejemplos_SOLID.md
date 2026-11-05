@@ -566,59 +566,29 @@ Estos son el tipo de interfaces que Martin Fowler llama **"Role Interfaces"** y 
 
 #### Diagrama de Dependencias (CUMPLE DIP)
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│  ALTO NIVEL - DOMINIO                                        │
-│                                                              │
-│  gestores_entidades/gestor_bateria.py                       │
-│  ┌──────────────────────────────────────┐                   │
-│  │ class GestorBateria:                 │                   │
-│  │                                      │                   │
-│  │   self._proxy_bateria ───────────┐  │                   │
-│  │   self._visualizador_bateria ────┼─ │                   │
-│  └──────────────────────────────────┼─ ┘                   │
-│                                      ↓                       │
-│                              Depende de ABSTRACCIÓN          │
-└──────────────────────────────────────┼──────────────────────┘
-                                       │
-                                       │
-┌──────────────────────────────────────┼──────────────────────┐
-│  ABSTRACCIONES (Interfaces)          ↓                       │
-│                                                              │
-│  entidades/abs_bateria.py                                   │
-│  ┌───────────────────────────────────────────┐              │
-│  │ class AbsProxyBateria(metaclass=ABCMeta): │              │
-│  │     @abstractmethod                       │              │
-│  │     def leer_carga(self): pass            │              │
-│  └───────────────────────────────────────────┘              │
-│                      ↑                                       │
-│                      │ IMPLEMENTA (depende de abstracción)  │
-└──────────────────────┼──────────────────────────────────────┘
-                       │
-                       │
-┌──────────────────────┼──────────────────────────────────────┐
-│  BAJO NIVEL - IMPLEMENTACIONES                              │
-│                      ↓                                       │
-│  agentes_sensores/proxy_bateria.py                          │
-│  ┌───────────────────────────────────────────┐              │
-│  │ class ProxyBateriaArchivo(AbsProxyBateria)│              │
-│  │     def leer_carga(self):                 │              │
-│  │         archivo = open("bateria", "r")    │              │
-│  │         return float(archivo.read())      │              │
-│  └───────────────────────────────────────────┘              │
-│                                                              │
-│  ┌───────────────────────────────────────────┐              │
-│  │ class ProxyBateriaSocket(AbsProxyBateria) │              │
-│  │     def leer_carga(self):                 │              │
-│  │         servidor = socket.socket(...)     │              │
-│  │         return carga                      │              │
-│  └───────────────────────────────────────────┘              │
-└─────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph ALTO["ALTO NIVEL - DOMINIO — gestores_entidades/gestor_bateria.py"]
+        GB["<b>class GestorBateria</b><br/>self._proxy_bateria<br/>self._visualizador_bateria"]
+    end
 
-✅ Flecha de dependencia apunta HACIA ARRIBA (hacia la abstracción)
-✅ Alto nivel NO conoce bajo nivel
-✅ Ambos dependen de la abstracción
+    subgraph ABS["ABSTRACCIONES (Interfaces) — entidades/abs_bateria.py"]
+        AP["<b>class AbsProxyBateria(metaclass=ABCMeta)</b><br/>@abstractmethod<br/>def leer_carga(self): pass"]
+    end
+
+    subgraph BAJO["BAJO NIVEL - IMPLEMENTACIONES — agentes_sensores/proxy_bateria.py"]
+        PA["<b>class ProxyBateriaArchivo(AbsProxyBateria)</b><br/>def leer_carga(self):<br/>&nbsp;&nbsp;archivo = open('bateria', 'r')<br/>&nbsp;&nbsp;return float(archivo.read())"]
+        PS["<b>class ProxyBateriaSocket(AbsProxyBateria)</b><br/>def leer_carga(self):<br/>&nbsp;&nbsp;servidor = socket.socket(...)<br/>&nbsp;&nbsp;return carga"]
+    end
+
+    GB -->|depende de ABSTRACCIÓN| AP
+    PA -.->|IMPLEMENTA| AP
+    PS -.->|IMPLEMENTA| AP
 ```
+
+- ✅ La flecha de dependencia apunta **hacia la abstracción**
+- ✅ Alto nivel NO conoce bajo nivel
+- ✅ Ambos dependen de la abstracción
 
 ### ¿Por qué cumple DIP?
 
@@ -765,46 +735,43 @@ class ProxyBateriaArchivo(AbsProxyBateria):
 
 ### Flujo de Dependencias (INVERSIÓN)
 
+**❌ SIN DIP (dependencias normales):**
+
+```mermaid
+flowchart LR
+    A["Alto nivel<br/>GestorBateria"] --> B["Bajo nivel<br/>ProxyBateriaSocket (socket)"]
 ```
-❌ SIN DIP (dependencias normales):
-Alto nivel ──────→ Bajo nivel
-GestorBateria ──→ ProxyBateriaSocket (socket)
-                  ❌ Cambiar implementación requiere modificar GestorBateria
 
+Cambiar la implementación requiere modificar `GestorBateria`.
 
-✅ CON DIP (dependencias invertidas):
-Alto nivel ──────→ Abstracción ←────── Bajo nivel
-GestorBateria ──→ AbsProxyBateria ←── ProxyBateriaSocket
-                         ↑
-                         └───────────── ProxyBateriaArchivo
+**✅ CON DIP (dependencias invertidas):**
 
-✅ Cambiar implementación NO requiere modificar GestorBateria
-✅ Agregar ProxyBateriaMQTT solo requiere crear nueva clase
+```mermaid
+flowchart LR
+    A["Alto nivel<br/>GestorBateria"] --> AB["Abstracción<br/>AbsProxyBateria"]
+    S["Bajo nivel<br/>ProxyBateriaSocket"] -.-> AB
+    F["Bajo nivel<br/>ProxyBateriaArchivo"] -.-> AB
 ```
+
+- ✅ Cambiar la implementación NO requiere modificar `GestorBateria`
+- ✅ Agregar `ProxyBateriaMQTT` solo requiere crear una nueva clase
 
 ### Otros Ejemplos Excelentes
 
 #### ✅ Sistema de Climatizadores
 
-```
-servicios_dominio/controlador_climatizador.py (Alto nivel)
-        ↓ usa
-entidades/climatizador.py → AbsClimatizador (Abstracción)
-        ↑ implementan
-entidades/climatizador.py → Climatizador, Calefactor (Bajo nivel)
+```mermaid
+flowchart TB
+    A["<b>Alto nivel</b><br/>servicios_dominio/controlador_climatizador.py"] -->|usa| AB["<b>Abstracción</b><br/>entidades/climatizador.py → AbsClimatizador"]
+    B["<b>Bajo nivel</b><br/>entidades/climatizador.py → Climatizador, Calefactor"] -.->|implementan| AB
 ```
 
 #### ✅ Sistema de Visualizadores
 
-```
-gestores_entidades/gestor_ambiente.py (Alto nivel)
-        ↓ usa
-entidades/abs_visualizador_temperatura.py (Abstracción)
-        ↑ implementan
-agentes_actuadores/visualizador_temperatura.py (Bajo nivel)
-    → VisualizadorTemperatura
-    → VisualizadorTemperaturaSocket
-    → VisualizadorTemperaturaApi
+```mermaid
+flowchart TB
+    A["<b>Alto nivel</b><br/>gestores_entidades/gestor_ambiente.py"] -->|usa| AB["<b>Abstracción</b><br/>entidades/abs_visualizador_temperatura.py"]
+    B["<b>Bajo nivel</b><br/>agentes_actuadores/visualizador_temperatura.py<br/>→ VisualizadorTemperatura<br/>→ VisualizadorTemperaturaSocket<br/>→ VisualizadorTemperaturaApi"] -.->|implementan| AB
 ```
 
 ### Conclusión
