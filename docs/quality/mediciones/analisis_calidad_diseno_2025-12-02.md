@@ -34,37 +34,26 @@ El proyecto ISSE_Termostato es un **sistema de control de climatización distrib
 
 **Clean Architecture (Arquitectura Limpia)** de Robert C. Martin con **5 capas concéntricas**:
 
+```mermaid
+flowchart TB
+    subgraph L1["LAYER 1: Frameworks & Drivers (Infraestructura)"]
+        L1C["- actores_externos/ (simuladores, displays externos)<br/>- configurador/ (inyección de dependencias, factories)"]
+        subgraph L2["LAYER 2: Interface Adapters (Adaptadores)"]
+            L2C["- agentes_sensores/ (proxies de entrada)<br/>- agentes_actuadores/ (visualizadores, actuadores)<br/>- registrador/ (auditoría y logging)"]
+            subgraph L3["LAYER 3: Use Cases (Casos de Uso)"]
+                L3C["- servicios_aplicacion/ (orquestación)<br/>- gestores_entidades/ (coordinación)"]
+                subgraph L4["LAYER 4: Entities (Dominio)"]
+                    L4C["- entidades/ (Ambiente, Bateria, etc.)"]
+                    subgraph L5["LAYER 5: Domain Services (Núcleo)"]
+                        L5C["- servicios_dominio/ (lógica pura)"]
+                    end
+                end
+            end
+        end
+    end
 ```
-┌────────────────────────────────────────────────────────────────┐
-│         LAYER 1: Frameworks & Drivers (Infraestructura)        │
-│  - actores_externos/ (simuladores, displays externos)          │
-│  - configurador/ (inyección de dependencias, factories)        │
-│                                                                 │
-│  ┌──────────────────────────────────────────────────────────┐  │
-│  │      LAYER 2: Interface Adapters (Adaptadores)          │  │
-│  │  - agentes_sensores/ (proxies de entrada)               │  │
-│  │  - agentes_actuadores/ (visualizadores, actuadores)     │  │
-│  │  - registrador/ (auditoría y logging)                   │  │
-│  │                                                          │  │
-│  │  ┌────────────────────────────────────────────────────┐ │  │
-│  │  │    LAYER 3: Use Cases (Casos de Uso)              │ │  │
-│  │  │  - servicios_aplicacion/ (orquestación)           │ │  │
-│  │  │  - gestores_entidades/ (coordinación)             │ │  │
-│  │  │                                                    │ │  │
-│  │  │  ┌──────────────────────────────────────────────┐ │ │  │
-│  │  │  │   LAYER 4: Entities (Dominio)               │ │ │  │
-│  │  │  │  - entidades/ (Ambiente, Bateria, etc.)     │ │ │  │
-│  │  │  │                                              │ │ │  │
-│  │  │  │  ┌────────────────────────────────────────┐ │ │ │  │
-│  │  │  │  │ LAYER 5: Domain Services (Núcleo)     │ │ │ │  │
-│  │  │  │  │  - servicios_dominio/ (lógica pura)  │ │ │ │  │
-│  │  │  │  └────────────────────────────────────────┘ │ │ │  │
-│  │  │  └──────────────────────────────────────────────┘ │ │  │
-│  │  └────────────────────────────────────────────────────┘ │  │
-│  └──────────────────────────────────────────────────────────┘  │
-└────────────────────────────────────────────────────────────────┘
-     ↑ Las dependencias deberían apuntar hacia el centro
-```
+
+> Las dependencias deberían apuntar hacia el centro.
 
 ### 1.2 Composición del Sistema
 
@@ -327,13 +316,9 @@ gestor_bateria = GestorBateria(bateria, proxy_bateria, visualizador)
 **❌ Violaciones críticas detectadas (111 total)**:
 
 **Violaciones de la Regla de Dependencia de Clean Architecture**:
-```
-Layer 2 (Use Cases) → Layer 4 (Frameworks & Drivers)
-
-Ejemplo:
-gestores_entidades/gestor_ambiente.py
-    ↓ (❌ VIOLA - salta 2 capas)
-configurador/configurador.py
+```mermaid
+flowchart TB
+    A["gestores_entidades/gestor_ambiente.py<br/>(Layer 2: Use Cases)"] -->|"❌ VIOLA — salta 2 capas"| B["configurador/configurador.py<br/>(Layer 4: Frameworks & Drivers)"]
 ```
 
 **40 violaciones críticas**: Capas internas saltando múltiples capas hacia afuera
@@ -649,16 +634,18 @@ class Presentador:
 
 #### Violación 1: Dependencias invertidas (40 violaciones críticas)
 
-```
-❌ INCORRECTO:
-gestores_entidades (Layer 2: Use Cases)
-    ↓
-configurador (Layer 4: Frameworks & Drivers)
+**❌ INCORRECTO:**
 
-✅ CORRECTO (debería ser):
-configurador (capa externa)
-    ↓
-gestores_entidades (capa interna)
+```mermaid
+flowchart TB
+    A["gestores_entidades<br/>(Layer 2: Use Cases)"] --> B["configurador<br/>(Layer 4: Frameworks & Drivers)"]
+```
+
+**✅ CORRECTO (debería ser):**
+
+```mermaid
+flowchart TB
+    C["configurador<br/>(capa externa)"] --> G["gestores_entidades<br/>(capa interna)"]
 ```
 
 **Impacto**: Las capas de negocio dependen de infraestructura, violando la Regla de Dependencia.
