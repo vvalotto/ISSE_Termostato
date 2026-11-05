@@ -78,52 +78,19 @@
 
 ### 2.1 Modelo de Despliegue Distribuido
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│  MÁQUINA DE DESARROLLO (MacBook/PC)                         │
-│  ┌───────────────────────────────────────────────────────┐  │
-│  │  actores_externos/                                    │  │
-│  │  ├── simulador_temperatura.py                         │  │
-│  │  ├── simulador_bateria.py                             │  │
-│  │  ├── simulador_selector_temperatura.py                │  │
-│  │  ├── simulador_seteo_temperatura_deseada.py           │  │
-│  │  ├── cartel_temperatura.py                            │  │
-│  │  ├── cartel_bateria.py                                │  │
-│  │  └── cartel_climatizador.py                           │  │
-│  │                                                         │  │
-│  │  Test/ (183 tests unitarios e integración)            │  │
-│  │  docs/ (Documentación y análisis)                     │  │
-│  └───────────────────────────────────────────────────────┘  │
-│                            ↕ TCP/IP (Socket)                 │
-│                      LAN (192.168.x.x)                       │
-└─────────────────────────────────────────────────────────────┘
-                             ↕
-┌─────────────────────────────────────────────────────────────┐
-│  RASPBERRY PI (Sistema Embebido)                            │
-│  IP: 192.168.0.14 (ejemplo)                                 │
-│  ┌───────────────────────────────────────────────────────┐  │
-│  │  PAQUETE CORE (~375 KB)                               │  │
-│  │  ├── entidades/                                       │  │
-│  │  ├── servicios_dominio/                               │  │
-│  │  ├── gestores_entidades/                              │  │
-│  │  ├── servicios_aplicacion/                            │  │
-│  │  ├── agentes_sensores/  ← GPIO/I2C real              │  │
-│  │  ├── agentes_actuadores/ ← Relays/PWM real           │  │
-│  │  ├── configurador/                                    │  │
-│  │  ├── registrador/                                     │  │
-│  │  ├── ejecutar.py                                      │  │
-│  │  └── termostato.json                                  │  │
-│  └───────────────────────────────────────────────────────┘  │
-│                            ↕                                 │
-│  ┌───────────────────────────────────────────────────────┐  │
-│  │  HARDWARE REAL                                        │  │
-│  │  ├── Sensor DHT22/DS18B20 (GPIO 4)                   │  │
-│  │  ├── ADC MCP3008 para batería (SPI)                  │  │
-│  │  ├── Relays 5V para calefacción/refrigeración        │  │
-│  │  ├── LEDs indicadores (GPIO 17, 27, 22)              │  │
-│  │  └── Botones físicos (GPIO 23, 24)                   │  │
-│  └───────────────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph DEV["MÁQUINA DE DESARROLLO (MacBook/PC)"]
+        DEVC["<b>actores_externos/</b><br/>├── simulador_temperatura.py<br/>├── simulador_bateria.py<br/>├── simulador_selector_temperatura.py<br/>├── simulador_seteo_temperatura_deseada.py<br/>├── cartel_temperatura.py<br/>├── cartel_bateria.py<br/>└── cartel_climatizador.py<br/><br/>Test/ (183 tests unitarios e integración)<br/>docs/ (Documentación y análisis)"]
+    end
+
+    subgraph RPI["RASPBERRY PI (Sistema Embebido) — IP: 192.168.0.14 (ejemplo)"]
+        CORE["<b>PAQUETE CORE (~375 KB)</b><br/>├── entidades/<br/>├── servicios_dominio/<br/>├── gestores_entidades/<br/>├── servicios_aplicacion/<br/>├── agentes_sensores/ ← GPIO/I2C real<br/>├── agentes_actuadores/ ← Relays/PWM real<br/>├── configurador/<br/>├── registrador/<br/>├── ejecutar.py<br/>└── termostato.json"]
+        HW["<b>HARDWARE REAL</b><br/>├── Sensor DHT22/DS18B20 (GPIO 4)<br/>├── ADC MCP3008 para batería (SPI)<br/>├── Relays 5V para calefacción/refrigeración<br/>├── LEDs indicadores (GPIO 17, 27, 22)<br/>└── Botones físicos (GPIO 23, 24)"]
+        CORE <--> HW
+    end
+
+    DEVC <-->|"TCP/IP (Socket) — LAN 192.168.x.x"| CORE
 ```
 
 ### 2.2 Ventajas de esta Arquitectura
