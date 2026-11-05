@@ -123,42 +123,27 @@ Ver `docs/Plan/BITACORA.md` para el detalle completo de tickets.
 
 El sistema implementa **Clean Architecture** (Arquitectura Limpia) de Robert C. Martin, donde las dependencias apuntan hacia el centro:
 
-```
-+===========================================================================+
-|                        FRAMEWORKS & DRIVERS                               |
-|  actores_externos/                                                        |
-|  sensor_temperatura.py, bateria.py, cartel_*.py                          |
-|                                                                           |
-|  +=====================================================================+  |
-|  |                    INTERFACE ADAPTERS                               |  |
-|  |  agentes_sensores/              agentes_actuadores/                 |  |
-|  |  - ProxySensorTemperatura       - VisualizadorTemperatura           |  |
-|  |  - ProxyBateria                 - VisualizadorBateria               |  |
-|  |  - ProxySelectorTemperatura     - VisualizadorClimatizador          |  |
-|  |                                 - ActuadorClimatizador              |  |
-|  |                                                                     |  |
-|  |  +===============================================================+  |  |
-|  |  |                    USE CASES (Application)                    |  |  |
-|  |  |  gestores_entidades/           servicios_aplicacion/          |  |  |
-|  |  |  - GestorAmbiente              - Presentador                  |  |  |
-|  |  |  - GestorBateria               - OperadorParalelo             |  |  |
-|  |  |  - GestorClimatizador          - Inicializador                |  |  |
-|  |  |                                                               |  |  |
-|  |  |  +=========================================================+  |  |  |
-|  |  |  |                    ENTITIES (Domain)                    |  |  |  |
-|  |  |  |  entidades/                 servicios_dominio/          |  |  |  |
-|  |  |  |  - Ambiente                 - ControladorTemperatura    |  |  |  |
-|  |  |  |  - Bateria                                              |  |  |  |
-|  |  |  |  - Climatizador                                         |  |  |  |
-|  |  |  |  - Interfaces abstractas (abs_*.py)                     |  |  |  |
-|  |  |  +=========================================================+  |  |  |
-|  |  |                             ^                                 |  |  |
-|  |  +===============================================================+  |  |
-|  |                                ^                                    |  |
-|  +=====================================================================+  |
-|                                   ^                                       |
-+===========================================================================+
-                    (las dependencias apuntan hacia el centro)
+```mermaid
+flowchart TB
+    subgraph FD["FRAMEWORKS & DRIVERS — actores_externos/"]
+        FD1["sensor_temperatura.py, bateria.py, cartel_*.py"]
+        subgraph IA["INTERFACE ADAPTERS"]
+            IA1["<b>agentes_sensores/</b><br/>- ProxySensorTemperatura<br/>- ProxyBateria<br/>- ProxySelectorTemperatura"]
+            IA2["<b>agentes_actuadores/</b><br/>- VisualizadorTemperatura<br/>- VisualizadorBateria<br/>- VisualizadorClimatizador<br/>- ActuadorClimatizador"]
+            subgraph UC["USE CASES (Application)"]
+                UC1["<b>gestores_entidades/</b><br/>- GestorAmbiente<br/>- GestorBateria<br/>- GestorClimatizador"]
+                UC2["<b>servicios_aplicacion/</b><br/>- Presentador<br/>- OperadorParalelo<br/>- Inicializador"]
+                subgraph EN["ENTITIES (Domain)"]
+                    EN1["<b>entidades/</b><br/>- Ambiente<br/>- Bateria<br/>- Climatizador<br/>- Interfaces abstractas (abs_*.py)"]
+                    EN2["<b>servicios_dominio/</b><br/>- ControladorTemperatura"]
+                end
+            end
+        end
+    end
+
+    FD -.->|las dependencias apuntan hacia el centro| IA
+    IA -.-> UC
+    UC -.-> EN
 ```
 
 ### Regla de Dependencia
