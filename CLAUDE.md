@@ -34,17 +34,21 @@ No hay dependencias externas en runtime (solo stdlib). `requests` se usa únicam
 
 Las dependencias apuntan **solo hacia adentro**. Las capas internas no conocen las externas.
 
-```
-actores_externos/          ← Frameworks & Drivers (simuladores, displays)
-agentes_sensores/          ← Interface Adapters: Proxies de entrada
-agentes_actuadores/        ← Interface Adapters: Visualizadores de salida
-gestores_entidades/        ← Use Cases: Orquestación
-servicios_aplicacion/      ← Use Cases: Coordinación de la app
-  └── lanzador.py          ← Composition Root (inyección de dependencias)
-entidades/                 ← Entities: Lógica de dominio pura + interfaces ABC
-servicios_dominio/         ← Entities: Reglas de negocio (histeresis)
-configurador/              ← Abstract Factory (9 factories + termostato.json)
-registrador/               ← Auditoría y logging
+```mermaid
+flowchart TB
+    AE["<b>actores_externos/</b><br/>Frameworks & Drivers (simuladores, displays)"]
+    AS["<b>agentes_sensores/</b><br/>Interface Adapters: Proxies de entrada"]
+    AA["<b>agentes_actuadores/</b><br/>Interface Adapters: Visualizadores de salida"]
+    GE["<b>gestores_entidades/</b><br/>Use Cases: Orquestación"]
+    SA["<b>servicios_aplicacion/</b><br/>Use Cases: Coordinación de la app<br/>lanzador.py = Composition Root (inyección de dependencias)"]
+    EN["<b>entidades/</b><br/>Entities: lógica de dominio pura + interfaces ABC"]
+    SD["<b>servicios_dominio/</b><br/>Entities: reglas de negocio (histeresis)"]
+    CF["<b>configurador/</b><br/>Abstract Factory (9 factories + termostato.json)"]
+    RG["<b>registrador/</b><br/>Auditoría y logging"]
+
+    AE --> AS & AA
+    AS & AA --> GE & SA
+    GE & SA --> EN & SD
 ```
 
 **`servicios_aplicacion/lanzador.py`** es el Composition Root: crea todas las entidades, adaptadores y gestores, inyecta dependencias, y lanza el operador principal.
