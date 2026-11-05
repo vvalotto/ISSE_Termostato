@@ -312,42 +312,28 @@ Paquetes que deberían ser concretos (adaptadores, UI):
 
 ### 9.1 Grafo de Dependencias
 
-```
-                    ┌─────────────────┐
-                    │   registrador   │ A=1.0, I=0.0, D=0.0
-                    │   (abstracto,   │
-                    │    estable)     │
-                    └────────┬────────┘
-                             │
-              ┌──────────────┼──────────────┐
-              │              │              │
-              ▼              │              ▼
-    ┌─────────────────┐      │    ┌─────────────────┐
-    │agentes_actuadores│     │    │ agentes_sensores│
-    │  I=0.67, D=0.33 │      │    │  I=0.75, D=0.25 │
-    └────────┬────────┘      │    └────────┬────────┘
-             │               │             │
-             │               │             ├───────────────────┐
-             │               │             │                   │
-             ▼               │             ▼                   ▼
-    ┌─────────────────┐      │    ┌─────────────────┐  ┌───────────────┐
-    │   entidades     │◄─────┴────┤servicios_aplicac│  │  configurador │
-    │ A=0.64, I=0.20  │           │  I=0.75, D=0.00 │  │ I=0.75, D=0.25│
-    │  D=0.16 (ideal) │           └────────┬────────┘  └───────┬───────┘
-    └────────┬────────┘                    │                   │
-             │                             │                   │
-             ▼                             ▼                   │
-    ┌─────────────────┐           ┌─────────────────┐          │
-    │servicios_dominio│           │gestores_entidades│◄─────────┘
-    │  I=0.0, D=1.0   │           │   I=0.0, D=1.0  │
-    │  (zona dolor)   │           │   (zona dolor)  │
-    └─────────────────┘           └─────────────────┘
+```mermaid
+flowchart TB
+    REG["<b>registrador</b><br/>A=1.0, I=0.0, D=0.0<br/>(abstracto, estable)"]
+    AA["<b>agentes_actuadores</b><br/>I=0.67, D=0.33"]
+    AS["<b>agentes_sensores</b><br/>I=0.75, D=0.25"]
+    EN["<b>entidades</b><br/>A=0.64, I=0.20<br/>D=0.16 (ideal)"]
+    SA["<b>servicios_aplicacion</b><br/>I=0.75, D=0.00"]
+    CFG["<b>configurador</b><br/>I=0.75, D=0.25"]
+    SD["<b>servicios_dominio</b><br/>I=0.0, D=1.0<br/>(zona dolor)"]
+    GE["<b>gestores_entidades</b><br/>I=0.0, D=1.0<br/>(zona dolor)"]
+    AE["<b>actores_externos</b><br/>(Aislado - simuladores/scripts)<br/>(no OO)"]
 
-
-    ┌─────────────────┐
-    │ actores_externos│  (Aislado - simuladores/scripts)
-    │   (no OO)       │
-    └─────────────────┘
+    REG --> AA
+    REG --> AS
+    REG --> EN
+    AA --> EN
+    AS --> SA
+    AS --> CFG
+    SA --> EN
+    SA --> GE
+    CFG --> GE
+    EN --> SD
 ```
 
 ### 9.2 Dependencias Detalladas
