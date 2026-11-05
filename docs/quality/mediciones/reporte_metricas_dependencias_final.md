@@ -101,38 +101,29 @@
 
 ### 2.2 Grafo de Dependencias
 
-```
-                     ┌─────────────┐
-                     │ registrador │ (sin dependencias)
-                     └──────┬──────┘
-                            │
-              ┌─────────────┼─────────────┐
-              │             │             │
-              ▼             │             ▼
-    ┌─────────────────┐     │    ┌─────────────────┐
-    │agentes_actuadores│    │    │ agentes_sensores│
-    └────────┬────────┘     │    └────────┬────────┘
-             │              │             │
-             │              │     ┌───────┴───────┐
-             │              │     │               │
-             ▼              │     ▼               ▼
-    ┌─────────────────┐     │  ┌─────────────┐  ┌─────────────┐
-    │   entidades     │◄────┴──┤servicios_app│◄─┤ configurador│
-    └────────┬────────┘        └──────┬──────┘  └──────┬──────┘
-             │                        │                │
-             │                        ▼                │
-             │                ┌───────────────┐        │
-             │                │gestores_entid.│◄───────┘
-             │                └───────────────┘
-             ▼
-    ┌─────────────────┐
-    │servicios_dominio│ (sin dependencias)
-    └─────────────────┘
+```mermaid
+flowchart TB
+    REG["registrador<br/>(sin dependencias)"]
+    AA[agentes_actuadores]
+    AS[agentes_sensores]
+    EN[entidades]
+    SA[servicios_app]
+    CFG[configurador]
+    GE["gestores_entid."]
+    SD["servicios_dominio<br/>(sin dependencias)"]
+    AE["actores_externos<br/>(aislado - scripts de simulación)"]
 
-
-    ┌─────────────────┐
-    │ actores_externos│ (aislado - scripts de simulación)
-    └─────────────────┘
+    REG --> AA
+    REG --> AS
+    REG --> EN
+    AA --> EN
+    AS --> SA
+    AS --> CFG
+    SA --> EN
+    CFG --> SA
+    SA --> GE
+    CFG --> GE
+    EN --> SD
 ```
 
 ---
@@ -194,13 +185,13 @@ La profundidad indica cuántos "saltos" de dependencias transitivas tiene un paq
 
 ### 4.2 Cadena de Dependencias Más Larga
 
-```
-agentes_sensores (5)
-  └─> servicios_aplicacion (4)
-        └─> configurador (4)
-              └─> agentes_actuadores (2)
-                    └─> entidades (1)
-                          └─> servicios_dominio (0)
+```mermaid
+flowchart TB
+    A["agentes_sensores (5)"] --> B["servicios_aplicacion (4)"]
+    B --> C["configurador (4)"]
+    C --> D["agentes_actuadores (2)"]
+    D --> E["entidades (1)"]
+    E --> F["servicios_dominio (0)"]
 ```
 
 **Interpretación**: La profundidad máxima de 5 es alta pero aceptable para un sistema de este tamaño.
@@ -223,16 +214,11 @@ agentes_sensores (5)
 
 ### 5.2 Análisis del Ciclo
 
-```
-     ┌──────────────────────────────────────┐
-     │                                      │
-     ▼                                      │
-┌─────────────┐      ┌─────────────┐      ┌─┴───────────┐
-│configurador │ ───► │agentes_sens.│ ───► │servicios_app│
-└─────────────┘      └─────────────┘      └─────────────┘
-                                                 │
-                                                 │
-     ◄───────────────────────────────────────────┘
+```mermaid
+flowchart LR
+    CFG[configurador] --> AS[agentes_sens.]
+    AS --> SA[servicios_app]
+    SA --> CFG
 ```
 
 ### 5.3 Impacto del Ciclo
